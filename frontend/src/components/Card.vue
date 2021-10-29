@@ -3,7 +3,7 @@
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 509 788.2766"
-        class="card"
+        id="card"
     >
         <g class="cls-1">
             <g id="Layer_2" data-name="Layer 2">
@@ -257,6 +257,7 @@
                 </g>
                 
 
+                <text x="285" y="665" class="big-2">{{ role }}</text>
                 <text x="120" y="250" class="big">KMITL</text>
                 <text x="116" y="465" class="small">{{ user.firstName }}</text>
                 <text x="116" y="485" class="small">{{ user.lastName }}</text>
@@ -290,16 +291,42 @@
 </template>
 
 <script>
+import { watch } from '@vue/runtime-core';
 export default {
-    props: ["user"],
-    setup() {
-        return {};
+    props:  {
+        user:{
+            type: Object,
+            require: true
+        },role:{
+            type: String,
+            require: true
+        }
+
+    },
+    setup(props) {
+        watch(()=> props.role , ()=>{
+            if (props.role == 'student'){
+                document.getElementById('card').classList.add("student-theme")
+            }
+            else if (props.role == 'teacher'){
+                document.getElementById('card').classList.remove("student-theme")
+            }
+        } ,)
+        return {
+        };
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.card {
+
+.student-theme{
+    --color1: rgb(255, 102, 0) !important;
+    --color2: rgb(255, 167, 66) !important;
+}
+#card {
+    --color1: var(--secondary-color-dark);
+    --color2: var(--secondary-color-normal);
     max-width: 100%;
     max-height: 100%;
     position: relative;
@@ -334,6 +361,13 @@ export default {
     fill: #fff;
 }
 
+.big-2 {
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 15px;
+    fill: #303030;
+}
+
 .cls-1 {
     isolation: isolate;
 }
@@ -349,11 +383,13 @@ export default {
 }
 
 .cls-3 {
-    fill: var(--secondary-color-dark);
+    transition: .5s fill;
+    fill: var(--color1);
 }
 
 .cls-4 {
-    fill: var(--secondary-color-normal);
+    transition: .5s fill;
+    fill: var(--color2);
 }
 
 .cls-5 {

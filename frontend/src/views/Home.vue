@@ -1,7 +1,7 @@
 <template>
-    <div class="home">
-        
-    </div>
+<div class="wrapper">
+    
+</div>
 </template>
 
 <script>
@@ -25,9 +25,8 @@ export default {
 
 <style lang="scss" scoped>
 .home{
-    .wrapper{
-
-    }
+    width: 100vw;
+    min-height: 100vh;
 }
 </style>
 
