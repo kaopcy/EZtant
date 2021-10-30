@@ -1,7 +1,7 @@
 <template>
     <div class="nav-bar">
         <div class="wrapper">
-            <div class="content-wrapper">
+            <div class="content-wrapper-desktop" v-if="!store.state.isMobile">
                 <div class="logo-wrapper">
                     <img src="../../public/logo.svg" alt="" @click="homeNav()" />
                 </div>
@@ -27,11 +27,61 @@
                 <router-link class="link" to="/">Teacher</router-link>
                 <router-link class="link" to="/">TA</router-link>
                 <router-link class="link" to="/register">Contact</router-link>
-                <router-link class="link" to="/">Post</router-link>
-                <div class="user-wrapper">
-                    <img src="../../public/image/profile.svg" alt="" />
+                <router-link class="link last" to="/">Post</router-link>
+                <img class="user-img" src="../../public/image/profile.svg" alt="">
+            </div>
+            <div class="content-wrapper-mobile" v-if="store.state.isMobile">
+                <div class="logo-wrapper">
+                    <img src="../../public/logo.svg" alt="" @click="homeNav()" />
+                </div>
+                <div class="nav-icon">
+                    <div class="thing" @click="toggleNavBar()">
+                        <span class="span1"></span>
+                        <span class="span2"></span>
+                        <span class="span3"></span>
+                    </div>
                 </div>
             </div>
+
+        </div>
+
+        <div class="nav-mobile" id="nav-mobile">
+            <router-link class="link login" to="/">Login</router-link>
+            <router-link class="link signup" to="/">Sign up</router-link>
+            <router-link class="link" to="/">About</router-link>
+            <div class="link" id="department-selector" @click="toggleDropDownMobile()" >
+                <span>Department</span>
+                <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    shape-rendering="geometricPrecision"
+                    style="color: currentColor"
+                    class="svg"
+                >
+                    <path d="M6 9l6 6 6-6"></path>
+                </svg>
+            </div>
+            <div class="drop-down-mobile" id="drop-down-mobile">
+                <div class="department-wrapper" v-for="item in department" :key="item">
+                    <div class="img-wrapper">
+                        <img :src="require(`../../public/image/department/${item.src}`)" alt="">
+                    </div>
+                    <div class="text">
+                        <span class="span-1">{{item.name}}</span>
+                        <span class="span-2">{{item.instrument}}</span>
+                    </div>
+                </div>
+            </div>
+            <router-link class="link" to="/">Teacher</router-link>
+            <router-link class="link" to="/">TA</router-link>
+            <router-link class="link" to="/register">Contact</router-link>
+            <router-link class="link last" to="/">Post</router-link>
         </div>
 
         <div class="drop-down" id="drop-down">
@@ -52,6 +102,10 @@
 <script>
 import { ref } from '@vue/reactivity';
 import { useRouter } from "vue-router";
+
+import { store } from '../store'
+
+
 export default {
     name: "NavBar",
     setup() {
@@ -107,7 +161,19 @@ export default {
             dropDown.classList.toggle('visible')
         }
 
-        return { homeNav , toggleDropDown , department };
+        const toggleDropDownMobile = ()=>{
+            const dropDown = document.getElementById('drop-down-mobile')
+            dropDown.classList.toggle('visible')
+            console.log('clicked');
+        }
+
+        const toggleNavBar = ()=> {
+            const navBar = document.getElementById('nav-mobile')
+            navBar.classList.toggle('visible')
+        }
+        
+
+        return { homeNav , toggleDropDown , toggleDropDownMobile , toggleNavBar , department , store };
     },
 };
 </script>
@@ -116,12 +182,12 @@ export default {
 .wrapper {
     font-family: var(--primary-font);
     width: 100%;
-    height: 70px;
+    height: 85px;
     background-color: #000;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    .content-wrapper {
+    .content-wrapper-desktop {
         justify-content: center;
         height: 100%;
         display: flex;
@@ -131,8 +197,9 @@ export default {
             margin-right: 3rem;
             height: 30%;
             cursor: pointer;
-            @media (max-width: 835px) {
-                height: 30%;
+            @media (max-width: 912px) {
+                margin-right: 1rem;
+                margin-left: .5rem;
             }
             @media (max-width: 740px) {
                 display: none;
@@ -145,12 +212,16 @@ export default {
             span{
                 margin-right: .25rem;
             }
-            &:last-of-type {
+            &.last {
                 color: #000;
                 font-weight: 500;
                 background-color: #fff;
                 &:hover {
+                    color: #303030;
                     background-color: rgb(204, 204, 204);
+                }
+                @media (max-width: 840px) {
+                    margin-right: 1rem;
                 }
             }
             .svg{
@@ -172,19 +243,54 @@ export default {
             padding: 0.5rem 1rem;
             border-radius: 5px;
             margin-right: 2rem;
+            @media (max-width: 990px) {
+                margin-right: 1rem;
+            }
+            @media (max-width: 840px) {
+                margin-right: 0;
+            }
             transition: 0.25s;
             &:hover {
                 color: #646464;
             }
         }
-        .user-wrapper {
-            height: 25px;
-            width: 25px;
-            background-color: #fff;
+        .user-img {
+            width: 35px;
+            height: 35px;
+            color: #fff;
+        }
+    }
+
+    .content-wrapper-mobile{
+        width: 100%;
+        height: 100%;
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
+        .logo-wrapper {
+            margin-left: 5%;
+            margin-right: 3rem;
+            height: 30%;
+            cursor: pointer;
             img {
-                display: none;
                 height: 100%;
-                width: 100%;
+            }
+        }
+        .nav-icon{
+            .thing{
+                display: flex;
+                flex-direction: column;
+                width: 20px; 
+                height: 20px;
+                background-color: transparent;
+                margin-right: 2rem;
+                span{
+                    width: 100%;
+                    height: 19px;
+                    margin-bottom: 7px;
+                    border-top: 2px solid white;
+                    border-radius: 20px;
+                }
             }
         }
     }
@@ -204,6 +310,109 @@ export default {
         transform: scaleY(100%);
     }
 }
+
+
+.nav-mobile{
+    display: none;
+    background-color: #fff;
+    width: 100%;
+    &.visible{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .link{
+        cursor: pointer;
+        font-family: var( --primary-font );
+        text-decoration: none;
+        width: 92%;
+        display: flex;
+        justify-content: flex-start;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 1.1rem 0;
+        transition: .25s;
+        span{
+            margin-right: 1rem;
+        }
+        border-radius: 5px;
+        color: #000;
+        border-bottom: 1px solid #eaeaea;
+        align-items: center;
+        &.login{
+            margin: .4rem 0;
+            font-size: 14px;
+            border: 1px solid #eaeaea;
+            justify-content: center;
+            color: #666666;
+        }
+        &.signup{
+            font-size: 14px;
+            margin: .4rem 0;
+            justify-content: center;
+            border: 1px solid #eaeaea;
+            color: #fff;
+            background-color: var(--secondary-color-dark);
+            transition: .25s;
+            &:hover{
+                background-color: #fff;
+                border: 1px solid var(--secondary-color-dark);
+                color: var(--secondary-color-dark);
+            }
+        }
+        &:hover{
+            background-color: rgb(247, 247, 247);
+        }
+    }
+    .drop-down-mobile{
+        display: none;
+        &.visible{
+            display: block;
+        }
+        .department-wrapper{
+            align-items: center;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            display: flex;
+            &:hover{
+                border-radius: 5px;
+                outline: 1px solid #e2e2e2;
+                background-color: rgb(252, 252, 252);
+            }
+            .text {
+                display: flex;
+                flex-direction: column;
+                font-family: var(--primary-font);
+                .span-1{
+                    font-weight: 800;
+                    font-size: .875rem;
+                    margin-bottom: .5rem;
+                }
+                .span-2{
+                    font-size: .875rem;
+                    color: rgb(102, 102, 102);
+                }
+
+            }
+            .img-wrapper{
+                margin-right: 1rem;
+                width: 50px;
+                height: 50px;
+                background-color: #000;
+                clip-path: circle(50% at 50% 50%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img{
+                    width: 50%;
+                    height: 50%;
+                }
+
+            }
+        }
+    }
+}
+
 .drop-down{
     width: 100%;
     background-color: #fff;

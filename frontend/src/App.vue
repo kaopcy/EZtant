@@ -1,10 +1,11 @@
 <template>
 <div>
     <!-- <div class="banner"  v-if="route.name !== 'Register'"> -->
-        <div class="blank" v-if="route.name !== 'Register'"></div>
+        <div class="blank" id="blank" v-if="route.name !== 'Register'">
+            <span>Want to become part of us?</span><router-link to="/register" class="register-link">Sign up</router-link>
+        </div>
         <NavBar class="navbar" v-if="route.name !== 'Register'" />
     <!-- </div> -->
-    <div class="test">{{width}}</div>
     <div class="link-wrapper">
     </div>
     <router-view></router-view>
@@ -13,8 +14,10 @@
 
 <script>
 import NavBar from './components/NavBar.vue'
+import { store } from './store'
+
 import { useRoute } from 'vue-router'
-import { onMounted, onUnmounted, ref, watch } from '@vue/runtime-core'
+import { onMounted, onUnmounted } from '@vue/runtime-core'
 
 export default {
     components:{
@@ -22,13 +25,8 @@ export default {
     },
     setup() {
         const route = useRoute()
-        const width = ref(0)
-
-        watch(width , ()=>{
-            console.log(window.innerWidth );
-        })
-        
         onMounted(()=>{
+            onResize()
             window.addEventListener('resize' , onResize )
         })
         
@@ -36,11 +34,19 @@ export default {
             window.removeEventListener('resize' , onResize )
         })
 
+            
+
+
         const onResize = ()=>{
-            width.value = window.innerWidth
+            if (window.innerWidth < 600){
+                store.commit('setIsMoblie' , true)
+            }
+            else{
+                store.commit('setIsMoblie' , false)
+            }
         }
 
-        return { route , width }
+        return { route }
     }
 }
 </script>
@@ -77,9 +83,22 @@ export default {
     box-sizing: border-box;
 }
 .blank {
+    justify-content: center;
     height: 40px;
-    background-color: #000;
+    background-color: rgb(15, 15, 15);
     width: 100%;
+    color: #fff;
+    font-family: var(--primary-font);
+    display: flex;
+    align-items: center;
+    span{
+        margin-right: 2rem;
+    }
+    .register-link{
+        color: rgb(129, 0, 108);
+        font-weight: 700;
+        margin-right: 5rem;
+    }
 }
 
 .navbar{

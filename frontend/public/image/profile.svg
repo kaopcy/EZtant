@@ -1,12 +1,13 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.53753 48.25533">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #231f20;
-      }
-    </style>
-  </defs>
-  <title>profile</title>
-  <circle class="cls-1" cx="21.1061" cy="12.92553" r="12.92553"/>
-  <path class="cls-1" d="M99,301.40427h42.383a18.61963,18.61963,0,0,0-2.04256-9.44681c-5.31183-10.05683-18.39745-10.57749-19.14893-10.59577-9.03847.00364-16.85483,4.225-19.91489,10.97873A17.03329,17.03329,0,0,0,99,301.40427Z" transform="translate(-98.86199 -253.14894)"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 68.2 68.2" style="enable-background:new 0 0 68.2 68.2;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+</style>
+<circle class="st0" cx="34.1" cy="34.1" r="33.1"/>
+<title>profile</title>
+<circle cx="34" cy="24.4" r="10"/>
+<path d="M17.7,52.7h32.8c0.1-2.5-0.4-5.1-1.6-7.3c-4.1-7.8-14.2-8.2-14.8-8.2c-7,0-13,3.3-15.4,8.5C17.8,47.9,17.4,50.4,17.7,52.7z"
+	/>
 </svg>

@@ -1,9 +1,13 @@
 import { createStore } from 'vuex'
 
-export default createStore({
+export const store = createStore({
   state: {
+      isMobile: false,
   },
   mutations: {
+      setIsMoblie(state , payload){
+        state.isMobile = payload
+      }
   },
   actions: {
   },

@@ -18,7 +18,7 @@
                         <img src="../../public/image/image/student.png" alt="">
                     </label>
             </div>
-            <router-link to="/">back</router-link>
+            <router-link to="/" class="back-btn" v-if="role === ''" >back</router-link>
             <form v-if="role == 'student'" class="student-form">
                 <div class="input">
                     <input
@@ -173,7 +173,7 @@ export default {
     setup() {
         const router = useRouter()
 
-        const role = ref(null)
+        const role = ref('')
 
         const student = reactive({
             studentID: "",
@@ -233,6 +233,7 @@ export default {
         flex: 4;
         display: flex;
         justify-content: center;
+        align-items: flex-start;
         flex-direction: column;
         color: var(--primary-font-color);
         @media (max-width: 900px) {
@@ -252,6 +253,17 @@ export default {
             @media (max-width: 1000px) {
                 font-size: 3.3rem;
             }
+        }
+
+        .back-btn{
+            margin-top: 3rem;
+            padding: .5rem 1rem;
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            text-transform: uppercase;
         }
 
         .radio-container{
