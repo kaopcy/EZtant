@@ -1,6 +1,10 @@
 <template>
 <div>
-    <NavBar class="navbar" v-if="route.name !== 'Register'"/>
+    <!-- <div class="banner"  v-if="route.name !== 'Register'"> -->
+        <div class="blank" v-if="route.name !== 'Register'"></div>
+        <NavBar class="navbar" v-if="route.name !== 'Register'" />
+    <!-- </div> -->
+    <div class="test">{{width}}</div>
     <div class="link-wrapper">
     </div>
     <router-view></router-view>
@@ -10,6 +14,7 @@
 <script>
 import NavBar from './components/NavBar.vue'
 import { useRoute } from 'vue-router'
+import { onMounted, onUnmounted, ref, watch } from '@vue/runtime-core'
 
 export default {
     components:{
@@ -17,7 +22,25 @@ export default {
     },
     setup() {
         const route = useRoute()
-        return { route }
+        const width = ref(0)
+
+        watch(width , ()=>{
+            console.log(window.innerWidth );
+        })
+        
+        onMounted(()=>{
+            window.addEventListener('resize' , onResize )
+        })
+        
+        onUnmounted(()=>{
+            window.removeEventListener('resize' , onResize )
+        })
+
+        const onResize = ()=>{
+            width.value = window.innerWidth
+        }
+
+        return { route , width }
     }
 }
 </script>
@@ -25,6 +48,12 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&family=Rubik:wght@300&display=swap');
+.test{
+    position: fixed;
+    top: 400px;
+    left: 100px;
+}
+
 :root{
     --primary-font: 'Inter', sans-serif;
     --secondary-font: 'Rubik', sans-serif;
@@ -47,10 +76,15 @@ export default {
     margin: 0;
     box-sizing: border-box;
 }
+.blank {
+    height: 40px;
+    background-color: #000;
+    width: 100%;
+}
+
 .navbar{
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
 }
 
 .link-wrapper{

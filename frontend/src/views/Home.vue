@@ -1,5 +1,5 @@
 <template>
-<div class="wrapper">
+<div class="home">
     
 </div>
 </template>
@@ -25,8 +25,8 @@ export default {
 
 <style lang="scss" scoped>
 .home{
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
+    height: 200vh;
 }
 </style>
 

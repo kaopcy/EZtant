@@ -18,6 +18,7 @@
                         <img src="../../public/image/image/student.png" alt="">
                     </label>
             </div>
+            <router-link to="/">back</router-link>
             <form v-if="role == 'student'" class="student-form">
                 <div class="input">
                     <input
@@ -278,15 +279,15 @@ export default {
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px;
 
                 }
+                outline: none;
                 &:hover{
-                    outline: none;
                 }
             }
             #student:checked ~ .student-wrapper{
                 color: #fff;
                 box-shadow: none;
+                outline: none;
                 &:hover{
-                    outline: none;
                 }
             }
             #student:checked ~ .teacher-wrapper{
@@ -313,10 +314,11 @@ export default {
                 cursor: pointer;
                 font-size: 1.5rem;
                 font-weight: 900;
-                
-                &:hover{
+                outline: 1px solid #b9b9b9;
 
+                &:hover{
                     outline: 1px solid #303030;
+
                 }
 
                 @media (max-width: 860px) {
