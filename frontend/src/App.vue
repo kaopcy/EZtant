@@ -69,12 +69,16 @@ export default {
     --primary-color-normal: #fff;
     --secondary-color-normal: #79A7E2;
     --secondary-color-dark: #1D4AA6;
+    --secondary-color-light: #a9c8f0;
     
     --card-height-normal: 810px;
     --card-width-normal: 571px;
 
     --card-height-s: 486px;
     --card-width-s: 343px;
+
+    --banner-height: 50px;
+    --navbar-height: 85px;
 }
 
 *{
@@ -82,9 +86,14 @@ export default {
     margin: 0;
     box-sizing: border-box;
 }
+
+body{
+    background-color: #f8f8f8;
+}
+
 .blank {
     justify-content: center;
-    height: 40px;
+    height: var(--banner-height);
     background-color: rgb(15, 15, 15);
     width: 100%;
     color: #fff;
@@ -103,6 +112,7 @@ export default {
 
 .navbar{
     position: sticky;
+    z-index: 100;
     top: 0;
 }
 

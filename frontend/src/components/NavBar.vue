@@ -27,7 +27,7 @@
                 <router-link class="link" to="/">Teacher</router-link>
                 <router-link class="link" to="/">TA</router-link>
                 <router-link class="link" to="/register">Contact</router-link>
-                <router-link class="link last" to="/">Post</router-link>
+                <router-link class="link last" to="/main-post">Post</router-link>
                 <img class="user-img" src="../../public/image/profile.svg" alt="">
             </div>
             <div class="content-wrapper-mobile" v-if="store.state.isMobile">
@@ -35,6 +35,7 @@
                     <img src="../../public/logo.svg" alt="" @click="homeNav()" />
                 </div>
                 <div class="nav-icon">
+                    <router-link class="link last" to="/main-post">Post</router-link>
                     <div class="thing" @click="toggleNavBar()">
                         <span class="span1"></span>
                         <span class="span2"></span>
@@ -47,7 +48,7 @@
 
         <div class="nav-mobile" id="nav-mobile">
             <router-link class="link login" to="/">Login</router-link>
-            <router-link class="link signup" to="/">Sign up</router-link>
+            <router-link class="link signup" to="/register">Sign up</router-link>
             <router-link class="link" to="/">About</router-link>
             <div class="link" id="department-selector" @click="toggleDropDownMobile()" >
                 <span>Department</span>
@@ -81,7 +82,7 @@
             <router-link class="link" to="/">Teacher</router-link>
             <router-link class="link" to="/">TA</router-link>
             <router-link class="link" to="/register">Contact</router-link>
-            <router-link class="link last" to="/">Post</router-link>
+            <router-link class="link last" to="/main-post">Post</router-link>
         </div>
 
         <div class="drop-down" id="drop-down">
@@ -182,11 +183,12 @@ export default {
 .wrapper {
     font-family: var(--primary-font);
     width: 100%;
-    height: 85px;
+    height: var(--navbar-height);
     background-color: #000;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    z-index: 100;
     .content-wrapper-desktop {
         justify-content: center;
         height: 100%;
@@ -204,6 +206,7 @@ export default {
             @media (max-width: 740px) {
                 display: none;
             }
+            
             img {
                 height: 100%;
             }
@@ -213,9 +216,11 @@ export default {
                 margin-right: .25rem;
             }
             &.last {
+                padding: 0.45rem 1rem;
                 color: #000;
                 font-weight: 500;
                 background-color: #fff;
+
                 &:hover {
                     color: #303030;
                     background-color: rgb(204, 204, 204);
@@ -241,7 +246,7 @@ export default {
             font-size: 16px;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border-radius: 5px;
+            border-radius: 7px;
             margin-right: 2rem;
             @media (max-width: 990px) {
                 margin-right: 1rem;
@@ -270,13 +275,31 @@ export default {
         .logo-wrapper {
             margin-left: 5%;
             margin-right: 3rem;
-            height: 30%;
+            height: 24%;
             cursor: pointer;
             img {
                 height: 100%;
             }
         }
         .nav-icon{
+            display: flex;
+            align-items: center;
+            .link{
+                text-decoration: none;
+                border-radius: 10px;
+                padding: 0.45rem 1rem;
+                color: #000;
+                font-weight: 500;
+                background-color: #fff;
+
+                &:hover {
+                    color: #303030;
+                    background-color: rgb(204, 204, 204);
+                }
+                @media (max-width: 840px) {
+                    margin-right: 1rem;
+                }
+            }
             .thing{
                 display: flex;
                 flex-direction: column;
@@ -297,20 +320,18 @@ export default {
 
 
 }
+
 @keyframes fade {
     
     0%{
         transform-origin: top;
-        opacity: 0;
         transform: scaleY(0);
     }
     100%{
         transform-origin: top;
-        opacity: 100%;
         transform: scaleY(100%);
     }
 }
-
 
 .nav-mobile{
     display: none;
@@ -321,6 +342,7 @@ export default {
         flex-direction: column;
         align-items: center;
     }
+    
     .link{
         cursor: pointer;
         font-family: var( --primary-font );
@@ -366,8 +388,10 @@ export default {
     }
     .drop-down-mobile{
         display: none;
+        overflow-y: scroll;
         &.visible{
-            display: block;
+            display: initial;
+            position: relative;
         }
         .department-wrapper{
             align-items: center;
@@ -414,6 +438,7 @@ export default {
 }
 
 .drop-down{
+    position: absolute;
     width: 100%;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
@@ -468,4 +493,6 @@ export default {
         }
     }
 }
+
+
 </style>

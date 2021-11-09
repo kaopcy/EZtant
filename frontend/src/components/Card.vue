@@ -224,7 +224,7 @@
                     class="cls-7"
                     transform="matrix(0.0006, -1, 1, 0.0006, 336.65754, 497.36836)"
                 >
-                    {{ user.studentID }}
+                    {{ user.username }}
                 </text>
                 <line
                     class="cls-8"
@@ -264,14 +264,14 @@
 
                 <text x="125" y="550" class="text-label">ID No.</text>
                 <text x="180" y="550" class="text-label">:</text>
-                <text x="200" y="550" class="text-label">{{ user.studentID }}</text>
+                <text x="200" y="550" class="text-label">{{ user.username }}</text>
                 <text x="125" y="580" class="text-label">Email</text>
                 <text x="180" y="580" class="text-label">:</text>
                 <text x="200" y="580" class="text-label">{{ user.email }}</text>
                 <text x="125" y="610" class="text-label">Faculty</text>
                 <text x="180" y="610" class="text-label">:</text>
                 <text x="200" y="610" class="text-label">
-                    {{ user.faculty }}
+                    {{ user.department }}
                 </text>
                 <rect
                     class="cls-5"

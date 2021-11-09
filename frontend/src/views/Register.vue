@@ -23,7 +23,7 @@
                 <div class="input">
                     <input
                         type="tel"
-                        v-model="student.studentID"
+                        v-model="student.username"
                         placeholder="StudentID"
                         maxlength="8"
                     />
@@ -60,7 +60,7 @@
                         <input
                             class="faculty"
                             list="faculty"
-                            v-model="student.faculty"
+                            v-model="student.department"
                             placeholder="Faculty"
                         />
                         <datalist id="faculty">
@@ -88,8 +88,9 @@
                     <router-link class="login-btn" :to="{name: 'Home'}">
                         already have account?
                     </router-link>
-                    <div class="register-btn" @click="register">
-                        REGISTER
+                    <div class="register-btn" @click="registerStudent">
+                        <span>REGISTER</span> 
+                        <fa :icon="['fas' , 'sign-in-alt']"/>
                     </div>
                 </div>
                 
@@ -135,7 +136,7 @@
                         <input
                             class="faculty"
                             list="faculty"
-                            v-model="teacher.faculty"
+                            v-model="teacher.department"
                             placeholder="Faculty"
                         />
                         <datalist id="faculty">
@@ -150,8 +151,9 @@
                     <router-link class="login-btn" :to="{name: 'Home'}">
                         already have account?
                     </router-link>
-                    <div class="register-btn" @click="register">
-                        REGISTER
+                    <div class="register-btn" @click="registerTeacher">
+                        <span>REGISTER</span>
+                        <fa :icon="['fas' , 'sign-in-alt']"/>
                     </div>
                 </div>
             </form>
@@ -164,6 +166,7 @@ import { reactive , ref } from "vue";
 import { useRouter } from 'vue-router'
 
 import Card from "../components/Card.vue";
+import axios from 'axios'
 
 export default {
     name: "Register",
@@ -176,12 +179,12 @@ export default {
         const role = ref('')
 
         const student = reactive({
-            studentID: "",
+            username: "",
             firstName: "",
             lastName: "",
             email: "",
             password: "",
-            faculty: "",
+            department: "",
             year: "",
         });
 
@@ -191,22 +194,68 @@ export default {
             lastName: "",
             email: "",
             password: "",
-            faculty: "",
+            department: "",
         })
 
-        const register = ()=> {
-            alert('Registered')
-            router.replace({ name: 'Home' })
+        const registerTeacher = async ()=> {
+            try {
+                const userData = {
+                    tc_name: teacher.firstName,
+                    tc_lastname: teacher.lastName,
+                    tc_email: teacher.email,
+                    tc_password: teacher.password,
+                    tc_department: teacher.department,
+                }
+                const data = await axios.post('http://127.0.0.1:8000/Teacher/' , userData )
+                console.log(data.data);
+                await router.replace({ name: 'Home' })
+                
+            } catch (error) {
+                console.log(error);
+            }
         }
+
+        const registerStudent = async ()=> {
+            try {
+                const userData = {
+                    tc_name: student.tc_name,
+                    tc_lastname: student.lastName,
+                    tc_email: student.email,
+                    tc_password: student.password,
+                    tc_department: student.tc_department,
+                }
+                const data = await axios.post('http://127.0.0.1:8000/Teacher/' , userData )
+                console.log(data.data);
+                await router.replace({ name: 'Home' })
+                
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+
         
-        return { role , student , teacher , register };
+        return { role , student , teacher , registerTeacher , registerStudent };
     },
 };
 </script>
 
 <style lang="scss" scoped>
-:root {
+@mixin transition($x...){
+    -webkit-transition: $x;
+    -moz-transition: $x;
+    -ms-transition: $x;
+    -o-transition: $x;
+    transition: $x;
 }
+
+@mixin transform($transforms) {
+	-webkit-transform: $transforms;
+	-moz-transform: $transforms;
+	-ms-transform: $transforms;
+	transform: $transforms;
+}
+
 .register {
     font-family: var(--primary-font);
     width: 100vw;
@@ -286,36 +335,40 @@ export default {
                     position: absolute;
                     inset: 0;
                     background-color: var(--secondary-color-normal);
-                    transition: .5s;
+                    @include transition(color .5s, background-color .5s, border-color .5s , transform .5s);
                     z-index: -1;
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px;
 
                 }
-                outline: none;
+                border: none;
                 &:hover{
+                    outline: none;
+                    border: none !important;
                 }
             }
             #student:checked ~ .student-wrapper{
                 color: #fff;
                 box-shadow: none;
-                outline: none;
+                border: none;
                 &:hover{
+                    outline: none;
+                    border: none !important;
                 }
             }
             #student:checked ~ .teacher-wrapper{
                 &::before{
                     z-index: -1;
-                    transition: .5s ;
+                    @include transition(color .5s, background-color .5s, border-color .5s , transform .5s);
                     content: '';
                     position: absolute;
                     inset: 0;
                     background-color: var(--secondary-color-normal);
-                    transform: translateX(110%);
+                    @include transform(translateX(110%));
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px;
                 }
             }
             .wrapper{
-                transition: .5s;
+                @include transition(color .5s, background-color .5s, border-color .5s);
                 position: relative;
                 text-transform: uppercase;
                 display: flex;
@@ -326,8 +379,9 @@ export default {
                 cursor: pointer;
                 font-size: 1.5rem;
                 font-weight: 900;
-                outline: 1px solid #b9b9b9;
-
+                border: 1px solid #e2e2e2;
+                border-radius: 5px;
+    
                 &:hover{
                     outline: 1px solid #303030;
 
@@ -361,18 +415,18 @@ export default {
         }
         @keyframes appear {
             0%{
-                transform: translateX(-100%);
+                @include transform(translateX(-100%));
             }
             100%{
-                transform: translateX(0);
+                @include transform(translateX(0));
             }
         }
         @keyframes appear2 {
             0%{
-                transform: translateX(100%);
+                @include transform(translateX(100%));
             }
             100%{
-                transform: translateX(0);
+                @include transform(translateX(0));
             }
         }
         form {
@@ -406,20 +460,28 @@ export default {
                 margin: 0.6rem 0;
                 font-size: 1rem;
                 width: 70%;
-                border: none;
                 padding: 0.9rem 1rem;
                 color: rgb(134, 134, 134);
                 font-family: var(--primary-font);
                 font-weight: 300;
-                box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                border: 1px solid #e6e6e6;
+                border-radius: 10px;
+                // box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
                 &:focus {
-                    box-shadow: rgba(69, 83, 95, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                    // box-shadow: rgba(69, 83, 95, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                    border: 1px solid #bdbdbd;
                     outline: none;
                     &::placeholder {
                         font-size: 1rem;
                         color: var(--secondary-font-color);
                     }
                 }
+
+                &:hover{
+                    border: 1px solid #bdbdbd;
+                }
+
                 @media (max-width: 1000px) {
                     width: 90%;
                     font-size: 1rem;
@@ -445,11 +507,14 @@ export default {
                     color: #fff;
                     background-color: var(--secondary-color-normal);
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
-                    font-weight: 900;
+                    font-weight: 700;
                     cursor: pointer;
-                    transition: .5s ;
+                    @include transition(color .5s, background-color .5s, border-color .5s);
                     &:hover{
                         background-color: var(--secondary-color-dark);
+                    }
+                    span{
+                        margin-right: .5rem;
                     }
                 }
             }
