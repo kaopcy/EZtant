@@ -218,13 +218,14 @@ export default {
         const registerStudent = async ()=> {
             try {
                 const userData = {
-                    tc_name: student.tc_name,
-                    tc_lastname: student.lastName,
-                    tc_email: student.email,
-                    tc_password: student.password,
-                    tc_department: student.tc_department,
+                    ta_name: student.firstName,
+                    ta_lastname: student.lastName,
+                    ta_email: student.email,
+                    ta_password: student.password,
+                    ta_department: student.department,
+                    ta_year: student.year,
                 }
-                const data = await axios.post('http://127.0.0.1:8000/Teacher/' , userData )
+                const data = await axios.post('http://127.0.0.1:8000/TA/' , userData )
                 console.log(data.data);
                 await router.replace({ name: 'Home' })
                 

@@ -1,0 +1,30 @@
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1590.5 244.22844">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #303030;
+      }
+
+      .cls-6 {
+        fill: none;
+        stroke: #976677;
+        stroke-miterlimit: 10;
+        stroke-width: 16px;
+      }
+    </style>
+  </defs>
+  <title>logo</title>
+  <rect class="cls-1" x="0.5" y="0.5" width="194" height="56"/>
+  <rect class="cls-1" x="1" y="92" width="194" height="56"/>
+  <rect class="cls-1" y="186" width="194" height="56"/>
+  <path class="cls-1" d="M306,40H409q-26,28-52,56H306Z" transform="translate(-36.5 -39.5)"/>
+  <polygon class="cls-1" points="475 0 433 0 269 191 269 242 307 242 475 46 475 0"/>
+  <polygon class="cls-1" points="475.5 187.5 475.5 242.5 370.5 242.5 420.5 187.5 475.5 187.5"/>
+  <polygon class="cls-1" points="534.5 0.5 748.5 0.5 748.5 56.5 672.5 56.5 672.5 242.5 609.5 242.5 608.5 56.5 534.5 56.5 534.5 0.5"/>
+  <polygon class="cls-1" points="1076.5 117.5 1076.5 242.5 1143.5 242.5 1143.5 200.5 1076.5 117.5"/>
+  <polygon class="cls-1" points="1243.5 242.5 1076.5 37.5 1076.5 0.5 1131.5 0.5 1302.5 212.5 1302.5 242.5 1243.5 242.5"/>
+  <polygon class="cls-1" points="1302.5 0.5 1233.5 0.5 1233.5 45.5 1302.5 126.5 1302.5 0.5"/>
+  <polygon class="cls-1" points="1373.5 0.5 1590.5 0.5 1590.5 56.5 1515.5 56.5 1515.5 242.5 1443.5 242.5 1444.5 56.5 1373.5 56.5 1373.5 0.5"/>
+  <path class="cls-6" d="M928,58,823,201q52.5,36.5,105,73,53.00005-36.5,106-73Q980.99995,129.5,928,58Z" transform="translate(-36.5 -39.5)"/>
+  <line class="cls-6" x1="892.5" y1="18.5" x2="892.5" y2="234.5"/>
+</svg>

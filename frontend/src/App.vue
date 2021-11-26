@@ -34,9 +34,6 @@ export default {
             window.removeEventListener('resize' , onResize )
         })
 
-            
-
-
         const onResize = ()=>{
             if (window.innerWidth < 600){
                 store.commit('setIsMoblie' , true)
@@ -88,7 +85,7 @@ export default {
 }
 
 body{
-    background-color: #f8f8f8;
+    background-color: #ffffff;
 }
 
 .blank {
