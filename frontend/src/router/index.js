@@ -13,8 +13,15 @@ const routes = [
     {
         path: "/main-post",
         name: "MainPost",
-        component: () => import("../views/MainPost.vue"),
+        component: () => import("../views/Post/MainPost.vue"),
     },
+    {
+        path: "/focus-post/:id",
+        name: "MainPost",
+        component: () => import("../views/Post/FocusPost.vue"),
+    },
+    
+
 ];
 
 const router = createRouter({

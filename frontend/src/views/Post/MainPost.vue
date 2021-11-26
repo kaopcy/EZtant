@@ -2,7 +2,6 @@
     <div class="main-post">
 
         <Popup id="popup" />
-
         <div class="greeting">
             <div class="greeting-img" :class="{ hovered: isHover }">
                 <div class="btn" id="btn-post" @click="store.commit('toggleIsPopup')">POST</div>
@@ -41,10 +40,10 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import Post from "../components/Post.vue";
+import Post from "../../components/Post.vue";
 import { onMounted } from "@vue/runtime-core";
-import { store } from "../store";
-import Popup from '../components/MainPost/PostPopup.vue'
+import { store } from "../../store";
+import Popup from '../../components/MainPost/PostPopup.vue'
 
 export default {
     name: "MainPost",
@@ -196,11 +195,10 @@ $sort-type-height: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-
     .greeting-img {
         width: 80%;
         height: 90%;
-        background-image: url("../../public/image/image/blog.jpg");
+        background-image: url("../../../public/image/image/blog.jpg");
         background-size: cover;
         background-position: 50% 50%;
         box-shadow: 0px 0px 119px -60px rgba(255, 255, 255, 0.897) inset;

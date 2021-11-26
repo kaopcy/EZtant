@@ -1,5 +1,13 @@
 <template>
-    <div class="post">
+    <div class="post" ref="postRef">
+        <transition name="fade">
+            <div class="see-more-wrapper" v-if="isHover">
+                <div class="see-more-btn">
+                    See more
+                </div>
+            </div>
+        </transition>
+
         <div class="banner">
             <div class="author-info-wrapper">
                 <img src="" alt="">
@@ -31,7 +39,7 @@
 </template>
 
 <script>
-import { onMounted } from '@vue/runtime-core'
+import { onMounted , ref } from '@vue/runtime-core'
 
 import Table from '../components/Table.vue'
 
@@ -50,9 +58,21 @@ export default {
 
     },
     setup(props) {
+        const isHover = ref(false)
+        const postRef = ref(null)
         onMounted(()=>{
+            postRef.value.onmouseenter = ()=>{
+                isHover.value = true
+            }
+
+            postRef.value.onmouseleave = ()=>{
+                isHover.value = false
+            }
+
             console.log(props.post);
         })
+
+        return { isHover , postRef }
     }
 
 }
@@ -63,13 +83,49 @@ $primary-font-color: #303030;
 $primary-font-color-light: #464646;
 $banner-height: 6rem;
 
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.see-more-wrapper{
+    width: 100%;
+    height: 40%;
+    background-image: linear-gradient(to top, rgb(82, 82, 82), rgba(255,0,0,0));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    .see-more-btn{
+        color: #fff;
+        font-size: 1.25rem;
+        padding: .5rem 3rem;
+        font-weight: 700;
+        border: 3px solid white;
+        border-radius: 40px;
+        background-color: transparent;
+    }
+}
+
 .post{
+    position: relative;
     font-family: var(--primary-font);
     width: 70%;
     margin: 0 auto;
     min-height: 400px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     margin-bottom: 2rem;
+    cursor: pointer;
+    overflow: hidden;
     @media (max-width: 648px) {
         width: 90%;
     }

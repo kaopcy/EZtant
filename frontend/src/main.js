@@ -12,9 +12,21 @@ import {
     faSearch,
     faUserFriends,
     faHeart,
+    faTrashAlt,
+    faPlusCircle,
+    faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSignInAlt, faSortAlphaDown, faSearch , faUserFriends , faHeart );
+library.add(
+    faSignInAlt,
+    faSortAlphaDown,
+    faSearch,
+    faUserFriends,
+    faHeart,
+    faTrashAlt,
+    faPlusCircle,
+    faCalendarAlt
+);
 
 createApp(App)
     .use(store)
