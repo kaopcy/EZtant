@@ -55,19 +55,20 @@ export default {
                 font-size: $font-size-s;
             }
         }
+        td{
+            font-size: $font-size-s;
+        }
         th{
-            font-weight: 700;
+            font-weight: 500;
         }
         tr{
-            border: 1px solid #ddd;
-
             &:nth-child(1){
                 background-color: var(--secondary-color-dark);
                 color: #fff;
                 
             }   
-            &:nth-child(even){
-                background-color: #f2f2f2;
+            &:nth-child(even) {
+                background-color: #f4f7ff;
             }
         }
     }

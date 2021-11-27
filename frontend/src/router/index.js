@@ -17,7 +17,7 @@ const routes = [
     },
     {
         path: "/focus-post/:id",
-        name: "MainPost",
+        name: "FocusPost",
         component: () => import("../views/Post/FocusPost.vue"),
     },
     

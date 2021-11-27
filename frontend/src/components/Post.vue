@@ -1,11 +1,11 @@
 <template>
     <div class="post" ref="postRef">
         <transition name="fade">
-            <div class="see-more-wrapper" v-if="isHover">
+            <router-link class="see-more-wrapper" v-if="isHover" :to="`/focus-post/${post.subject}`">
                 <div class="see-more-btn">
                     See more
                 </div>
-            </div>
+            </router-link>
         </transition>
 
         <div class="banner">
@@ -55,7 +55,6 @@ export default {
             type: Object,
             require: true,
         }
-
     },
     setup(props) {
         const isHover = ref(false)
@@ -105,6 +104,8 @@ $banner-height: 6rem;
     position: absolute;
     bottom: 0;
     right: 0;
+    text-decoration: none;
+    
     .see-more-btn{
         color: #fff;
         font-size: 1.25rem;

@@ -288,7 +288,7 @@ $button-color: rgba(0, 118, 255, 0.9);
                 color: rgb(255, 255, 255);
                 font-weight: 500;
                 background-color: $button-color;
-
+                box-shadow: 0 4px 14px 0 rgb(0 118 255 / 39%);
                 &:hover {
                     color: $button-color;
                     background-color: rgb(255, 255, 255);
