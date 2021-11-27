@@ -120,8 +120,6 @@ $button-color-hover: rgb(214, 54, 33);
         cursor: pointer;
         top: 0;
 
-        
-
         span {
             transition: 0.25s;
             position: absolute;

@@ -206,7 +206,7 @@ export default {
                     tc_password: teacher.password,
                     tc_department: teacher.department,
                 }
-                const data = await axios.post('http://127.0.0.1:8000/Teacher/' , userData )
+                const data = await axios.post(`${process.env.DJANGO_BASE_URL}/api/register` , userData )
                 console.log(data.data);
                 await router.replace({ name: 'Home' })
                 

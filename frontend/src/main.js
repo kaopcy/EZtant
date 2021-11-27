@@ -16,6 +16,9 @@ import {
     faPlusCircle,
     faCalendarAlt,
     faSignOutAlt,
+    faAddressBook,
+    faHistory,
+    
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -27,7 +30,9 @@ library.add(
     faTrashAlt,
     faPlusCircle,
     faCalendarAlt,
-    faSignOutAlt
+    faSignOutAlt,
+    faAddressBook,
+    faHistory
 );
 
 createApp(App)
