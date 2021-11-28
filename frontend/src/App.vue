@@ -1,10 +1,10 @@
 <template>
 <div>
     <!-- <div class="banner"  v-if="route.name !== 'Register'"> -->
-        <div class="blank" id="blank" v-if="route.name !== 'Register'">
+        <div class="blank" id="blank" v-if="route.name !== 'Register' && route.name !== 'Login'">
             <span>Want to become part of us?</span><router-link to="/register" class="register-link">Sign up</router-link>
         </div>
-        <NavBar class="navbar" v-if="route.name !== 'Register'" />
+        <NavBar class="navbar" v-if="route.name !== 'Register' && route.name !== 'Login'" />
     <!-- </div> -->
     <div class="link-wrapper">
     </div>
@@ -13,17 +13,18 @@
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue'
+import NavBar from './components/Navbar/NavBar.vue'
 import { store } from './store'
 
 import { useRoute } from 'vue-router'
 import { onMounted, onUnmounted } from '@vue/runtime-core'
-
+import useAuth from './composables/useAuth'
 export default {
     components:{
         NavBar,
     },
     setup() {
+        const { getFullName } = useAuth()
         const route = useRoute()
         onMounted(()=>{
             onResize()
@@ -43,7 +44,7 @@ export default {
             }
         }
 
-        return { route }
+        return { route , getFullName }
     }
 }
 </script>

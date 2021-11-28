@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="popup-wrapper" v-if="isPopup && role === 'student'">
+        <div class="popup-wrapper" v-if="isPopup && role === 'teacher'">
             <form class="post" @submit.prevent="post">
                 <!-- close btn -->
                 <button id="close-btn" @click="store.commit('toggleIsPopup')">
@@ -65,7 +65,7 @@ export default {
         const { getFullName , role } = useAuth()
         const isPopup = computed(() => store.state.isPopup);
         const tableRef = ref(null)
-
+        
         const data = ref({
             subject: "",
             author: "",

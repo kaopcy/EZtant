@@ -1,24 +1,41 @@
 <template>
     <div class="register">
         <div class="card-wrapper">
-            <Card :user="role == 'student' ? student : teacher " :role="role" />
+            <Card :user="role == 'student' ? student : teacher" :role="role" />
         </div>
         <div class="register-wrapper">
             <h1>Register</h1>
             <div class="radio-container">
-                <h2>Role: </h2>
-                <input type="radio" name="role" id="teacher" value="teacher" v-model="role" >
-                <input type="radio" name="role" id="student" value="student" v-model="role" >
-                    <label for="teacher" class="wrapper teacher-wrapper">
-                        <span>teacher</span>
-                        <img src="../../public/image/image/teacherlogo.png" alt="">
-                    </label>
-                    <label for="student" class="wrapper student-wrapper">
-                        <span>student</span>
-                        <img src="../../public/image/image/student.png" alt="">
-                    </label>
+                <h2>Role:</h2>
+                <input
+                    type="radio"
+                    name="role"
+                    id="teacher"
+                    value="teacher"
+                    v-model="role"
+                />
+                <input
+                    type="radio"
+                    name="role"
+                    id="student"
+                    value="student"
+                    v-model="role"
+                />
+                <label for="teacher" class="wrapper teacher-wrapper">
+                    <span>teacher</span>
+                    <img
+                        src="../../public/image/image/teacherlogo.png"
+                        alt=""
+                    />
+                </label>
+                <label for="student" class="wrapper student-wrapper">
+                    <span>student</span>
+                    <img src="../../public/image/image/student.png" alt="" />
+                </label>
             </div>
-            <router-link to="/" class="back-btn" v-if="role === ''" >back</router-link>
+            <router-link to="/" class="back-btn" v-if="role === ''"
+                >back</router-link
+            >
             <form v-if="role == 'student'" class="student-form">
                 <div class="input">
                     <input
@@ -57,43 +74,42 @@
                     />
                 </div>
                 <div class="faculty-year">
-                        <input
-                            class="faculty"
-                            list="faculty"
-                            v-model="student.department"
-                            placeholder="Faculty"
-                        />
-                        <datalist id="faculty">
-                            <option value="Edge"></option>
-                            <option value="Firefox"></option>
-                            <option value="Chrome"></option>
-                            <option value="Opera"></option>
-                            <option value="Safari"></option>
-                        </datalist>
+                    <input
+                        class="faculty"
+                        list="faculty"
+                        v-model="student.department"
+                        placeholder="Faculty"
+                    />
+                    <datalist id="faculty">
+                        <option value="Edge"></option>
+                        <option value="Firefox"></option>
+                        <option value="Chrome"></option>
+                        <option value="Opera"></option>
+                        <option value="Safari"></option>
+                    </datalist>
 
-                        <input
-                            class="year"
-                            list="year"
-                            v-model="student.year"
-                            placeholder="year"
-                        />
-                        <datalist id="year">
-                            <option value="1"></option>
-                            <option value="2"></option>
-                            <option value="3"></option>
-                            <option value="4"></option>
-                        </datalist>
+                    <input
+                        class="year"
+                        list="year"
+                        v-model="student.year"
+                        placeholder="year"
+                    />
+                    <datalist id="year">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                    </datalist>
                 </div>
                 <div class="btn-wrapper">
-                    <router-link class="login-btn" :to="{name: 'Home'}">
+                    <router-link class="login-btn" :to="{ name: 'Home' }">
                         already have account?
                     </router-link>
                     <div class="register-btn" @click="registerStudent">
-                        <span>REGISTER</span> 
-                        <fa :icon="['fas' , 'sign-in-alt']"/>
+                        <span>REGISTER</span>
+                        <fa :icon="['fas', 'sign-in-alt']" />
                     </div>
                 </div>
-                
             </form>
             <form v-if="role == 'teacher'" class="teacher-form">
                 <div class="input">
@@ -133,40 +149,41 @@
                     />
                 </div>
                 <div class="faculty-year">
-                        <input
-                            class="faculty"
-                            list="faculty"
-                            v-model="teacher.department"
-                            placeholder="Faculty"
-                        />
-                        <datalist id="faculty">
-                            <option value="Edge"></option>
-                            <option value="Firefox"></option>
-                            <option value="Chrome"></option>
-                            <option value="Opera"></option>
-                            <option value="Safari"></option>
-                        </datalist>
+                    <input
+                        class="faculty"
+                        list="faculty"
+                        v-model="teacher.department"
+                        placeholder="Faculty"
+                    />
+                    <datalist id="faculty">
+                        <option value="Edge"></option>
+                        <option value="Firefox"></option>
+                        <option value="Chrome"></option>
+                        <option value="Opera"></option>
+                        <option value="Safari"></option>
+                    </datalist>
                 </div>
                 <div class="btn-wrapper">
-                    <router-link class="login-btn" :to="{name: 'Home'}">
+                    <router-link class="login-btn" :to="{ name: 'Home' }">
                         already have account?
                     </router-link>
                     <div class="register-btn" @click="registerTeacher">
                         <span>REGISTER</span>
-                        <fa :icon="['fas' , 'sign-in-alt']"/>
+                        <fa :icon="['fas', 'sign-in-alt']" />
                     </div>
                 </div>
+                <span>{{error?error:''}}</span>
             </form>
         </div>
     </div>
 </template>
 
 <script>
-import { reactive , ref } from "vue";
-import { useRouter } from 'vue-router'
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import Card from "../components/Card.vue";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
     name: "Register",
@@ -174,9 +191,12 @@ export default {
         Card,
     },
     setup() {
-        const router = useRouter()
+        const router = useRouter();
 
-        const role = ref('')
+        const role = ref("");
+
+        const data = ref(null);
+        const error = ref(null);
 
         const student = reactive({
             username: "",
@@ -195,54 +215,69 @@ export default {
             email: "",
             password: "",
             department: "",
-        })
+        });
 
-        const registerTeacher = async ()=> {
+        const registerTeacher = async () => {
             try {
                 const userData = {
-                    tc_name: teacher.firstName,
-                    tc_lastname: teacher.lastName,
-                    tc_email: teacher.email,
-                    tc_password: teacher.password,
-                    tc_department: teacher.department,
-                }
-                const data = await axios.post(`${process.env.DJANGO_BASE_URL}/api/register` , userData )
-                console.log(data.data);
-                await router.replace({ name: 'Home' })
-                
+                    first_name: teacher.firstName,
+                    last_name: teacher.lastName,
+                    email: teacher.email,
+                    password: teacher.password,
+                    department: teacher.department,
+                    role: "teacher",
+                };
+                const res = await axios.post(
+                    `${process.env.DJANGO_BASE_URL ??= 'http://127.0.0.1:8000/'}/api/register`,
+                    userData
+                );
+                data.value = res.data;
+                await router.replace({ name: "Home" });
             } catch (error) {
+                error.value = error.message;
                 console.log(error);
             }
-        }
+        };
 
-        const registerStudent = async ()=> {
+        const registerStudent = async () => {
             try {
                 const userData = {
-                    ta_name: student.firstName,
-                    ta_lastname: student.lastName,
-                    ta_email: student.email,
-                    ta_password: student.password,
-                    ta_department: student.department,
-                    ta_year: student.year,
-                }
-                const data = await axios.post('http://127.0.0.1:8000/TA/' , userData )
-                console.log(data.data);
-                await router.replace({ name: 'Home' })
-                
+                    student_id: student.username,
+                    first_name: student.firstName,
+                    last_name: student.lastName,
+                    email: student.email,
+                    password: student.password,
+                    department: student.department,
+                    student_year: student.year,
+                    role: "student",
+                };
+                const res = await axios.post(
+                    `${process.env.DJANGO_BASE_URL ??= 'http://127.0.0.1:8000/'}/api/register`,
+                    userData
+                );
+                data.value = res.data;
+                await router.replace({ name: "Home" });
             } catch (error) {
+                error.value = error.message;
                 console.log(error);
             }
-        }
+        };
 
-
-        
-        return { role , student , teacher , registerTeacher , registerStudent };
+        return {
+            role,
+            student,
+            teacher,
+            registerTeacher,
+            registerStudent,
+            error,
+            data,
+        };
     },
 };
 </script>
 
 <style lang="scss" scoped>
-@mixin transition($x...){
+@mixin transition($x...) {
     -webkit-transition: $x;
     -moz-transition: $x;
     -ms-transition: $x;
@@ -251,10 +286,10 @@ export default {
 }
 
 @mixin transform($transforms) {
-	-webkit-transform: $transforms;
-	-moz-transform: $transforms;
-	-ms-transform: $transforms;
-	transform: $transforms;
+    -webkit-transform: $transforms;
+    -moz-transform: $transforms;
+    -ms-transform: $transforms;
+    transform: $transforms;
 }
 
 .register {
@@ -305,9 +340,9 @@ export default {
             }
         }
 
-        .back-btn{
+        .back-btn {
             margin-top: 3rem;
-            padding: .5rem 1rem;
+            padding: 0.5rem 1rem;
             background-color: #000;
             color: #fff;
             font-weight: 700;
@@ -316,51 +351,60 @@ export default {
             text-transform: uppercase;
         }
 
-        .radio-container{
+        .radio-container {
             display: flex;
             align-items: center;
-            h2{
+            h2 {
                 font-size: 1.5rem;
-                margin-right: .5rem ;
+                margin-right: 0.5rem;
                 @media (max-width: 860px) {
                     font-size: 1rem;
                 }
             }
-            input[type="radio"]{
+            input[type="radio"] {
                 display: none;
             }
-            #teacher:checked ~ .teacher-wrapper{
+            #teacher:checked ~ .teacher-wrapper {
                 color: #fff;
-                &::before{
-                    content: '';
+                &::before {
+                    content: "";
                     position: absolute;
                     inset: 0;
                     background-color: var(--secondary-color-normal);
-                    @include transition(color .5s, background-color .5s, border-color .5s , transform .5s);
+                    @include transition(
+                        color 0.5s,
+                        background-color 0.5s,
+                        border-color 0.5s,
+                        transform 0.5s
+                    );
                     z-index: -1;
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px;
-
                 }
                 border: none;
-                &:hover{
+                &:hover {
                     outline: none;
                     border: none !important;
                 }
             }
-            #student:checked ~ .student-wrapper{
+            #student:checked ~ .student-wrapper {
                 color: #fff;
                 box-shadow: none;
                 border: none;
-                &:hover{
+                &:hover {
                     outline: none;
                     border: none !important;
                 }
             }
-            #student:checked ~ .teacher-wrapper{
-                &::before{
+            #student:checked ~ .teacher-wrapper {
+                &::before {
                     z-index: -1;
-                    @include transition(color .5s, background-color .5s, border-color .5s , transform .5s);
-                    content: '';
+                    @include transition(
+                        color 0.5s,
+                        background-color 0.5s,
+                        border-color 0.5s,
+                        transform 0.5s
+                    );
+                    content: "";
                     position: absolute;
                     inset: 0;
                     background-color: var(--secondary-color-normal);
@@ -368,37 +412,40 @@ export default {
                     box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px;
                 }
             }
-            .wrapper{
-                @include transition(color .5s, background-color .5s, border-color .5s);
+            .wrapper {
+                @include transition(
+                    color 0.5s,
+                    background-color 0.5s,
+                    border-color 0.5s
+                );
                 position: relative;
                 text-transform: uppercase;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                padding: .5rem 1rem;
+                padding: 0.5rem 1rem;
                 margin-right: 1rem;
                 cursor: pointer;
                 font-size: 1.5rem;
                 font-weight: 900;
                 border: 1px solid #e2e2e2;
                 border-radius: 5px;
-    
-                &:hover{
-                    outline: 1px solid #303030;
 
+                &:hover {
+                    outline: 1px solid #303030;
                 }
 
                 @media (max-width: 860px) {
                     font-size: 1rem;
                 }
             }
-            .student-wrapper{
+            .student-wrapper {
                 background-color: transparent;
             }
-            .teacher-wrapper{
+            .teacher-wrapper {
                 background-color: transparent;
             }
-            img{
+            img {
                 width: 40px;
                 height: 40px;
                 object-fit: cover;
@@ -408,25 +455,25 @@ export default {
                 }
             }
         }
-        .teacher-form{
-            animation: .5s appear2;
+        .teacher-form {
+            animation: 0.5s appear2;
         }
-        .student-form{
-            animation: .5s appear;
+        .student-form {
+            animation: 0.5s appear;
         }
         @keyframes appear {
-            0%{
+            0% {
                 @include transform(translateX(-100%));
             }
-            100%{
+            100% {
                 @include transform(translateX(0));
             }
         }
         @keyframes appear2 {
-            0%{
+            0% {
                 @include transform(translateX(100%));
             }
-            100%{
+            100% {
                 @include transform(translateX(0));
             }
         }
@@ -435,9 +482,9 @@ export default {
             width: 100%;
             display: flex;
             flex-direction: column;
-            .faculty-year{
+            .faculty-year {
                 display: flex;
-                .faculty{
+                .faculty {
                     width: 40%;
                     margin-right: 5%;
                     @media (max-width: 1000px) {
@@ -445,13 +492,12 @@ export default {
                         margin-right: 5%;
                     }
                 }
-                .year{
+                .year {
                     @media (max-width: 1000px) {
                         width: 25%;
                     }
                     width: 25%;
                 }
-
             }
             input {
                 &::placeholder {
@@ -469,7 +515,8 @@ export default {
                 border-radius: 10px;
                 // box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
                 &:focus {
-                    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+                        rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
                     // box-shadow: rgba(69, 83, 95, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
                     border: 1px solid #bdbdbd;
                     outline: none;
@@ -479,7 +526,7 @@ export default {
                     }
                 }
 
-                &:hover{
+                &:hover {
                     border: 1px solid #bdbdbd;
                 }
 
@@ -488,9 +535,9 @@ export default {
                     font-size: 1rem;
                 }
                 @media (max-width: 676px) {
-                    }
+                }
             }
-            .btn-wrapper{
+            .btn-wrapper {
                 display: flex;
                 width: 70%;
                 @media (max-width: 1000px) {
@@ -498,28 +545,32 @@ export default {
                 }
                 justify-content: space-between;
                 align-items: center;
-                .login-btn{
+                .login-btn {
                     text-decoration: underline;
                     color: blue;
                     cursor: pointer;
                 }
-                .register-btn{
-                    padding: .8rem 1.3rem;
+                .register-btn {
+                    padding: 0.8rem 1.3rem;
                     color: #fff;
                     background-color: var(--secondary-color-normal);
-                    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+                    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+                        rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
                     font-weight: 700;
                     cursor: pointer;
-                    @include transition(color .5s, background-color .5s, border-color .5s);
-                    &:hover{
+                    @include transition(
+                        color 0.5s,
+                        background-color 0.5s,
+                        border-color 0.5s
+                    );
+                    &:hover {
                         background-color: var(--secondary-color-dark);
                     }
-                    span{
-                        margin-right: .5rem;
+                    span {
+                        margin-right: 0.5rem;
                     }
                 }
             }
-
         }
     }
 }

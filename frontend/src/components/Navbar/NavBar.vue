@@ -4,7 +4,7 @@
             <div class="content-wrapper-desktop" v-if="!store.state.isMobile">
                 <div class="logo-wrapper">
                     <img
-                        src="../../public/logo_color.svg"
+                        src="../../../public/logo_color.svg"
                         alt=""
                         @click="homeNav()"
                     />
@@ -40,14 +40,14 @@
                 >
                 <img
                     class="user-img"
-                    src="../../public/image/profile.svg"
+                    src="../../../public/image/profile.svg"
                     alt=""
                 />
             </div>
             <div class="content-wrapper-mobile" v-if="store.state.isMobile">
                 <div class="logo-wrapper">
                     <img
-                        src="../../public/logo_color.svg"
+                        src="../../../public/logo_color.svg"
                         alt=""
                         @click="homeNav()"
                     />
@@ -66,7 +66,7 @@
         </div>
 
         <div class="nav-mobile" id="nav-mobile">
-            <router-link class="link login" to="/">Login</router-link>
+            <router-link class="link login" to="/login">Login</router-link>
             <router-link class="link signup" to="/register"
                 >Sign up</router-link
             >
@@ -101,7 +101,7 @@
                     <div class="img-wrapper">
                         <img
                             :src="
-                                require(`../../public/image/department/${item.src}`)
+                                require(`../../../public/image/department/${item.src}`)
                             "
                             alt=""
                         />
@@ -127,7 +127,7 @@
                 <div class="img-wrapper">
                     <img
                         :src="
-                            require(`../../public/image/department/${item.src}`)
+                            require(`../../../public/image/department/${item.src}`)
                         "
                         alt=""
                     />
@@ -145,14 +145,16 @@
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 
-import { store } from "../store";
+import { store } from "../../store";
 import { watch } from '@vue/runtime-core';
+
+import useAuth from '../../composables/useAuth'
 
 export default {
     name: "NavBar",
     setup() {
         const router = useRouter();
-
+        const { username , isLoggedIn } = useAuth()
         const department = ref([
             {
                 name: "Computer Engineer",
@@ -237,6 +239,8 @@ export default {
             toggleNavBar,
             department,
             store,
+            username,
+            isLoggedIn
         };
     },
 };
@@ -366,6 +370,7 @@ $button-color: rgba(0, 118, 255, 0.9);
                     color: rgb(255, 255, 255);
                     font-weight: 500;
                     background-color: $button-color;
+                    box-shadow: 0 4px 14px 0 rgb(0 118 255 / 39%);
 
                     &:hover {
                         color: $button-color;
