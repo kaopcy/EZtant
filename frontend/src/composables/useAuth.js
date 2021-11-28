@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
+import { useRouter } from 'vue-router'
 
-const username = ref({
+const user = ref({
     id: null,
     studentID: null,
     firstName: null,
@@ -18,9 +19,11 @@ const baseURL = "http://127.0.0.1:8000/";
 // const baseURL = 'http://192.168.1.40:8000/';
 
 export default function () {
-    const role = computed(() => username.value.role);
-    const isLoggedIn = computed(() => (username.value.role ? true : false));
+    const role = computed(() => user.value.role);
+    const isLoggedIn = computed(() => (user.value.role ? true : false));
     const getFullName = computed(() => isLoggedIn.value ? `${firstName.value} ${lastName.value}` : 'not logged in');
+
+    const router = useRouter()
 
     const login = async (email, password) => {
         try {
@@ -36,6 +39,7 @@ export default function () {
                 }),
             });
             const data = await response.json();
+            router.push('/')
             console.log(data);
         } catch (error) {
             alert(error.message);
@@ -52,6 +56,7 @@ export default function () {
                 credentials: "include",
             });
             const data = await response.json();
+            clearUserData()
             console.log(data);
         } catch (error) {
             console.log(error.message);
@@ -69,25 +74,38 @@ export default function () {
                 credentials: "include",
             });
             const data = await response.json();
-            username.value.role = data.role ?? null;
-            username.value.studentID = data.student_id ?? null;
-            username.value.id = data.id ?? null;
-            username.value.firstName = data.first_name ?? null;
-            username.value.lastName = data.last_name ?? null;
-            username.value.department = data.department ?? null;
-            username.value.year = data.student_year ?? null;
-            username.value.email = data.email ?? null;
+            user.value.role = data.role ?? null;
+            user.value.studentID = data.student_id ?? null;
+            user.value.id = data.id ?? null;
+            user.value.firstName = data.first_name ?? null;
+            user.value.lastName = data.last_name ?? null;
+            user.value.department = data.department ?? null;
+            user.value.year = data.student_year ?? null;
+            user.value.email = data.email ?? null;
         } catch (error) {
             console.log(error.message);
         }
     };
+
+    const clearUserData = ()=>{
+        user.value = {
+            id: null,
+            studentID: null,
+            firstName: null,
+            lastName: null,
+            role: null,
+            department: null,
+            year: null,
+            email: null,
+        }
+    }
 
     getUser();
 
     return {
         role,
         isLoggedIn,
-        username,
+        user,
         getFullName,
         login,
         logout,

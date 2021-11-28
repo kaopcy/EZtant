@@ -32,8 +32,6 @@
                 <span>{{ errorData ? errorData : "" }}</span>
             </div>
         </form>
-        <button class="submit-btn" @click="getUser()">getuser</button>
-        <button class="submit-btn" @click="logout()">logout</button>
     </div>
 </template>
 
@@ -46,7 +44,7 @@ export default {
     name: "Login",
     setup() {
 
-        const { login , logout , getUser , username } = useAuth()
+        const { login , username } = useAuth()
 
         const user = reactive({
             email: "",
@@ -59,8 +57,6 @@ export default {
         return {
             user,
             login,
-            logout,
-            getUser,
             errorData,
             loginData,
             username

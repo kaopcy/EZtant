@@ -38,11 +38,20 @@
                 <router-link class="link last" to="/main-post"
                     >Post</router-link
                 >
-                <img
-                    class="user-img"
-                    src="../../../public/image/profile.svg"
-                    alt=""
-                />
+                <div
+                    class="img-wrapper"
+                    :class="{
+                        active: userPopupRef ? userPopupRef.isClose : false,
+                    }"
+                >
+                    <UserPopup ref="userPopupRef" />
+                    <img
+                        class="user-img"
+                        src="../../../public/image/profile.svg"
+                        alt=""
+                        @click="userPopupRef.toggleClose()"
+                    />
+                </div>
             </div>
             <div class="content-wrapper-mobile" v-if="store.state.isMobile">
                 <div class="logo-wrapper">
@@ -66,10 +75,27 @@
         </div>
 
         <div class="nav-mobile" id="nav-mobile">
-            <router-link class="link login" to="/login">Login</router-link>
-            <router-link class="link signup" to="/register"
+            <router-link class="link login" to="/login" v-if="!isLoggedIn"
+                >Login</router-link
+            >
+            <router-link class="link signup" to="/register" v-if="!isLoggedIn"
                 >Sign up</router-link
             >
+            <div class="user-wrapper" v-if="isLoggedIn">
+                <div class="detail">
+                    <div class="img-wrapper">
+                        <img
+                            :src="
+                                user.image ??
+                                'https://th.jobsdb.com/th-th/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
+                            "
+                            alt=""
+                        />
+                    </div>
+                    <span>{{ getFullName }}</span>
+                </div>
+                <div class="logout-btn">LOGOUT</div>
+            </div>
             <div
                 class="link"
                 id="department-selector"
@@ -146,15 +172,20 @@ import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 
 import { store } from "../../store";
-import { watch } from '@vue/runtime-core';
+import { watch } from "@vue/runtime-core";
 
-import useAuth from '../../composables/useAuth'
+import useAuth from "../../composables/useAuth";
+import UserPopup from "../../components/Navbar/UserPopup.vue";
 
 export default {
     name: "NavBar",
+    components: {
+        UserPopup,
+    },
     setup() {
         const router = useRouter();
-        const { username , isLoggedIn } = useAuth()
+        const userPopupRef = ref(null);
+        const { user, isLoggedIn, getFullName } = useAuth();
         const department = ref([
             {
                 name: "Computer Engineer",
@@ -214,23 +245,25 @@ export default {
 
         const toggleNavBar = () => {
             const navBar = document.getElementById("nav-mobile");
-            const navBtn = document.getElementById("nav-btn")
+            const navBtn = document.getElementById("nav-btn");
             const dropDown = document.getElementById("drop-down-mobile");
             dropDown.classList.remove("visible");
-            navBtn.classList.toggle("active")
+            navBtn.classList.toggle("active");
             navBar.classList.toggle("visible");
         };
 
-        watch(()=>store.state.isMobile , ()=>{
-            if (store.state.isMobile){
-                const dropDown = document.getElementById("drop-down");
-                dropDown.classList.remove("visible");
+        watch(
+            () => store.state.isMobile,
+            () => {
+                if (store.state.isMobile) {
+                    const dropDown = document.getElementById("drop-down");
+                    dropDown.classList.remove("visible");
+                } else {
+                    const navMobile = document.getElementById("nav-mobile");
+                    navMobile.classList.remove("visible");
+                }
             }
-            else {
-                const navMobile = document.getElementById("nav-mobile");
-                navMobile.classList.remove("visible");
-            }
-        })
+        );
 
         return {
             homeNav,
@@ -239,8 +272,10 @@ export default {
             toggleNavBar,
             department,
             store,
-            username,
-            isLoggedIn
+            user,
+            isLoggedIn,
+            userPopupRef,
+            getFullName,
         };
     },
 };
@@ -251,7 +286,14 @@ $link-color: #696969;
 $link-color-hover: #000;
 
 $button-color: rgba(0, 118, 255, 0.9);
-
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 .wrapper {
     font-family: var(--primary-font);
     width: 100%;
@@ -332,10 +374,36 @@ $button-color: rgba(0, 118, 255, 0.9);
                 color: $link-color-hover;
             }
         }
-        .user-img {
-            width: 35px;
-            height: 35px;
-            color: #fff;
+
+        .img-wrapper {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: 50%;
+                box-shadow: rgba(52, 165, 231, 0.363) 0px 4px 29px 0px;
+                z-index: 9;
+            }
+            &.active {
+                &::after {
+                    animation: spin 1s infinite linear;
+                }
+            }
+            .user-img {
+                z-index: 99;
+                width: 35px;
+                height: 35px;
+                color: #fff;
+                object-fit: cover;
+            }
         }
     }
 
@@ -397,26 +465,24 @@ $button-color: rgba(0, 118, 255, 0.9);
                     margin-bottom: 7px;
                     border-top: 2px solid rgb(5, 5, 5);
                     border-radius: 20px;
-                    transition: .25s;
+                    transition: 0.25s;
                     transform-origin: left;
                 }
 
-                &.active{
-                    span{
+                &.active {
+                    span {
                         border-width: 2px;
-                        &:nth-child(1){
+                        &:nth-child(1) {
                             transform: rotate(45deg) scaleX(130%);
                         }
-                        &:nth-child(2){
-                            transform: translate(100% , 0);
+                        &:nth-child(2) {
+                            transform: translate(100%, 0);
                         }
-                        &:nth-child(3){
+                        &:nth-child(3) {
                             transform: rotate(-45deg) scaleX(130%);
                         }
-                        
                     }
                 }
-
             }
         }
     }
@@ -438,11 +504,76 @@ $button-color: rgba(0, 118, 255, 0.9);
     background-color: #fff;
     width: 100%;
     max-height: 70vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     &.visible {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .user-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        align-self: flex-start;
+        justify-content: space-between;
+        padding-left: 1rem;
+        .detail {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            cursor: pointer;
+            &:hover {
+                border: 1px dashed rgb(230, 230, 230);
+                border-radius: 4px;
+                .img-wrapper {
+                    &::after {
+                        animation: spin 1s infinite linear;
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        border-radius: 50%;
+                        box-shadow: rgba(52, 165, 231, 0.363) 0px 4px 29px 0px;
+                        z-index: 9;
+                    }
+                }
+                
+            }
+
+            .img-wrapper {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                margin-right: 1rem;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    clip-path: circle(50% at 50% 50%);
+                    z-index: 1;
+                }
+            }
+            span {
+                font-family: var(--primary-font);
+                color: var(--priamry-font-color);
+            }
+        }
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #fff;
+            background-color: var(--secondary-color-dark);
+            transition: background-color 0.25s;
+            font-family: var(--primary-font);
+            cursor: pointer;
+            margin-right: 1rem;
+            box-shadow: 0 4px 14px 0 rgb(0 118 255 / 39%);
+            &:hover {
+                background-color: var(--secondary-color-normal);
+            }
+        }
     }
 
     .link {
@@ -469,7 +600,7 @@ $button-color: rgba(0, 118, 255, 0.9);
             border: 1px solid #eaeaea;
             justify-content: center;
             color: #666666;
-            &:hover{
+            &:hover {
                 background-color: rgb(201, 201, 201);
             }
         }
