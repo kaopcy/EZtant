@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+import useAuth from "../composables/useAuth";
+const { isLoggedIn } = useAuth();
+
 const routes = [
     {
         path: "/",
@@ -45,13 +49,18 @@ const routes = [
         name: "StudentList",
         component: () => import("../views/UserList/StudentList.vue"),
     },
-    
-
 ];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
 });
-
+router.beforeEach((to, from, next) => {
+    if (to.name !== "Login" && !isLoggedIn) {
+        console.log('not logged in');
+        next({ name: "Login" });
+    }
+    // if the user is not authenticated, `next` is called twice
+    next();
+});
 export default router;

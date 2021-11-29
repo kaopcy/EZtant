@@ -1,7 +1,7 @@
 <template>
 <div class="teacher-wrapper">
     <h1>Hello from teacher</h1>
-    <Loading v-if="isLoading" />
+    <Loading v-if="isLoading" :Attr="{width: '100%' , height:'100%'}" />
     <span v-if="!isLoading">
         {{allTeacher}}
     </span>

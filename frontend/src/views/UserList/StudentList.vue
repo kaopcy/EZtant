@@ -14,11 +14,11 @@
             >
                 <div class="left">
                     <div class="img-wrapper">
-                        <img :src="student.image" alt="" />
+                        <img :src="student.imageURL" alt="" />
                     </div>
                     <div class="text-wrapper">
-                        <h1>{{ student.firstName }} {{ student.lastName }}</h1>
-                        <span>{{ student.studentID }} {{ student.year }}D</span>
+                        <h1>{{ student.first_name }} {{ student.last_name }}</h1>
+                        <span>{{ student.student_id }} {{ student.student_year }}D</span>
                     </div>
                 </div>
                 <div class="right">
