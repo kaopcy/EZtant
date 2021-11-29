@@ -47,7 +47,10 @@
                     <UserPopup ref="userPopupRef" />
                     <img
                         class="user-img"
-                        src="../../../public/image/profile.svg"
+                        :src="
+                            user.image ??
+                            'https://th.jobsdb.com/th-th/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
+                        "
                         alt=""
                         @click="userPopupRef.toggleClose()"
                     />
@@ -82,7 +85,14 @@
                 >Sign up</router-link
             >
             <div class="user-wrapper" v-if="isLoggedIn">
-                <div class="detail">
+                <router-link
+                    class="detail link"
+                    :to="
+                        role === 'teacher'
+                            ? '/teacher-profile/1'
+                            : '/student-profile/1'
+                    "
+                >
                     <div class="img-wrapper">
                         <img
                             :src="
@@ -93,8 +103,8 @@
                         />
                     </div>
                     <span>{{ getFullName }}</span>
-                </div>
-                <div class="logout-btn">LOGOUT</div>
+                </router-link>
+                <div class="logout-btn" @click="handleLogout()">LOGOUT</div>
             </div>
             <div
                 class="link"
@@ -185,7 +195,7 @@ export default {
     setup() {
         const router = useRouter();
         const userPopupRef = ref(null);
-        const { user, isLoggedIn, getFullName } = useAuth();
+        const { user, isLoggedIn, getFullName, role , logout } = useAuth();
         const department = ref([
             {
                 name: "Computer Engineer",
@@ -252,6 +262,11 @@ export default {
             navBar.classList.toggle("visible");
         };
 
+        const handleLogout = () => {
+            logout();
+            window.location.reload();
+        };
+
         watch(
             () => store.state.isMobile,
             () => {
@@ -270,12 +285,14 @@ export default {
             toggleDropDown,
             toggleDropDownMobile,
             toggleNavBar,
+            handleLogout,
             department,
             store,
             user,
             isLoggedIn,
             userPopupRef,
             getFullName,
+            role,
         };
     },
 };
@@ -399,8 +416,9 @@ $button-color: rgba(0, 118, 255, 0.9);
             }
             .user-img {
                 z-index: 99;
-                width: 35px;
-                height: 35px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
                 color: #fff;
                 object-fit: cover;
             }
@@ -503,6 +521,7 @@ $button-color: rgba(0, 118, 255, 0.9);
     display: none;
     background-color: #fff;
     width: 100%;
+    position: absolute;
     max-height: 70vh;
     overflow-y: auto;
     &.visible {
@@ -523,9 +542,11 @@ $button-color: rgba(0, 118, 255, 0.9);
             align-items: center;
             padding: 1rem 0;
             cursor: pointer;
+            border: none;
+
             &:hover {
-                border: 1px dashed rgb(230, 230, 230);
                 border-radius: 4px;
+                background-color: #fff;
                 .img-wrapper {
                     &::after {
                         animation: spin 1s infinite linear;
@@ -537,7 +558,6 @@ $button-color: rgba(0, 118, 255, 0.9);
                         z-index: 9;
                     }
                 }
-                
             }
 
             .img-wrapper {

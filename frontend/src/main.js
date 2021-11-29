@@ -18,6 +18,8 @@ import {
     faSignOutAlt,
     faAddressBook,
     faHistory,
+    faUniversity,
+    faGraduationCap,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -32,7 +34,9 @@ library.add(
     faCalendarAlt,
     faSignOutAlt,
     faAddressBook,
-    faHistory
+    faHistory,
+    faUniversity,
+    faGraduationCap
 );
 
 createApp(App)

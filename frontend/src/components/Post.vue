@@ -53,7 +53,6 @@ export default {
     props: {
         post: {
             type: Object,
-            require: true,
         }
     },
     setup(props) {

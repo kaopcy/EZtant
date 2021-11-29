@@ -25,6 +25,16 @@ const routes = [
         name: "FocusPost",
         component: () => import("../views/Post/FocusPost.vue"),
     },
+    {
+        path: "/student-profile/:id",
+        name: "StudentProfile",
+        component: () => import("../views/Profile/StudentProfile.vue"),
+    },
+    {
+        path: "/teacher-profile/:id",
+        name: "TeacherProfile",
+        component: () => import("../views/Profile/TeacherProfile.vue"),
+    },
     
 
 ];

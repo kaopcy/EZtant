@@ -83,10 +83,17 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: var(--primary-font);
 }
 
 body{
     background-color: #ffffff;
+}
+
+.link{
+    text-decoration: none;
+    outline: none;
+    border: none;
 }
 
 .blank {

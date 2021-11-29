@@ -1,10 +1,15 @@
 <template>
     <div class="main-post">
-
         <Popup id="popup" />
         <div class="greeting">
             <div class="greeting-img" :class="{ hovered: isHover }">
-                <div class="btn" id="btn-post" @click="store.commit('toggleIsPopup')">POST</div>
+                <div
+                    class="btn"
+                    id="btn-post"
+                    @click="store.commit('toggleIsPopup')"
+                >
+                    POST
+                </div>
                 <div class="wrapper" :class="{ hovered: isHover }">
                     <h1>Find your Right teacher assistant!</h1>
                 </div>
@@ -15,13 +20,13 @@
             <div class="wrapper" :class="isLast ? 'active' : 'inactive'">
                 <h1
                     :class="isLast ? 'active' : 'inactive'"
-                    @click="isLast = true"
+                    @click="toggleIsLast()"
                 >
                     Lastest
                 </h1>
                 <h1
                     :class="!isLast ? 'active' : 'inactive'"
-                    @click="isLast = false"
+                    @click="toggleIsLast()"
                 >
                     Available
                 </h1>
@@ -32,7 +37,10 @@
             </div>
         </div>
 
-        <div class="post-wrapper">
+        <div class="post-wrapper" v-if="isLoading">
+            <Loading :Attr="{width: '80%' , height: '70vh'}"/>
+        </div>
+        <div class="post-wrapper" v-if="!isLoading">
             <Post v-for="post in posts" :key="post" :post="post" />
         </div>
     </div>
@@ -40,108 +48,27 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import Post from "../../components/Post.vue";
 import { onMounted } from "@vue/runtime-core";
 import { store } from "../../store";
-import Popup from '../../components/MainPost/PostPopup.vue'
 
+import Popup from "../../components/MainPost/PostPopup.vue";
+import Post from "../../components/Post.vue";
+import Loading from '../../components/Loading/LoadingComponent.vue'
+
+import usePost from '../../composables/usePost'
 export default {
     name: "MainPost",
     components: {
         Post,
         Popup,
+        Loading,
     },
     setup() {
         const isHover = ref(false);
 
-        const isLast = ref(true);
+        const { getAllPost , getLastestPost , isLoading } = usePost()
 
-        const posts = ref([
-            {
-                subject: "Data communication",
-                timeStamp: "15 minute ago",
-                author: "Jirasak",
-                requested: [
-                    {
-                        name: "",
-                    },
-                ],
-                schedule: [
-                    {
-                        section: "101",
-                        day: "TUE",
-                        time: "09.00 - 12.00 AM.",
-                    },
-                    {
-                        section: "102",
-                        day: "WED",
-                        time: "01.00 - 04.00 PM.",
-                    },
-                    {
-                        section: "103",
-                        day: "FRI",
-                        time: "04.30 - 07.30 PM.",
-                    },
-                ],
-                detail: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae officia doloribus nihil animi reiciendis assumenda cupiditate nostrum commodi facilis optio.",
-            },
-            {
-                subject: "Data communication",
-                timeStamp: "15 minute ago",
-                author: "Jirasak",
-                requested: [
-                    {
-                        name: "",
-                    },
-                ],
-                schedule: [
-                    {
-                        section: "101",
-                        day: "TUE",
-                        time: "09.00 - 12.00 AM.",
-                    },
-                    {
-                        section: "102",
-                        day: "WED",
-                        time: "01.00 - 04.00 PM.",
-                    },
-                    {
-                        section: "103",
-                        day: "FRI",
-                        time: "04.30 - 07.30 PM.",
-                    },
-                ],
-                detail: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae officia doloribus nihil animi reiciendis assumenda cupiditate nostrum commodi facilis optio.",
-            },
-            {
-                subject: "Data communication",
-                timeStamp: "15 minute ago",
-                author: "Jirasak",
-                requested: [
-                    {
-                        name: "",
-                    },
-                ],
-                schedule: [
-                    {
-                        section: "101",
-                        day: "TUE",
-                        time: "09.00 - 12.00 AM.",
-                    },
-                    {
-                        section: "102",
-                        day: "WED",
-                        time: "01.00 - 04.00 PM.",
-                    },
-                    {
-                        section: "103",
-                        day: "FRI",
-                        time: "04.30 - 07.30 PM.",
-                    },
-                ],
-                detail: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae officia doloribus nihil animi reiciendis assumenda cupiditate nostrum commodi facilis optio.",
-            },
-        ]);
+        const posts = ref(null);
 
         const onHoverAnimation = () => {
             const posBtn = document.getElementById("btn-post");
@@ -153,12 +80,23 @@ export default {
             };
         };
 
-        const toggleIsLast = () => {
+        // handle toggle { Last , Available }
+        const isLast = ref(true);
+        const toggleIsLast = async () => {
             isLast.value = !isLast.value;
+            if (isLast.value){
+                posts.value = await getLastestPost()
+                console.log(process.env.VUE_APP_URL);
+            }
+            else{
+                posts.value = await getAllPost()
+                console.log(process.env.VUE_APP_URL);
+            }
         };
 
-        onMounted(() => {
+        onMounted(async ()=> {
             if (!store.state.isMobile) onHoverAnimation();
+            posts.value = await getAllPost()
         });
 
         return {
@@ -166,7 +104,8 @@ export default {
             isHover,
             isLast,
             toggleIsLast,
-            store
+            store,
+            isLoading
         };
     },
 };
@@ -182,7 +121,7 @@ $sort-type-height: 5px;
     position: relative;
 }
 
-#popup{
+#popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -412,5 +351,8 @@ $sort-type-height: 5px;
     position: relative;
     width: 100%;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div class="login-container">
-        <form class="login-wrapper" @submit.prevent="login(user.email , user.password )">
+        <Loading :Attr="{width:'100%',height:'100%'}" v-if="isLoading"/>
+        <form class="login-wrapper" @submit.prevent="login(user.email , user.password )" v-if="!isLoading">
             <h1>Login</h1>
             <div class="input-wrapper">
                 <label for="email">Email:</label>
@@ -28,38 +29,35 @@
                 </div>
                 <button class="submit-btn">Login</button>
             </div>
-            <div class="error-data">
-                <span>{{ errorData ? errorData : "" }}</span>
-            </div>
         </form>
     </div>
 </template>
 
 <script>
-import { reactive, ref } from "@vue/reactivity";
+import { reactive } from "@vue/reactivity";
 
 import useAuth from '../composables/useAuth'
+import Loading from '../components/Loading/LoadingComponent.vue'
 
 export default {
     name: "Login",
+    components:{
+        Loading,
+    },
     setup() {
 
-        const { login , username } = useAuth()
+        const { login , username , isLoading } = useAuth()
 
         const user = reactive({
             email: "",
             password: "",
         });
 
-        const loginData = ref(null);
-        const errorData = ref(null);
-
         return {
             user,
             login,
-            errorData,
-            loginData,
-            username
+            username,
+            isLoading
         };
     },
 };
