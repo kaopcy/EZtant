@@ -73,6 +73,13 @@
                         placeholder="Password"
                     />
                 </div>
+                <div class="input">
+                    <input
+                        type="text"
+                        v-model="student.imageURL"
+                        placeholder="ImageURL"
+                    />
+                </div>
                 <div class="faculty-year">
                     <input
                         class="faculty"
@@ -105,7 +112,7 @@
                     <router-link class="login-btn" :to="{ name: 'Home' }">
                         already have account?
                     </router-link>
-                    <div class="register-btn" @click="registerStudent">
+                    <div class="register-btn" @click="registerStudent(student)">
                         <span>REGISTER</span>
                         <fa :icon="['fas', 'sign-in-alt']" />
                     </div>
@@ -148,6 +155,13 @@
                         placeholder="Password"
                     />
                 </div>
+                <div class="input">
+                    <input
+                        type="text"
+                        v-model="teacher.imageURL"
+                        placeholder="ImageURL"
+                    />
+                </div>
                 <div class="faculty-year">
                     <input
                         class="faculty"
@@ -167,12 +181,11 @@
                     <router-link class="login-btn" :to="{ name: 'Home' }">
                         already have account?
                     </router-link>
-                    <div class="register-btn" @click="registerTeacher">
+                    <div class="register-btn" @click="registerTeacher(teacher)">
                         <span>REGISTER</span>
                         <fa :icon="['fas', 'sign-in-alt']" />
                     </div>
                 </div>
-                <span>{{error?error:''}}</span>
             </form>
         </div>
     </div>
@@ -180,10 +193,9 @@
 
 <script>
 import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
 
 import Card from "../components/Card.vue";
-import axios from "axios";
+import useAuth from '../composables/useAuth'
 
 export default {
     name: "Register",
@@ -191,12 +203,8 @@ export default {
         Card,
     },
     setup() {
-        const router = useRouter();
-
+        const { registerTeacher , registerStudent } = useAuth()
         const role = ref("");
-
-        const data = ref(null);
-        const error = ref(null);
 
         const student = reactive({
             username: "",
@@ -206,6 +214,8 @@ export default {
             password: "",
             department: "",
             year: "",
+            imageURL: '',
+
         });
 
         const teacher = reactive({
@@ -215,53 +225,8 @@ export default {
             email: "",
             password: "",
             department: "",
+            imageURL: '',
         });
-
-        const registerTeacher = async () => {
-            try {
-                const userData = {
-                    first_name: teacher.firstName,
-                    last_name: teacher.lastName,
-                    email: teacher.email,
-                    password: teacher.password,
-                    department: teacher.department,
-                    role: "teacher",
-                };
-                const res = await axios.post(
-                    `${process.env.DJANGO_BASE_URL ??= 'http://127.0.0.1:8000/'}/api/register`,
-                    userData
-                );
-                data.value = res.data;
-                await router.replace({ name: "Home" });
-            } catch (error) {
-                error.value = error.message;
-                console.log(error);
-            }
-        };
-
-        const registerStudent = async () => {
-            try {
-                const userData = {
-                    student_id: student.username,
-                    first_name: student.firstName,
-                    last_name: student.lastName,
-                    email: student.email,
-                    password: student.password,
-                    department: student.department,
-                    student_year: student.year,
-                    role: "student",
-                };
-                const res = await axios.post(
-                    `${process.env.DJANGO_BASE_URL ??= 'http://127.0.0.1:8000/'}/api/register`,
-                    userData
-                );
-                data.value = res.data;
-                await router.replace({ name: "Home" });
-            } catch (error) {
-                error.value = error.message;
-                console.log(error);
-            }
-        };
 
         return {
             role,
@@ -269,8 +234,6 @@ export default {
             teacher,
             registerTeacher,
             registerStudent,
-            error,
-            data,
         };
     },
 };

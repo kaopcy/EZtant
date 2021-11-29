@@ -32,8 +32,8 @@
                         <path d="M6 9l6 6 6-6"></path>
                     </svg>
                 </div>
-                <router-link class="link" to="/">Teacher</router-link>
-                <router-link class="link" to="/">TA</router-link>
+                <router-link class="link" to="/teacher-list">Teacher</router-link>
+                <router-link class="link" to="/student-list">TA</router-link>
                 <router-link class="link" to="/register">Contact</router-link>
                 <router-link class="link last" to="/main-post"
                     >Post</router-link
@@ -48,7 +48,7 @@
                     <img
                         class="user-img"
                         :src="
-                            user.image ??
+                            user.imageURL ??
                             'https://th.jobsdb.com/th-th/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
                         "
                         alt=""
@@ -96,7 +96,7 @@
                     <div class="img-wrapper">
                         <img
                             :src="
-                                user.image ??
+                                user.imageURL ??
                                 'https://th.jobsdb.com/th-th/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
                             "
                             alt=""

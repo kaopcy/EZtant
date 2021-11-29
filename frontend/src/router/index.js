@@ -35,6 +35,16 @@ const routes = [
         name: "TeacherProfile",
         component: () => import("../views/Profile/TeacherProfile.vue"),
     },
+    {
+        path: "/teacher-list",
+        name: "TeacherList",
+        component: () => import("../views/UserList/TeacherList.vue"),
+    },
+    {
+        path: "/student-list",
+        name: "StudentList",
+        component: () => import("../views/UserList/StudentList.vue"),
+    },
     
 
 ];

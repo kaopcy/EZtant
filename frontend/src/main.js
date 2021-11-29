@@ -20,6 +20,7 @@ import {
     faHistory,
     faUniversity,
     faGraduationCap,
+    faStar,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -36,7 +37,8 @@ library.add(
     faAddressBook,
     faHistory,
     faUniversity,
-    faGraduationCap
+    faGraduationCap,
+    faStar
 );
 
 createApp(App)

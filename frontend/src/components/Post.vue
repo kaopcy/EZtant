@@ -96,7 +96,7 @@ $banner-height: 6rem;
 .see-more-wrapper{
     width: 100%;
     height: 40%;
-    background-image: linear-gradient(to top, rgb(82, 82, 82), rgba(255,0,0,0));
+    background-color: rgba(102, 102, 102, 0.288);
     display: flex;
     justify-content: center;
     align-items: center;

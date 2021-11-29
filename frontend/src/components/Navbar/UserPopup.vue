@@ -9,7 +9,7 @@
                 <router-link class="head link" to="/student-profile/1" >
                     <img
                         :src="
-                            user.image ??
+                            user.imageURL ??
                             'https://th.jobsdb.com/th-th/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
                         "
                     />
