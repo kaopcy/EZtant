@@ -91,6 +91,7 @@ export default {
 }
 .container {
     position: absolute;
+    min-width: 220px;
     top: 50px;
     right: -13px;
     background-color: #fff;

@@ -1,38 +1,49 @@
 <template>
     <div class="main-wrapper">
         <div class="search-bar-wrapper">
-            <input type="text" class="search-bar" placeholder="Search" />
+            <input
+                type="text"
+                class="search-bar"
+                placeholder="Search"
+                v-model="searchValue"
+            />
             <fa class="icon" :icon="['fas', 'search']" />
             <fa class="icon" :icon="['fas', 'sort-alpha-down']" />
         </div>
         <Loading v-if="isLoading" :Attr="{ width: '500px', height: '500px' }" />
         <div class="student-list-wrapper" v-if="!isLoading">
-            <div
-                class="student-list"
-                v-for="student in allStudent"
+            <router-link
+                class="student-list link"
+                v-for="student in filteredStudent"
                 :key="student"
+                :to="`/student-list/profile/${student.id}`"
             >
                 <div class="left">
                     <div class="img-wrapper">
                         <img :src="student.imageURL" alt="" />
                     </div>
                     <div class="text-wrapper">
-                        <h1>{{ student.first_name }} {{ student.last_name }}</h1>
-                        <span>{{ student.student_id }} {{ student.student_year }}D</span>
+                        <h1>
+                            {{ student.first_name }} {{ student.last_name }}
+                        </h1>
+                        <span
+                            >{{ student.student_id }}
+                            {{ student.student_year }}D</span
+                        >
                     </div>
                 </div>
                 <div class="right">
-                    <fa class="icon" :icon="['fas','star']" ></fa>
-                    <span>{{getRandomStar()}}</span>
+                    <fa class="icon" :icon="['fas', 'star']"></fa>
+                    <span>{{ getRandomStar() }}</span>
                 </div>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { onMounted } from "@vue/runtime-core";
+import { computed, onMounted } from "@vue/runtime-core";
 import useUserData from "../../composables/useUserData";
 import Loading from "../../components/Loading/LoadingComponent.vue";
 
@@ -44,17 +55,32 @@ export default {
     setup() {
         const { getAllStudent, isLoading } = useUserData();
         const allStudent = ref(null);
+        const searchValue = ref("");
+
         onMounted(async () => {
             allStudent.value = await getAllStudent();
         });
 
         // random star
-        const getRandomStar = ()=> parseInt((Math.random() * 30))
+        const getRandomStar = () => parseInt(Math.random() * 30);
+
+        // filtered profile
+        const filteredStudent = computed(() => {
+            if (!allStudent.value) return "";
+            const filtered = allStudent.value.filter((student) =>
+                `${student.first_name}${student.last_name}`
+                    .toLowerCase()
+                    .includes(searchValue.value.toLowerCase())
+            );
+            return filtered;
+        });
 
         return {
             isLoading,
             allStudent,
-            getRandomStar
+            getRandomStar,
+            searchValue,
+            filteredStudent,
         };
     },
 };
@@ -105,6 +131,8 @@ $search-width: 500px;
         align-items: flex-start;
         min-width: 560px;
         max-width: 60%;
+        margin-bottom: 4rem;
+
         @media (max-width: 600px) {
             min-width: 90%;
             max-width: 90%;
@@ -157,11 +185,11 @@ $search-width: 500px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                .icon{
+                .icon {
                     color: var(--primary-font-color);
                 }
-                span{
-                    font-size: .8rem;
+                span {
+                    font-size: 0.8rem;
                     color: rgb(172, 172, 172);
                 }
             }

@@ -87,13 +87,14 @@ export default {
 }
 
 body{
-    background-color: #ffffff;
+    background-color: #fafafa;
 }
 
 .link{
     text-decoration: none;
     outline: none;
     border: none;
+    color: var(--primary-font-color);
 }
 
 .blank {

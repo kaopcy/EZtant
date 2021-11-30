@@ -1,10 +1,11 @@
 import { ref } from "vue";
 import Swal from "sweetalert2";
 export default function () {
-    const isLoading = ref(false)
+    const isLoading = ref(false);
+
     const getAllStudent = async () => {
         try {
-            isLoading.value = true
+            isLoading.value = true;
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/all-students`,
                 {
@@ -15,9 +16,9 @@ export default function () {
                     credentials: "include",
                 }
             );
-            const data = await response.json()
+            const data = await response.json();
 
-            return data
+            return data;
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -31,7 +32,7 @@ export default function () {
 
     const getAllTeacher = async () => {
         try {
-            isLoading.value = true
+            isLoading.value = true;
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/all-teachers`,
                 {
@@ -42,9 +43,9 @@ export default function () {
                     credentials: "include",
                 }
             );
-            const data = await response.json()
+            const data = await response.json();
 
-            return data
+            return data;
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -56,5 +57,32 @@ export default function () {
         }
     };
 
-    return { getAllStudent , getAllTeacher , isLoading};
+    const getUserByID = async (id) => {
+        try {
+            isLoading.value = true;
+            const response = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/${id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                }
+            );
+            const data = await response.json();
+
+            return data;
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Access denied",
+                text: error.message,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
+    return { getAllStudent, getAllTeacher , getUserByID , isLoading };
 }

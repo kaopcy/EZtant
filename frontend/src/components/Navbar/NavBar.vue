@@ -148,8 +148,8 @@
                     </div>
                 </div>
             </div>
-            <router-link class="link" to="/">Teacher</router-link>
-            <router-link class="link" to="/">TA</router-link>
+            <router-link class="link" to="/teacher-list">Teacher</router-link>
+            <router-link class="link" to="/student-list">TA</router-link>
             <router-link class="link" to="/register">Contact</router-link>
             <router-link class="link last" to="/main-post">Post</router-link>
         </div>

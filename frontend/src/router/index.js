@@ -49,6 +49,16 @@ const routes = [
         name: "StudentList",
         component: () => import("../views/UserList/StudentList.vue"),
     },
+    {
+        path: "/student-list/profile/:id",
+        name: "StudentListProfile",
+        component: () => import("../views/UserList/Profile/StudentListProfile.vue"),
+    },
+    {
+        path: "/teacher-list/profile/:id",
+        name: "TeacherListProfile",
+        component: () => import("../views/UserList/Profile/TeacherListProfile.vue"),
+    },
 ];
 
 const router = createRouter({
