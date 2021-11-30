@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import useAuth from "../composables/useAuth";
-const { isLoggedIn } = useAuth();
+const { isLoggedIn , getUser } = useAuth();
 
 const routes = [
     {
@@ -65,8 +65,11 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
 });
-router.beforeEach((to, from, next) => {
-    if (to.name !== "Login" && !isLoggedIn) {
+router.beforeEach( async (to, from, next) => {
+    if (!isLoggedIn.value){
+        await getUser()
+    }
+    if (to.name !== "Login" && !isLoggedIn.value ) {
         console.log('not logged in');
         next({ name: "Login" });
     }

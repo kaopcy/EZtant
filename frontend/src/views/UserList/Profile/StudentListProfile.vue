@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import useUserData from '../../../composables/useUserData'
@@ -20,13 +19,10 @@ export default {
         Loading,
     },
     setup() {
-        const { getUserByID , isLoading } = useUserData()
-        const user = ref(null)
+        const { getUserByID , isLoading , user } = useUserData()
         const route = useRoute()
-
-        onMounted(async()=>{
-            user.value = await getUserByID(route.params.id)
-        })
+        
+        getUserByID(route.params.id)
 
         return { user , isLoading }
     }

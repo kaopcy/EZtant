@@ -46,7 +46,6 @@ export default function () {
                 }
             );
             const data = await response.json();
-            console.log(data);
             if (response.status === 403) throw new Error(data.detail);
             await getUser();
             router.push("/");
@@ -57,8 +56,8 @@ export default function () {
                 showConfirmButton: false,
                 timer: 1500
             })
-            console.log(data);
         } catch (error) {
+            clearUserData()
             Swal.fire({
                 icon: "error",
                 title: "Access denied",
@@ -168,6 +167,7 @@ export default function () {
             user.value.email = data.email ?? null;
             user.value.imageURL = data.imageURL ?? 'https://scontent.fbkk29-2.fna.fbcdn.net/v/t1.6435-9/145036933_2024789844329614_5665229284832997399_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeF-G4NBaMMqLeOMgBnXW7Y4zrMy5swv9THOszLmzC_1MUQZpLV0TqUXN4WUpLNo9-pMK8A4LzDscC6NXxX3D41R&_nc_ohc=QwtBEvFjOH8AX9e6Le6&_nc_ht=scontent.fbkk29-2.fna&oh=af0b4ead911191902a9a640eddc3a077&oe=61CA9B6D';
         } catch (error) {
+            clearUserData()
             console.log(error.message);
         } finally {
             isLoading.value = false
@@ -188,7 +188,7 @@ export default function () {
         };
     };
 
-    getUser();
+    // getUser();
 
     return {
         role,

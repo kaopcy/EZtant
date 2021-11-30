@@ -1,7 +1,6 @@
 <template>
     <div class="main-wrapper">
         <span class="line"></span>
-
         <div class="search-bar-wrapper">
             <input type="text" class="search-bar" placeholder="Search" v-model="searchValue"/>
             <fa class="icon" :icon="['fas', 'search']" />
@@ -10,24 +9,31 @@
         <Loading v-if="isLoading" :Attr="{ width: '100%', height: '100%' }" />
 
         <div class="teacher-list-wrapper">
-            <router-link
-                class="teacher-card link"
-                v-for="teacher in filteredTeacher"
-                :key="teacher"
-                :to="`/teacher-list/profile/${teacher.id}`"
+            <transition-group
+                appear
+                @before-enter="beforeEnter"
+                @enter="enter"
             >
-                <img :src="teacher.imageURL" alt="" />
-                <h2>{{ teacher.first_name }} {{ teacher.last_name }}</h2>
-                <h3>{{ teacher.department }} engineering</h3>
-                <div class="email">{{ teacher.email }}</div>
-            </router-link>
+                <router-link
+                    class="teacher-card link"
+                    v-for="(teacher , index) in filteredTeacher"
+                    :key="teacher"
+                    :to="`/teacher-list/profile/${teacher.id}`"
+                    :data-index="index"
+                >
+                    <img :src="teacher.imageURL" alt="" />
+                    <h2>{{ teacher.first_name }} {{ teacher.last_name }}</h2>
+                    <h3>{{ teacher.department }} engineering</h3>
+                    <div class="email">{{ teacher.email }}</div>
+                </router-link>
+            </transition-group>
         </div>
     </div>
 </template>
 
 <script>
+import gsap from 'gsap'
 import { ref , computed } from "vue";
-import { onMounted } from "@vue/runtime-core";
 import useUserData from "../../composables/useUserData";
 import Loading from "../../components/Loading/LoadingComponent.vue";
 
@@ -37,13 +43,11 @@ export default {
         Loading,
     },
     setup() {
-        const { getAllTeacher, isLoading } = useUserData();
-        const allTeacher = ref(null);
+        const { getAllTeacher, isLoading , allTeacher } = useUserData();
         const searchValue = ref('')
 
-        onMounted(async () => {
-            allTeacher.value = await getAllTeacher();
-        });
+        // fetch
+        getAllTeacher()
 
         // random star
         const getRandomStar = () => parseInt(Math.random() * 30);
@@ -59,12 +63,29 @@ export default {
             return filtered;
         });
 
+        // animation
+        const beforeEnter = (el) => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateX(100px)'
+        };
+        const enter = (el, done) => {
+            gsap.to(el, {
+                opacity: 1,
+                x: 0,
+                duration: 0.7,
+                onComplete: done,
+                delay: el.dataset.index * 0.1,
+            });
+        };
+
         return {
             isLoading,
             allTeacher,
             getRandomStar,
             searchValue,
-            filteredTeacher
+            filteredTeacher,
+            beforeEnter,
+            enter
         };
     },
 };
@@ -72,8 +93,8 @@ export default {
 
 <style lang="scss" scoped>
 $search-width: 500px;
-$min-wrapper-width: 580px;
 $image-width: 150px;
+$hover-color: #418ae8;
 
 .main-wrapper {
     width: 100%;
@@ -121,11 +142,14 @@ $image-width: 150px;
     }
 
     .teacher-list-wrapper {
-        min-width: $min-wrapper-width;
-        max-width: 60%;
+        max-width: 900px;
+        @media (max-width:1100px) {
+            max-width: 600px;
+        }
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
         margin-bottom: 4rem;
         .teacher-card {
             display: flex;
@@ -138,6 +162,16 @@ $image-width: 150px;
             padding: 2rem 1rem 1rem 1rem;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             border-radius: 4px;
+            transition: .25s background-color , color ;
+            &:hover{
+                background-color: $hover-color;
+                color: #fff;
+                .email{
+                    background-color: #fff;
+                    color: #303030;
+                }
+            }
+
             img {
                 width: $image-width;
                 height: $image-width;
@@ -164,6 +198,7 @@ $image-width: 150px;
                 color: #fff;
                 cursor: pointer;
                 &:hover {
+                    outline: 2px solid rgb(226, 226, 226);
                 }
             }
         }

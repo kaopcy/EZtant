@@ -88,11 +88,7 @@
                         placeholder="Faculty"
                     />
                     <datalist id="faculty">
-                        <option value="Edge"></option>
-                        <option value="Firefox"></option>
-                        <option value="Chrome"></option>
-                        <option value="Opera"></option>
-                        <option value="Safari"></option>
+                        <option v-for="option in options" :key="option" :value="option" ></option>
                     </datalist>
 
                     <input
@@ -121,10 +117,9 @@
             <form v-if="role == 'teacher'" class="teacher-form">
                 <div class="input">
                     <input
-                        type="text"
-                        v-model="teacher.username"
-                        placeholder="Username"
-                        maxlength="8"
+                        type="email"
+                        v-model="teacher.email"
+                        placeholder="Email"
                     />
                 </div>
                 <div class="input">
@@ -139,13 +134,6 @@
                         type="text"
                         v-model="teacher.lastName"
                         placeholder="LastName"
-                    />
-                </div>
-                <div class="input">
-                    <input
-                        type="email"
-                        v-model="teacher.email"
-                        placeholder="Email"
                     />
                 </div>
                 <div class="input">
@@ -170,11 +158,7 @@
                         placeholder="Faculty"
                     />
                     <datalist id="faculty">
-                        <option value="Edge"></option>
-                        <option value="Firefox"></option>
-                        <option value="Chrome"></option>
-                        <option value="Opera"></option>
-                        <option value="Safari"></option>
+                        <option v-for="option in options" :key="option" :value="option" ></option>
                     </datalist>
                 </div>
                 <div class="btn-wrapper">
@@ -228,10 +212,15 @@ export default {
             imageURL: '',
         });
 
+        const options = ref([
+            'Computer', 'Chemistry' , 'Bio' , 'Food' , 'Industial' , 'Music' , 'Telecom'
+        ])
+
         return {
             role,
             student,
             teacher,
+            options,
             registerTeacher,
             registerStudent,
         };

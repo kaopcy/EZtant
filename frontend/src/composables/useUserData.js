@@ -2,6 +2,10 @@ import { ref } from "vue";
 import Swal from "sweetalert2";
 export default function () {
     const isLoading = ref(false);
+    const allStudent = ref(null);
+    const allTeacher = ref(null);
+
+    const user = ref(null)
 
     const getAllStudent = async () => {
         try {
@@ -16,9 +20,8 @@ export default function () {
                     credentials: "include",
                 }
             );
-            const data = await response.json();
-
-            return data;
+            allStudent.value = await response.json();
+            if (response.status === '403') throw new Error(allStudent.value.detail);
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -43,9 +46,9 @@ export default function () {
                     credentials: "include",
                 }
             );
-            const data = await response.json();
+            allTeacher.value = await response.json();
+            if (response.status === '403') throw new Error(allTeacher.value.detail);
 
-            return data;
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -70,9 +73,8 @@ export default function () {
                     credentials: "include",
                 }
             );
-            const data = await response.json();
-
-            return data;
+            user.value = await response.json();
+            if (response.status === '403') throw new Error(user.value.detail);
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -84,5 +86,5 @@ export default function () {
         }
     };
 
-    return { getAllStudent, getAllTeacher , getUserByID , isLoading };
+    return { getAllStudent, getAllTeacher , getUserByID , isLoading , allStudent , allTeacher , user };
 }

@@ -1,5 +1,7 @@
 <template>
     <div class="main-wrapper">
+        <span class="line"></span>
+
         <div class="search-bar-wrapper">
             <input
                 type="text"
@@ -12,40 +14,48 @@
         </div>
         <Loading v-if="isLoading" :Attr="{ width: '500px', height: '500px' }" />
         <div class="student-list-wrapper" v-if="!isLoading">
-            <router-link
-                class="student-list link"
-                v-for="student in filteredStudent"
-                :key="student"
-                :to="`/student-list/profile/${student.id}`"
+            <transition-group
+                appear
+                @before-enter="beforeEnter"
+                @enter="enter"
             >
-                <div class="left">
-                    <div class="img-wrapper">
-                        <img :src="student.imageURL" alt="" />
+                <router-link
+                    class="student-list link"
+                    v-for="(student , index) in filteredStudent"
+                    :key="student"
+                    :to="`/student-list/profile/${student.id}`"
+                    :data-index="index"
+                >
+                    <div class="left">
+                        <div class="img-wrapper">
+                            <img :src="student.imageURL" alt="" />
+                        </div>
+                        <div class="text-wrapper">
+                            <h1>
+                                {{ student.first_name }} {{ student.last_name }} {{index}}
+                            </h1>
+                            <span
+                                >{{ student.student_id }}
+                                {{ student.student_year }}D</span
+                            >
+                        </div>
                     </div>
-                    <div class="text-wrapper">
-                        <h1>
-                            {{ student.first_name }} {{ student.last_name }}
-                        </h1>
-                        <span
-                            >{{ student.student_id }}
-                            {{ student.student_year }}D</span
-                        >
+                    <div class="right">
+                        <fa class="icon" :icon="['fas', 'star']"></fa>
+                        <span>{{ getRandomStar() }}</span>
                     </div>
-                </div>
-                <div class="right">
-                    <fa class="icon" :icon="['fas', 'star']"></fa>
-                    <span>{{ getRandomStar() }}</span>
-                </div>
-            </router-link>
+                </router-link>
+            </transition-group>
         </div>
     </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { computed, onMounted } from "@vue/runtime-core";
+import { computed } from "@vue/runtime-core";
 import useUserData from "../../composables/useUserData";
 import Loading from "../../components/Loading/LoadingComponent.vue";
+import gsap from "gsap";
 
 export default {
     name: "StudentList",
@@ -53,13 +63,11 @@ export default {
         Loading,
     },
     setup() {
-        const { getAllStudent, isLoading } = useUserData();
-        const allStudent = ref(null);
+        const { getAllStudent, isLoading , allStudent } = useUserData();
         const searchValue = ref("");
 
-        onMounted(async () => {
-            allStudent.value = await getAllStudent();
-        });
+        // onmounted hook
+        getAllStudent()
 
         // random star
         const getRandomStar = () => parseInt(Math.random() * 30);
@@ -75,12 +83,29 @@ export default {
             return filtered;
         });
 
+        // animation
+        const beforeEnter = (el) => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateX(100px)'
+        };
+        const enter = (el, done) => {
+            gsap.to(el, {
+                opacity: 1,
+                x: 0,
+                duration: 0.5,
+                onComplete: done,
+                delay: el.dataset.index * 0.2,
+            });
+        };
+
         return {
             isLoading,
             allStudent,
             getRandomStar,
             searchValue,
             filteredStudent,
+            beforeEnter,
+            enter,
         };
     },
 };
@@ -97,6 +122,15 @@ $search-width: 500px;
     flex-direction: column;
     align-items: center;
     color: var(--primary-font-color);
+    overflow-x: hidden;
+    .line {
+        width: 70%;
+        height: 2px;
+        background-color: rgb(233, 233, 233);
+        border-radius: 2px;
+        margin: 2rem 0;
+    }
+
     .search-bar-wrapper {
         display: flex;
         align-items: center;
@@ -145,9 +179,8 @@ $search-width: 500px;
             padding: 1rem;
             border: 1px solid rgb(238, 238, 238);
             cursor: pointer;
-            transition: 0.25s;
+            transition: 0.25s background-color;
             justify-content: space-between;
-
             &:hover {
                 background-color: rgb(238, 238, 238);
                 border: 1px solid rgb(218, 218, 218);
@@ -172,12 +205,13 @@ $search-width: 500px;
                     display: flex;
                     flex-direction: column;
                     h1 {
-                        font-size: 1.5rem;
+                        font-size: 1.25rem;
                         font-weight: 600;
                     }
                     span {
                         font-size: 1rem;
                         font-weight: 400;
+                        color: rgb(134, 134, 134);
                     }
                 }
             }
