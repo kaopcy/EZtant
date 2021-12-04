@@ -1,6 +1,11 @@
 <template>
     <div class="focus-post-wrapper">
-        <div class="post">
+        
+        <div class="loading" v-if="isLoading">
+            <Loading :Attr="{ width: '100px' , height: '100px' }" />
+        </div>
+
+        <div class="post" v-if="!isLoading">
             <!-- header field -->
             <div class="head">
                 <div class="author-info-wrapper">
@@ -24,6 +29,7 @@
                             id="applicant-popup"
                             v-if="isPopup"
                             @closeApplicantPopup="closeApplicantPopup"
+                            :request="post.requested"
                         />
                     </transition>
                 </div>
@@ -83,7 +89,12 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRoute } from 'vue-router';
+
+import usePost from '../../composables/usePost'
+
+import Loading from '../../components/Loading/LoadingComponent.vue'
 import Table from "../../components/Table.vue";
 import ApplicantPopup from "../../components/MainPost/ApplicantPopup.vue";
 
@@ -92,37 +103,19 @@ export default {
     components: {
         Table,
         ApplicantPopup,
+        Loading,
     },
     setup() {
-        const post = ref({
-            subject: "Data Communication",
-            timeStamp: "15 minute ago",
-            author: "Jirasak",
-            requested: [
-                {
-                    name: "",
-                },
-            ],
-            schedule: [
-                {
-                    section: "101",
-                    day: "TUE",
-                    time: "09.00 - 12.00 AM.",
-                },
-                {
-                    section: "102",
-                    day: "WED",
-                    time: "01.00 - 04.00 PM.",
-                },
-                {
-                    section: "103",
-                    day: "FRI",
-                    time: "04.30 - 07.30 PM.",
-                },
-            ],
-            detail: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae officia doloribus nihil animi reiciendis assumenda cupiditate nostrum commodi facilis optio.",
-        });
+        const { isLoading , getPostByPostID } = usePost()
+        const route = useRoute()
         const isPopup = ref(false);
+        const post = ref(null);
+        const test = ref(false)
+        // onmounted method
+        onMounted(async ()=>{
+            post.value = await getPostByPostID(route.params.id)
+        });
+
         const interactRef = ref(null);
 
         const handleRequest = () => {
@@ -134,12 +127,16 @@ export default {
             console.log("colse");
         };
 
+        
+
         return {
             post,
+            isLoading,
             handleRequest,
             isPopup,
             interactRef,
             closeApplicantPopup,
+            test
         };
     },
 };

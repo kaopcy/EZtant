@@ -60,6 +60,8 @@ export default {
         border-radius: 5px;
         cursor: pointer;
         margin: .25rem .5rem;
+        outline: 1px solid rgb(236, 236, 236) ;
+        transition: .25s background-color;
         &:hover{
             background-color: rgb(245, 245, 245);
             outline: 1px solid rgb(230, 230, 230) ;

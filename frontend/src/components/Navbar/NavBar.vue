@@ -15,7 +15,7 @@
                     id="department-selector"
                     @click="toggleDropDown()"
                 >
-                    <span>Department</span>
+                    <span>Post</span>
                     <svg
                         viewBox="0 0 24 24"
                         width="16"
@@ -36,7 +36,7 @@
                 <router-link class="link" to="/student-list">TA</router-link>
                 <router-link class="link" to="/register">Contact</router-link>
                 <router-link class="link last" to="/main-post"
-                    >Post</router-link
+                    >Create</router-link
                 >
                 <div
                     class="img-wrapper"

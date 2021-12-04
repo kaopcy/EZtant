@@ -1,6 +1,6 @@
 <template>
     <div class="main-wrapper">
-        <h1>Hello {{getFullName}}</h1>
+        <h1>Hello {{user}}</h1>
     </div>
 </template>
 
@@ -9,10 +9,9 @@ import useAuth from '../../composables/useAuth'
 export default {
     name: 'StudentProfile',
     setup(){
-        const { getFullName } = useAuth()
+        const { user } = useAuth()
 
-
-        return { getFullName }
+        return { user }
     } 
 }
 </script>

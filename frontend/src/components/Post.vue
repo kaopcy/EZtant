@@ -1,7 +1,7 @@
 <template>
     <div class="post" ref="postRef">
         <transition name="fade">
-            <router-link class="see-more-wrapper" v-if="isHover" :to="`/focus-post/${post.subject}`">
+            <router-link class="see-more-wrapper" v-if="isHover" :to="`/focus-post/${post.id}`">
                 <div class="see-more-btn">
                     See more
                 </div>
@@ -113,6 +113,7 @@ $banner-height: 6rem;
         border: 3px solid white;
         border-radius: 40px;
         background-color: transparent;
+        cursor: pointer;
     }
 }
 
@@ -124,7 +125,6 @@ $banner-height: 6rem;
     min-height: 400px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     margin-bottom: 2rem;
-    cursor: pointer;
     overflow: hidden;
     @media (max-width: 648px) {
         width: 90%;

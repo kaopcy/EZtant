@@ -6,7 +6,15 @@
                 @click="toggleClose()"
             />
             <div class="wrapper" v-if="isLoggedIn">
-                <router-link class="head link" to="/student-profile/1" >
+                <router-link
+                    class="head link"
+                    @click="toggleClose()"
+                    :to="
+                        role == 'teacher'
+                            ? '/teacher-profile/1'
+                            : '/student-profile/1'
+                    "
+                >
                     <img
                         :src="
                             user.imageURL ??
@@ -17,7 +25,7 @@
                         >{{ role }}
                         <fa
                             class="icon"
-                            style="margin-left:.5rem"
+                            style="margin-left: 0.5rem"
                             :icon="[
                                 'fas',
                                 `${

@@ -72,7 +72,7 @@ router.beforeEach( async (to, from, next) => {
     if (to.name !== "Login" && !isLoggedIn.value ) {
         console.log('not logged in');
         next({ name: "Login" });
-    }
+    } 
     // if the user is not authenticated, `next` is called twice
     next();
 });

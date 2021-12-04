@@ -86,11 +86,9 @@ export default {
             isLast.value = !isLast.value;
             if (isLast.value){
                 posts.value = await getLastestPost()
-                console.log(process.env.VUE_APP_URL);
             }
             else{
                 posts.value = await getAllPost()
-                console.log(process.env.VUE_APP_URL);
             }
         };
 
