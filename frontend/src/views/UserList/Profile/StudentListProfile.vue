@@ -13,7 +13,7 @@ import { useRoute } from 'vue-router'
 import useUserData from '../../../composables/useUserData'
 import Loading from '../../../components/Loading/LoadingComponent.vue'
 
-export default {
+export default { 
     name: 'StudentListProfile',
     components:{
         Loading,

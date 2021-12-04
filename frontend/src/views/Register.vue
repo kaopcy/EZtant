@@ -199,7 +199,6 @@ export default {
             department: "",
             year: "",
             imageURL: '',
-
         });
 
         const teacher = reactive({

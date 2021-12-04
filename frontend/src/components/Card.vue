@@ -255,7 +255,6 @@
                         transform="translate(-901 -157.7234)"
                     />
                 </g>
-                
 
                 <text x="285" y="665" class="big-2">{{ role }}</text>
                 <text x="120" y="250" class="big">KMITL</text>
@@ -264,7 +263,9 @@
 
                 <text x="125" y="550" class="text-label">ID No.</text>
                 <text x="180" y="550" class="text-label">:</text>
-                <text x="200" y="550" class="text-label">{{ user.username }}</text>
+                <text x="200" y="550" class="text-label">
+                    {{ user.username }}
+                </text>
                 <text x="125" y="580" class="text-label">Email</text>
                 <text x="180" y="580" class="text-label">:</text>
                 <text x="200" y="580" class="text-label">{{ user.email }}</text>
@@ -281,46 +282,66 @@
                     height="129.02128"
                     rx="3.91489"
                 />
-                <g id="Layer_4" data-name="Layer 4">
-                    <circle class="cls-11" cx="166.86784" cy="359.29965" r="24.12449"/>
-                    <path class="cls-11" d="M1051.175,539.90007c-3.85181,1.67053-16.15641,7.58934-23.04382,21.59283a44.59405,44.59405,0,0,0-4.51412,19.60854h88.63717a43.03039,43.03039,0,0,0-2.3492-14.45661c-5.85388-16.84432-20.66692-24.67437-24.93768-26.74476a27.25137,27.25137,0,0,1-18.24128,6.03273A26.96126,26.96126,0,0,1,1051.175,539.90007Z" transform="translate(-901 -157.7234)"/>
+                <g id="Layer_4" data-name="Layer 4" v-if="!user.imageURL">
+                    <circle
+                        class="cls-11"
+                        cx="166.86784"
+                        cy="359.29965"
+                        r="24.12449"
+                    />
+                    <path
+                        class="cls-11"
+                        d="M1051.175,539.90007c-3.85181,1.67053-16.15641,7.58934-23.04382,21.59283a44.59405,44.59405,0,0,0-4.51412,19.60854h88.63717a43.03039,43.03039,0,0,0-2.3492-14.45661c-5.85388-16.84432-20.66692-24.67437-24.93768-26.74476a27.25137,27.25137,0,0,1-18.24128,6.03273A26.96126,26.96126,0,0,1,1051.175,539.90007Z"
+                        transform="translate(-901 -157.7234)"
+                    />
                 </g>
+                <image
+                    :href="user.imageURL"
+                    x="116.21277"
+                    y="298.46913"
+                    width="101.44681"
+                    height="129.02128"
+                />
             </g>
         </g>
     </svg>
 </template>
 
 <script>
-import { watch } from '@vue/runtime-core';
+import { watch } from "@vue/runtime-core";
 export default {
-    props:  {
-        user:{
+    props: {
+        user: {
             type: Object,
-            require: true
-        },role:{
+            require: true,
+        },
+        role: {
             type: String,
-            require: true
-        }
-
+            require: true,
+        },
     },
     setup(props) {
-        watch(()=> props.role , ()=>{
-            if (props.role == 'student'){
-                document.getElementById('card').classList.add("student-theme")
+        watch(
+            () => props.role,
+            () => {
+                if (props.role == "student") {
+                    document
+                        .getElementById("card")
+                        .classList.add("student-theme");
+                } else if (props.role == "teacher") {
+                    document
+                        .getElementById("card")
+                        .classList.remove("student-theme");
+                }
             }
-            else if (props.role == 'teacher'){
-                document.getElementById('card').classList.remove("student-theme")
-            }
-        } ,)
-        return {
-        };
+        );
+        return {};
     },
 };
 </script>
 
 <style lang="scss" scoped>
-
-.student-theme{
+.student-theme {
     --color1: rgb(255, 102, 0) !important;
     --color2: rgb(255, 167, 66) !important;
 }
@@ -383,12 +404,12 @@ export default {
 }
 
 .cls-3 {
-    transition: .5s fill;
+    transition: 0.5s fill;
     fill: var(--color1);
 }
 
 .cls-4 {
-    transition: .5s fill;
+    transition: 0.5s fill;
     fill: var(--color2);
 }
 
