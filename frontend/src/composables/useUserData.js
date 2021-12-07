@@ -11,7 +11,7 @@ export default function () {
         try {
             isLoading.value = true;
             const response = await fetch(
-                `${process.env.VUE_APP_DJANGO_BASE_URL}api/all-students`,
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/all-students`,
                 {
                     method: "GET",
                     headers: {
@@ -37,7 +37,7 @@ export default function () {
         try {
             isLoading.value = true;
             const response = await fetch(
-                `${process.env.VUE_APP_DJANGO_BASE_URL}api/all-teachers`,
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/all-teachers`,
                 {
                     method: "GET",
                     headers: {

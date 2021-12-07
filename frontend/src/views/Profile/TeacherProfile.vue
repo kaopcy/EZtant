@@ -54,6 +54,7 @@ export default {
         const { user } = useAuth();
         const selectedTab = ref("information");
         provide('user' , user)
+        
         return { user, selectedTab };
     },
 };

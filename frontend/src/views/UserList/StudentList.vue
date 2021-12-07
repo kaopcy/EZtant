@@ -1,36 +1,38 @@
 <template>
-<div class="studentlist-wrapper">
-    <UserTabWrapper>
-        <StudentTab  title="All"/>
-        <StudentTab  :title="options[0]"/>
-        <StudentTab  :title="options[1]"/>
-        <StudentTab  :title="options[2]"/>
-        <StudentTab  :title="options[3]"/>
-        <StudentTab  :title="options[4]"/>
-        <StudentTab  :title="options[5]"/>
-        <StudentTab  :title="options[6]"/>
-    </UserTabWrapper>
-</div>
+    <div class="studentlist-wrapper">
+        <UserTabWrapper>
+            <StudentTab title="All" />
+            <StudentTab :title="department[0]" />
+            <StudentTab :title="department[1]" />
+            <StudentTab :title="department[2]" />
+            <StudentTab :title="department[3]" />
+            <StudentTab :title="department[4]" />
+            <StudentTab :title="department[5]" />
+            <StudentTab :title="department[6]" />
+        </UserTabWrapper>
+    </div>
 </template>
 
 <script>
-import UserTabWrapper from '../../components/UserList/UserTabWrapper.vue'
-import StudentTab from '../../components/UserList/StudentTab'
-import { ref } from 'vue'
+import UserTabWrapper from "../../components/UserList/UserTabWrapper.vue";
+import StudentTab from "../../components/UserList/StudentTab";
+
+import { computed } from "vue";
+import { store } from "../../store";
+
 export default {
     name: "StudentList",
-    components:{
+    components: {
         StudentTab,
         UserTabWrapper,
     },
     setup() {
-        const options = ref([
-            'Computer', 'Chemistry' , 'Bio' , 'Food' , 'Industial' , 'Music' , 'Telecom'
-        ])
-        return { options }
-    }
+        const department = computed(() =>
+            store.state.departmentTemplate.map((e) => e.name.split(" ")[0])
+        );
+        return { department };
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

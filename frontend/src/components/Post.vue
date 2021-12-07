@@ -95,7 +95,7 @@ $banner-height: 6rem;
 
 .see-more-wrapper{
     width: 100%;
-    height: 40%;
+    height: 20%;
     background-color: rgba(102, 102, 102, 0.288);
     display: flex;
     justify-content: center;

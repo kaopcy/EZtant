@@ -16,48 +16,110 @@
                 <span>:</span>
             </div>
             <div class="span-wrapper">
-                <span>{{ user.firstName }} {{ user.lastName }}</span>
-                <span>{{ user.firstName }}</span>
-                <span>{{ user.lastName }}</span>
-                <span>{{ user.email }}</span>
-                <span>{{ user.department }} Engineering</span>
+                <input type="text" v-model="user.email" :disabled="!isEdit" />
+                <input
+                    type="text"
+                    v-model="user.firstName"
+                    :disabled="!isEdit"
+                />
+                <input
+                    type="text"
+                    v-model="user.lastName"
+                    :disabled="!isEdit"
+                />
+                <input type="text" v-model="user.email" :disabled="!isEdit" />
+                <input
+                    type="text"
+                    v-model="user.department"
+                    :disabled="!isEdit"
+                />
+            </div>
+            <div class="span-wrapper" v-if="isEdit">
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.email = ''"
+                    ></fa>
+                </span>
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.firstName = ''"
+                    ></fa>
+                </span>
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.lastName = ''"
+
+                    ></fa>
+                </span>
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.email = ''"
+
+                    ></fa>
+                </span>
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.department = ''"
+
+                    ></fa>
+                </span>
+                
             </div>
         </div>
 
         <div class="btn-wrapper">
-            <div class="btn">
-                <span>Edit</span> 
+            <div class="btn" @click="isEdit = !isEdit">
+                <span>Edit</span>
                 <fa class="icon" :icon="['fas', 'edit']" />
             </div>
             <div class="btn">
                 <span>Change Password</span>
                 <fa class="icon" :icon="['fas', 'key']" />
             </div>
-            <div class="btn">
-                <span>Save</span> 
+            <button class="btn" @click="updateUser()" :disabled="!isEdit">
+                <span>Save</span>
                 <fa class="icon" :icon="['fas', 'save']" />
-            </div>
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-import { inject } from "@vue/runtime-core";
+import { inject, ref } from "@vue/runtime-core";
+import useAuth from "../../composables/useAuth";
 export default {
     name: "Info",
     setup() {
+        const { updateUser } = useAuth();
         const user = inject("user");
-        return { user };
+        const isEdit = ref(false);
+
+        return { user, isEdit, updateUser };
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.wrapper{
+.wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
-    @media (max-width:630px) {
+    @media (max-width: 630px) {
         width: 100%;
     }
 }
@@ -66,13 +128,27 @@ export default {
     align-items: center;
     margin-left: 2rem;
     margin-bottom: 2rem;
-    span {
+    white-space: nowrap;
+    @media (max-width: 700px) {
+        margin-left: 0;
+    }
+    span,
+    input {
         font-size: 1.25rem;
         font-weight: 800;
         margin: 0.5rem 0;
         @media (max-width: 600px) {
             font-size: 1rem;
         }
+    }
+    input {
+        padding: 0.25rem;
+        padding-left: 0.5rem;
+        border-radius: 5px;
+        margin: 0.25rem;
+        border: none;
+        color: rgb(134, 134, 134);
+        outline: 1px solid rgb(224, 224, 224);
     }
     .h1-wrapper {
         display: flex;
@@ -88,26 +164,51 @@ export default {
         font-weight: 500;
         display: flex;
         flex-direction: column;
-        span {
-            font-weight: 500;
+        span,
+        input {
+            font-weight: 400;
+            &:disabled {
+                outline: none;
+            }
+        }
+        .icon {
+            margin-left: 0.5rem;
+            &:hover {
+                animation: cutie 0.5s infinite linear;
+                @keyframes cutie {
+                    0% {
+                        transform: rotate(20deg);
+                    }
+                    50% {
+                        transform: rotate(-20deg);
+                    }
+                    100% {
+                        transform: rotate(20deg);
+                    }
+                }
+            }
         }
     }
 }
-.btn-wrapper{
+.btn-wrapper {
     display: flex;
     align-self: flex-end;
-    .btn{
+    @media (max-width: 630px) {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .btn {
         display: flex;
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         border: 1px solid rgb(214, 214, 214);
         border-radius: 5px;
         margin-right: 1rem;
-        transition: .25s background-color , color;
-        cursor: pointer;
-        span{
-            margin-right: .5rem;
+        transition: 0.25s background-color, color;
+        span {
+            margin-right: 0.5rem;
         }
-        &:hover{
+        &:hover:not([disabled]) {
+            cursor: pointer;
             background-color: var(--primary-font-color);
             color: #fff;
         }

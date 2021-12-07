@@ -11,7 +11,7 @@
             <fa class="icon" :icon="['fas', 'sort-alpha-down']" />
         </div>
         
-        <Loading v-if="isLoading" :Attr="{ width: '100%', height: '100%' }" />
+        <Loading v-if="isLoading" :Attr="{ width:'70%' , height: '40vh' }" />
 
         <div class="teacher-list-wrapper">
             <transition-group appear @before-enter="beforeEnter" @enter="enter">
@@ -194,8 +194,9 @@ $hover-color: #418ae8;
             }
             h3 {
                 font-size: 0.9rem;
-                font-weight: 500;
+                font-weight: 400;
                 margin-bottom: 1rem;
+                color: rgb(165, 165, 165);
             }
             .email {
                 font-size: 0.7rem;

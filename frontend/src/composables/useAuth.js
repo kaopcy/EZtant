@@ -145,7 +145,7 @@ export default function () {
         try {
             isLoading.value = true
             const response = await fetch(
-                `${process.env.VUE_APP_DJANGO_BASE_URL}api/user`,
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account`,
                 {
                     method: "GET",
                     headers: {
@@ -188,6 +188,19 @@ export default function () {
         };
     };
 
+    const updateUser = async ()=> {
+        Swal.fire({
+            title: 'Please Wait !',
+            html: 'data uploading',// add html attribute if you want or remove
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            },
+        });
+        await new Promise(resolve=> setTimeout(resolve , 1000))
+        Swal.close();
+    }
+
     // getUser();
 
     return {
@@ -200,6 +213,7 @@ export default function () {
         login,
         logout,
         getUser,
+        updateUser,
         isLoading
     };
 }

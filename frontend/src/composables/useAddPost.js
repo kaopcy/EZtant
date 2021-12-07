@@ -1,35 +1,34 @@
 import { ref } from "vue";
 const posts = ref({
-    subject: "",
+    subject_name: "",
+    subject_id: "",
     timeStamp: "",
-    author: "",
-    detail: "",
-    requested: [
+    max_requested: "",
+    wage: null,
+    description: "",
+    schedules: [
         {
-            name: "",
-        },
-    ],
-    schedule: [
-        {
-            section: "101",
-            day: "TUE",
-            time: "09.00 - 12.00 AM.",
+            section: "",
+            day: "",
+            time: "",
         },
     ],
 });
 
 export default function () {
-    const addPost = (payload) => {
+    const isLoading = ref(false)
+
+    const addPost = async (payload) => {
+        isLoading.value = true
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date+' '+time;
-        posts.value.subject = payload.subject
-        posts.value.author = payload.author
-        posts.value.detail = payload.detail
-        posts.value.timeStamp = dateTime
+        payload.timestamp = dateTime
+        
 
-        console.log(posts.value);
+
+        console.log(payload);
     };
     const addSchedule = (schedules) => {
         posts.value.schedule = schedules;

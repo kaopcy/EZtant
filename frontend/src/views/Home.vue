@@ -1,6 +1,6 @@
 <template>
 <div class="home">
-    
+    <h1>HOMEPAGE</h1>
 </div>
 </template>
 
@@ -26,7 +26,10 @@ export default {
 <style lang="scss" scoped>
 .home{
     width: 100%;
-    height: 200vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 

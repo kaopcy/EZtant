@@ -14,21 +14,45 @@
                     <h1>Course detail</h1>
                     <!-- input -->
                     <div class="input-wrapper">
-                        <input type="text" placeholder="Subject" v-model="data.subject" required/>
-                        <input type="text" placeholder="Subject ID" required/>
-                        <input type="number" placeholder="Person per group" required/>
-                        <input type="number" placeholder="Payment" required/>
+                        <input
+                            type="text"
+                            placeholder="Subject"
+                            v-model="data.subject_name"
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Subject ID"
+                            v-model="data.subject_id"
+                            required
+                        />
+                        <input
+                            type="number"
+                            placeholder="Person per group"
+                            v-model="data.max_requested"
+                            required
+                        />
+                        <input
+                            type="number"
+                            placeholder="Payment"
+                            v-model="data.wage"
+                            required
+                        />
                     </div>
                     <!-- Add btn -->
                     <div class="add-schedule-wrapper">
                         <h1>
                             Schedule
-                            <fa class="icon" :icon="['fas' , 'calendar-alt']" style="color:#a1a6ad"></fa>
+                            <fa
+                                class="icon"
+                                :icon="['fas', 'calendar-alt']"
+                                style="color: #a1a6ad"
+                            ></fa>
                         </h1>
                     </div>
                     <!-- table -->
                     <div class="table-wrapper">
-                        <Table ref="tableRef"/>
+                        <Table ref="tableRef" />
                     </div>
                 </div>
                 <!-- detail -->
@@ -37,10 +61,14 @@
                     <h1>Detail</h1>
                     <!-- input -->
                     <div class="input-wrapper">
-                        <textarea placeholder="Enter detail..." v-model="data.detail" required></textarea>
+                        <textarea
+                            placeholder="Enter detail..."
+                            v-model="data.description"
+                            required
+                        ></textarea>
                     </div>
                     <!-- post btn -->
-                    <input type="submit" class="post-btn" name="Post">
+                    <input type="submit" class="post-btn" name="Post" />
                 </div>
             </form>
         </div>
@@ -48,12 +76,12 @@
 </template>
 
 <script>
-import { computed , ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
 import { store } from "../../store";
 
 import Table from "../../components/MainPost/AddTable.vue";
-import useAddPost from '../../composables/useAddPost'
-import useAuth from '../../composables/useAuth'
+import useAddPost from "../../composables/useAddPost";
+import useAuth from "../../composables/useAuth";
 
 export default {
     name: "PostPopup",
@@ -61,38 +89,37 @@ export default {
         Table,
     },
     setup() {
-        const { addPost } = useAddPost()
-        const { getFullName , role } = useAuth()
+        const { addPost } = useAddPost();
+        const { role } = useAuth();
         const isPopup = computed(() => store.state.isPopup);
-        const tableRef = ref(null)
-        
-        const data = ref({
-            subject: "",
-            author: "",
-            detail: "",
-        })
-        const post = ()=>{
-            tableRef.value.submitSchedule()
-            addPost({
-                subject: data.value.subject,
-                author: getFullName,
-                detail: data.value.detail
-            })
-            data.value = {
-                subject: "",
-                author: "",
-                detail: "",
-            }
-            store.commit('toggleIsPopup')
-        }
+        const tableRef = ref(null);
 
-        return { store, isPopup , post , tableRef , data , role };
+        const data = ref({
+            subject_name: "",
+            subject_id: "",
+            max_requested: null,
+            wage: null,
+            description: "",
+        });
+        const post = () => {
+            tableRef.value.submitSchedule();
+            addPost(data.value);
+            data.value = {
+                subject_name: "",
+                subject_id: "",
+                max_requested: null,
+                wage: null,
+                description: "",
+            };
+            store.commit("toggleIsPopup");
+        };
+
+        return { store, isPopup, post, tableRef, data, role };
     },
 };
 </script>
 
 <style lang="scss" scoped>
-
 $main-color: #083672;
 $button-color: #fff;
 $button-color-hover: rgb(214, 54, 33);
@@ -106,7 +133,7 @@ $button-color-hover: rgb(214, 54, 33);
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     #close-btn {
         width: 30px;
         height: 30px;
@@ -138,7 +165,7 @@ $button-color-hover: rgb(214, 54, 33);
         }
 
         @media (max-width: 800px) {
-            span{
+            span {
                 background-color: rgb(0, 0, 0);
             }
         }
@@ -177,21 +204,21 @@ $button-color-hover: rgb(214, 54, 33);
         background-color: #b8b8b8;
         border-radius: 10px;
     }
-    input{
+    input {
         font-family: var(--primary-font);
         border: none;
         outline: none;
     }
 
-    h1{
+    h1 {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--primary-font-color);
         align-self: flex-start;
         position: relative;
-        padding: 2rem 2rem .8rem 2rem;
-        &::after{
-            content: '';
+        padding: 2rem 2rem 0.8rem 2rem;
+        &::after {
+            content: "";
             position: absolute;
             inset: 0;
             border-bottom: 5px solid var(--primary-font-color);
@@ -208,61 +235,59 @@ $button-color-hover: rgb(214, 54, 33);
     }
 }
 
-.main-wrapper{
+.main-wrapper {
     flex: 4;
     display: flex;
     flex-direction: column;
     align-items: center;
-    .input-wrapper{
+    .input-wrapper {
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
         width: 70%;
-        input{
+        input {
             margin-top: 1rem;
-            padding: .5rem;
-            border: .5px solid rgb(233, 233, 233);
+            padding: 0.5rem;
+            border: 0.5px solid rgb(233, 233, 233);
             width: 100%;
             outline: none;
 
-            &:focus{
+            &:focus {
                 outline: none;
-                border: .5px solid rgb(184, 184, 184);
+                border: 0.5px solid rgb(184, 184, 184);
             }
 
-            &::placeholder{
+            &::placeholder {
                 color: rgb(192, 192, 192);
             }
-
         }
     }
-    .add-schedule-wrapper{
-        h1{
+    .add-schedule-wrapper {
+        h1 {
             margin-bottom: 1rem;
-            .icon{
-                margin-left: .5rem;
+            .icon {
+                margin-left: 0.5rem;
             }
-            &::after{
+            &::after {
                 display: none;
             }
         }
-        .add-schedule-btn{
+        .add-schedule-btn {
             color: var(--primary-font-color);
             font-weight: 600;
-            padding: .5rem 1rem;
+            padding: 0.5rem 1rem;
             margin: 1rem;
             border: 2px solid rgb(223, 223, 223);
             border-radius: 20px;
             cursor: pointer;
-            transition: .25s;
+            transition: 0.25s;
             margin-bottom: 1rem;
-            &:hover{
+            &:hover {
                 border: 2px solid $main-color;
             }
         }
-        
     }
-    .table-wrapper{
+    .table-wrapper {
         width: 80%;
         display: flex;
         justify-content: center;
@@ -274,38 +299,37 @@ $button-color-hover: rgb(214, 54, 33);
     }
 }
 
-.detail-wrapper{
+.detail-wrapper {
     flex: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     background-color: $main-color;
-    h1{
+    h1 {
         color: #fff;
-        &::after{
+        &::after {
             border-bottom: 5px solid #fff;
         }
-        
     }
-    .input-wrapper{
+    .input-wrapper {
         width: 80%;
-        textarea{
+        textarea {
             font-family: var(--primary-font);
             color: var(--primary-font-color);
             border: none;
             outline: 2px solid rgb(235, 235, 235);
             font-size: 1rem;
-            padding: .5rem;
+            padding: 0.5rem;
             border-radius: 4px;
             margin-top: 1rem;
             height: 300px;
             width: 100%;
         }
     }
-    .post-btn{
+    .post-btn {
         cursor: pointer;
-        padding: .25rem 4rem;
+        padding: 0.25rem 4rem;
         border: 3px solid white;
         border-radius: 40px;
         background-color: transparent;
@@ -314,10 +338,7 @@ $button-color-hover: rgb(214, 54, 33);
         color: #fff;
         margin: 2rem 0;
     }
-
 }
-
-
 
 .fade-enter-active,
 .fade-leave-active {

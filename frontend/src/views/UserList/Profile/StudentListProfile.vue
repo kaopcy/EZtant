@@ -1,6 +1,6 @@
 <template>
 <div class="main-wrapper">
-    <Loading  :Attr="{ width:'100%' , height: '100%' }" v-if="isLoading"/>
+    <Loading  :Attr="{ width:'70%' , height: '40vh' }" v-if="isLoading"/>
     <section v-if="!isLoading">
         <span>{{user}}</span>
     </section>

@@ -11,7 +11,7 @@
             <fa class="icon" :icon="['fas', 'sort-alpha-down']" />
         </div>
         
-        <Loading v-if="isLoading" :Attr="{ width: '500px', height: '500px' }" />
+        <Loading v-if="isLoading" :Attr="{ width:'70%' , height: '40vh' }" />
 
         <div class="student-list-wrapper" v-if="!isLoading">
             <transition-group appear @before-enter="beforeEnter" @enter="enter">

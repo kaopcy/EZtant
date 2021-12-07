@@ -1,8 +1,11 @@
 <template>
     <div class="focus-post-wrapper">
         
-        <div class="loading" v-if="isLoading">
-            <Loading :Attr="{ width: '100px' , height: '100px' }" />
+        <Loading :Attr="{ width: '70%' , height: '40vh' }" v-if="isLoading"/>
+
+        <div class="topic-wrapper" v-if="!isLoading">
+            <h1 class="topic">Post.</h1>
+            <span>hire teacher assistant for {{post.department}} engineering.</span>
         </div>
 
         <div class="post" v-if="!isLoading">
@@ -153,13 +156,28 @@ $primary-font-color-light: #464646;
     top: 70px;
 }
 
+.topic-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5rem;
+    margin-top: 2rem;
+    h1{
+        color: var(--primary-font-color);
+    }
+    span{
+        color: rgb(126, 126, 126);
+    }
+}
+
 .focus-post-wrapper {
     font-family: var(--primary-font);
+    margin: 1rem 0;
     width: 100%;
     height: 100vh;
     background-color: $background-color;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
@@ -185,7 +203,7 @@ $primary-font-color-light: #464646;
     .head {
         height: 5rem;
         width: 100%;
-        background-color: var(--secondary-color-light);
+        background-color: var(--secondary-color-normal);
         display: flex;
         justify-content: space-between;
         align-items: center;

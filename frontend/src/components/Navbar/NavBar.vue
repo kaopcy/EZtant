@@ -35,7 +35,7 @@
                 <router-link class="link" to="/teacher-list">Teacher</router-link>
                 <router-link class="link" to="/student-list">TA</router-link>
                 <router-link class="link" to="/register">Contact</router-link>
-                <router-link class="link last" to="/main-post"
+                <router-link class="link last" to="/create"
                     >Create</router-link
                 >
                 <div
@@ -65,8 +65,8 @@
                     />
                 </div>
                 <div class="nav-icon">
-                    <router-link class="link last" to="/main-post"
-                        >Post</router-link
+                    <router-link class="link last" to="/create"
+                        >Create</router-link
                     >
                     <div id="nav-btn" class="thing" @click="toggleNavBar()">
                         <span class="span1"></span>
@@ -129,10 +129,11 @@
                 </svg>
             </div>
             <div class="drop-down-mobile" id="drop-down-mobile">
-                <div
-                    class="department-wrapper"
+                <router-link
+                    class="department-wrapper link"
                     v-for="item in department"
                     :key="item"
+                    :to="`/main-post/${item.name.split(' ')[0]}`"
                 >
                     <div class="img-wrapper">
                         <img
@@ -146,19 +147,20 @@
                         <span class="span-1">{{ item.name }}</span>
                         <span class="span-2">{{ item.instrument }}</span>
                     </div>
-                </div>
+                </router-link>
             </div>
             <router-link class="link" to="/teacher-list">Teacher</router-link>
             <router-link class="link" to="/student-list">TA</router-link>
             <router-link class="link" to="/register">Contact</router-link>
-            <router-link class="link last" to="/main-post">Post</router-link>
+            <router-link class="link last" to="/create">Post</router-link>
         </div>
 
         <div class="drop-down" id="drop-down">
-            <div
-                class="department-wrapper"
+            <router-link
+                class="department-wrapper link"
                 v-for="item in department"
                 :key="item"
+                :to="`/main-post/${item.name.split(' ')[0]}`"
             >
                 <div class="img-wrapper">
                     <img
@@ -172,10 +174,11 @@
                     <span class="span-1">{{ item.name }}</span>
                     <span class="span-2">{{ item.instrument }}</span>
                 </div>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>
+
 
 <script>
 import { ref } from "@vue/reactivity";
@@ -196,43 +199,7 @@ export default {
         const router = useRouter();
         const userPopupRef = ref(null);
         const { user, isLoggedIn, getFullName, role , logout } = useAuth();
-        const department = ref([
-            {
-                name: "Computer Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "computer.svg",
-            },
-            {
-                name: "Bio Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "bio.svg",
-            },
-            {
-                name: "Chemistry Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "chemistry.svg",
-            },
-            {
-                name: "Food Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "food.svg",
-            },
-            {
-                name: "Industial Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "industial.svg",
-            },
-            {
-                name: "Music Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "music.svg",
-            },
-            {
-                name: "Telecom Engineer",
-                instrument: "Lorem ipsum dolor sit amet consectetur.",
-                src: "telecom.svg",
-            },
-        ]);
+        const department = ref(store.state.departmentTemplate);
 
         const homeNav = () => {
             router.replace({ name: "Home" });

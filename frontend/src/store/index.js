@@ -6,6 +6,46 @@ export const store = createStore({
     state: {
         isMobile: false,
         isPopup: false,
+        departmentTemplate: [
+            {
+                name: "Computer Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "computer.svg",
+            },
+            {
+                name: "Bio Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "bio.svg",
+            },
+            {
+                name: "Chemistry Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "chemistry.svg",
+            },
+            {
+                name: "Food Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "food.svg",
+            },
+            {
+                name: "Industial Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "industial.svg",
+            },
+            {
+                name: "Music Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "music.svg",
+            },
+            {
+                name: "Telecom Engineer",
+                instrument: "Lorem ipsum dolor sit amet consectetur.",
+                src: "telecom.svg",
+            },
+        ],
+    },
+    getters:{
+        getDepartmentName: state=> state.departmentTemplate.map((arr)=> arr.name.split(' ')[0])
     },
     mutations: {
         setIsMoblie(state, payload) {

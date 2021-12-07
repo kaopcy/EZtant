@@ -1,5 +1,8 @@
 <template>
 <div class="post-wrapper" >
+    <div class="post-num" v-if="!isLoading">
+        {{allPost.length}} {{allPost.length > 1 ? 'Posts' : 'Post'}}
+    </div>
     <div class="post" v-if="!isLoading">
         <Postz v-for="post in allPost" :key="post" :post="post" />
     </div>
@@ -39,6 +42,7 @@ export default {
 <style lang="scss" scoped>
 .post-wrapper{
     display: flex;
+    flex-direction: column;
     align-items: center;
     .post{
         display: flex;
@@ -51,4 +55,13 @@ export default {
 
     }
 }
+
+.post-num{
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 1rem;
+    border-bottom: 4px solid rgb(187, 187, 187);
+    padding-bottom: .16rem;
+}
+
 </style>
