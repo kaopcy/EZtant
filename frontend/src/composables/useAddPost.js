@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import useAlert from "./useAlert";
 const posts = ref({
     subject_name: "",
     subject_id: "",
@@ -16,19 +17,38 @@ const posts = ref({
 });
 
 export default function () {
+    const { finish , loading } = useAlert()
     const isLoading = ref(false)
 
     const addPost = async (payload) => {
+        loading('Creating data. . .')
         isLoading.value = true
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date+' '+time;
         payload.timestamp = dateTime
-        
-
-
-        console.log(payload);
+        console.log(JSON.parse(JSON.stringify(payload)));
+        try {
+            
+            const res = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/create`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(payload)
+                }
+            );
+            console.log(res.status);
+        } catch (error) {
+            console.log(error.message);
+        } finally{
+            finish('Created Successfully!')
+            isLoading.value = false
+        }
     };
     const addSchedule = (schedules) => {
         posts.value.schedule = schedules;

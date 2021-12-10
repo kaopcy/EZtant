@@ -16,7 +16,7 @@
             <div class="input-wrapper">
                 <label for="password">Password:</label>
                 <input
-                    type="text"
+                    type="password"
                     name="password"
                     id="password"
                     v-model="user.password"
@@ -94,10 +94,9 @@ button {
         display: flex;
         flex-direction: column;
         position: relative;
-        // border: 1px solid rgb(180, 180, 180);
         padding: 2rem 1rem;
-        // border-radius: 5px;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        background-color: #fff;
         h1 {
             margin-bottom: 1rem;
             align-self: center;

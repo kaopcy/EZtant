@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import Swal from "sweetalert2";
 import axios from 'axios'
+import useAlert from "./useAlert";
 
 const user = ref({
     id: null,
@@ -27,8 +27,10 @@ export default function () {
     );
 
     const router = useRouter();
+    const { finish , loading , error } = useAlert()
 
     const login = async (email, password) => {
+        loading('Logging in. . .')
         try {
             isLoading.value = true
             let response = await fetch(
@@ -49,20 +51,10 @@ export default function () {
             if (response.status === 403) throw new Error(data.detail);
             await getUser();
             router.push("/");
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Login Succesfully!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        } catch (error) {
+            finish('Logging in succesfully')
+        } catch (err) {
             clearUserData()
-            Swal.fire({
-                icon: "error",
-                title: "Access denied",
-                text: error.message,
-            });
+            error(`Access denied` , err)
         } finally{
             isLoading.value = false
         }
@@ -189,16 +181,9 @@ export default function () {
     };
 
     const updateUser = async ()=> {
-        Swal.fire({
-            title: 'Please Wait !',
-            html: 'data uploading',// add html attribute if you want or remove
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading()
-            },
-        });
+        loading('data uploading')
         await new Promise(resolve=> setTimeout(resolve , 1000))
-        Swal.close();
+        finish('updated successfully')
     }
 
     // getUser();

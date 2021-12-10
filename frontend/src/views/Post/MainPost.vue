@@ -42,6 +42,7 @@
                     v-for="post in getPostByDepartment"
                     :key="post"
                     :post="post"
+                    :author="post.author"
                 />
             </transition-group>
             <h1 v-if="getPostByDepartment.length == 0 || !getPostByDepartment.length">Empty</h1>
@@ -91,7 +92,7 @@ export default {
             posts.value
                 ? posts.value.filter(
                       (e) =>
-                          e.department.toLowerCase() ===
+                          e.author.department.toLowerCase() ===
                           selectedValue.value.toLowerCase()
                   )
                 : []
