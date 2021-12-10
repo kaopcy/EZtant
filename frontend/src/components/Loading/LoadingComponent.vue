@@ -55,15 +55,17 @@ $color: #303030;
     right: 0px;
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: transparent;
+
 }
 
 span{
     position: absolute;
     left: 50%;
-    top: 120%;
-    color: $color;
+    top: 130%;
+    color: rgb(141, 141, 141);
     transform: translateX(-50%) translateY(-50%);
+    font-weight: 400;
 }
 
 .preloader {

@@ -1,11 +1,12 @@
 <template>
-    <div class="post" ref="postRef">
+    <div class="post" ref="postRef" :class="{ hovered: isHover }">
         <transition name="fade">
             <router-link
                 class="see-more-wrapper"
                 v-if="isHover"
                 :to="`/focus-post/${post.id}`"
             >
+                <h1>{{ post.subject_name }}</h1>
                 <div class="see-more-btn">See more</div>
             </router-link>
         </transition>
@@ -116,7 +117,7 @@ $banner-height: 6rem;
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: 0.25s ease;
+    transition: .25s ease;
 }
 
 .fade-enter-from,
@@ -127,16 +128,22 @@ $banner-height: 6rem;
 
 .see-more-wrapper {
     width: 100%;
-    height: 20%;
-    background-color: rgba(102, 102, 102, 0.288);
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.616);
+    border-radius: 10px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     position: absolute;
     bottom: 0;
     right: 0;
     text-decoration: none;
-
+    z-index: 2;
+    gap: 1rem;
+    h1{
+        color: #fff;
+    }
     .see-more-btn {
         color: #fff;
         font-size: 1.25rem;
@@ -146,6 +153,9 @@ $banner-height: 6rem;
         border-radius: 40px;
         background-color: transparent;
         cursor: pointer;
+        &:hover{
+            
+        }
     }
 }
 
@@ -156,21 +166,36 @@ $banner-height: 6rem;
     width: 700px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     margin-bottom: 2rem;
+    border-radius: 10px;
+    background: #fff;
     overflow: hidden;
     @media (max-width: 720px) {
-        width: 100%;
+        width: 95%;
+    }
+    &.hovered{
     }
     .banner {
         width: 100%;
         height: 100px;
-        // height: $banner-height;
         @media (max-width: 600px) {
             height: 70px;
         }
-        background-color: var(--secondary-color-normal);
+        background-color: rgb(255, 255, 255);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
+        &::before{
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: .7px;
+            background-color: rgb(226, 226, 226);
+            z-index: 1;
+        }
 
         .author-info-wrapper {
             display: flex;
@@ -178,6 +203,7 @@ $banner-height: 6rem;
             align-items: center;
             img {
                 border-radius: 50%;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
                 height: 50px;
                 width: 50px;
                 margin-right: 1rem;
@@ -190,7 +216,7 @@ $banner-height: 6rem;
                     color: $primary-font-color;
                 }
                 span {
-                    color: $primary-font-color-light;
+                    color: rgb(179, 179, 179);
                     font-weight: 500;
                 }
 
@@ -211,10 +237,11 @@ $banner-height: 6rem;
             margin-right: 2rem;
             .icon {
                 font-size: 1.3rem;
+                
             }
             span {
                 font-size: 1rem;
-                color: $primary-font-color-light;
+                color: rgb(179, 179, 179);
                 font-weight: 500;
             }
             .wrapper {
@@ -222,6 +249,12 @@ $banner-height: 6rem;
                 display: flex;
                 flex-direction: column;
                 margin: 0 1rem;
+                &:nth-child(1){
+                    color: rgb(238, 54, 54);
+                }
+                &:nth-child(2){
+                    color: var(--secondary-color-dark);
+                }
             }
 
             @media (max-width:600px) {
@@ -244,6 +277,7 @@ $banner-height: 6rem;
         justify-content: center;
         align-items: center;
         margin: 2rem 0;
+        background: #fff;
         @media (max-width: 600px) {
             flex-direction: column;
         }
@@ -254,12 +288,20 @@ $banner-height: 6rem;
             justify-content: center;
             align-items: center;
             margin: 2rem;
+            color: var(--primary-font-color);
             @media (max-width: 800px) {
                 width: 100%;
             }
             .text{
+                color: rgb(114, 114, 114);
                 display: flex;
                 flex-direction: column;
+                @media (max-width:600px) {
+                    min-width: 310px;
+                }
+                span{
+                    color: var(--primary-font-color);
+                }
             }
 
         }
