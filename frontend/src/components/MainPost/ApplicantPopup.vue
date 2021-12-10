@@ -15,9 +15,9 @@
             <span v-for="item in request" :key="item">
                 <img :src="item.imageURL" alt="" />
                 <div class="text">
-                    <span style="padding-left: 0; font-weight: 800">{{
-                        item.name
-                    }}</span>
+                    <span style="padding-left: 0; font-weight: 800">
+                        {{item.first_name}}  {{item.last_name}}
+                    </span>
                     <span
                         style="padding-left: 0;
                     rgb(177, 177, 177);"
@@ -66,6 +66,7 @@ $button-color-hover: rgb(214, 54, 33);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 10px;
     align-items: center;
+    z-index: 100;
     .head {
         width: 100%;
         display: flex;

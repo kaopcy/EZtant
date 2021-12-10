@@ -180,10 +180,38 @@ export default function () {
         };
     };
 
-    const updateUser = async ()=> {
-        loading('data uploading')
-        await new Promise(resolve=> setTimeout(resolve , 1000))
-        finish('updated successfully')
+    const updateUser = async (userData)=> {
+        loading('Updating user data. . .')
+        try {
+            isLoading.value = true
+            console.log(userData.email);
+            let response = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/update`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        email: userData.email,
+                        first_name: userData.firstName,
+                        last_name: userData.lastName,
+                        imageURL: userData.imageURL,
+                        department: userData.department,
+                    }),
+                }
+            );
+            const data = await response.json();
+            if (response.status === 403) throw new Error(data.detail);
+            await getUser();
+            finish('updated in succesfully')
+        } catch (err) {
+            clearUserData()
+            error(`Access denied` , err)
+        } finally{
+            finish('updated successfully')
+        }
     }
 
     // getUser();

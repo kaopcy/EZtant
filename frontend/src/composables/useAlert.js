@@ -16,7 +16,7 @@ export default function (){
             icon: 'success',
             title: text,
             showConfirmButton: false,
-            timer: 1000
+            timer: 1000,
         })
     }
 

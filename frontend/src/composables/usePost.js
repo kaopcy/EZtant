@@ -121,7 +121,30 @@ export default function () {
             isLoading.value = false;
         }
     };
+    
+    const request = async (id)=>{
+        loading('requesting data . . .')
 
+        isLoading.value = true;
+        try {
+            const res = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}/requested` ,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                }
+                )
+            const data = await res.json()
+            finish(data.message)
+        } catch (error) {
+            console.log(error);
+        } finally{
+            isLoading.value = false;
+        }
+    }
 
     return {
         getAllPost,
@@ -131,5 +154,6 @@ export default function () {
         deletePostByID,
         isLoading,
         userPost,
+        request
     };
 }

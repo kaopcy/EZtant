@@ -97,15 +97,14 @@
                         </div>
                         <div
                             class="btn"
-                            @click="handleRequest"
                             v-if="isEditAble"
                         >
                             <fa class="icon" :icon="['fas', 'edit']" />
                             <span>Edit</span>
                         </div>
                         <div
-                            class="btn"
-                            @click="handleRequest"
+                            class="btn request"
+                            @click="request(route.params.id)"
                             v-if="user.role === 'student'"
                         >
                             <fa class="icon" :icon="['fas', 'sign-out-alt']" />
@@ -137,7 +136,7 @@ export default {
         Loading,
     },
     setup() {
-        const { isLoading, getPostByPostID, deletePostByID } = usePost();
+        const { isLoading, getPostByPostID, deletePostByID , request } = usePost();
         const { user } = useAuth();
         const route = useRoute();
         const isPopup = ref(false);
@@ -154,10 +153,6 @@ export default {
 
         const interactRef = ref(null);
 
-        const handleRequest = () => {
-            console.log("requested");
-        };
-
         const closeApplicantPopup = () => {
             isPopup.value = false;
             console.log("colse");
@@ -169,11 +164,11 @@ export default {
             user,
             route,
             isLoading,
-            handleRequest,
             isPopup,
             interactRef,
             closeApplicantPopup,
             isEditAble,
+            request
         };
     },
 };
@@ -321,6 +316,7 @@ $primary-font-color-light: #464646;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                position: relative;
             }
         }
         .detail {
@@ -390,9 +386,18 @@ $primary-font-color-light: #464646;
                     .icon {
                     }
                 }
-                &:nth-child(3) {
+                &.request {
+                    border: 1px solid var(--secondary-color-dark);
+                    color: var(--secondary-color-dark);
                     .icon {
-                        transform: rotate(-90deg);
+                        color: var(--secondary-color-dark);
+                    }
+                    &:hover {
+                        color: #fff;
+                        background-color: var(--secondary-color-dark);
+                        .icon {
+                            color: #fff;
+                        }
                     }
                 }
                 span {

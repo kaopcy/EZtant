@@ -1,16 +1,5 @@
 <template>
-    <div class="post" ref="postRef" :class="{ hovered: isHover }">
-        <transition name="fade">
-            <router-link
-                class="see-more-wrapper"
-                v-if="isHover"
-                :to="`/focus-post/${post.id}`"
-            >
-                <h1>{{ post.subject_name }}</h1>
-                <div class="see-more-btn">See more</div>
-            </router-link>
-        </transition>
-
+    <div class="post" :class="{ hovered: isHover }">
         <div class="banner">
             <div class="author-info-wrapper">
                 <img :src="author.imageURL" alt="" />
@@ -34,7 +23,21 @@
             </div>
         </div>
         <slot></slot>
-        <div class="content">
+        <div class="content" ref="postRef" >
+            <transition name="fade">
+                <router-link
+                    class="see-more-wrapper"
+                    v-if="isHover"
+                    :to="`/focus-post/${post.id}`"
+                >
+                    <h1>
+                        {{ post.subject_name }}
+                        <span class="line"></span>
+                    </h1>
+                    
+                    <div class="see-more-btn">See more</div>
+                </router-link>
+            </transition>
             <div class="detail-wrapper">
                 <div class="text">
                     <div>
@@ -117,20 +120,28 @@ $banner-height: 6rem;
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: .25s ease;
+    transition: all 0.5s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
+    // transform: translateY(100%);
     opacity: 0;
-    transform: translateY(100%);
+    h1{
+        transform: translateY(100px);
+        transition-delay: 0.3s;
+        opacity: 1;
+    }
+    .see-more-btn {
+        transform: translateY(250px);
+        opacity: 1;
+    }
 }
 
 .see-more-wrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 100px);
     background-color: rgba(0, 0, 0, 0.616);
-    border-radius: 10px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -140,21 +151,57 @@ $banner-height: 6rem;
     right: 0;
     text-decoration: none;
     z-index: 2;
-    gap: 1rem;
-    h1{
+    gap: 2rem;
+    @media (max-width: 600px) {
+        height: calc(100% - 70px);
+    }
+    h1 {
         color: #fff;
+        transition: all .5s;
+        position: relative;
+        padding: .5rem;
+        transform: translateY(40px);
+        span{
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 0;
+            bottom: 0;
+            background-color: rgb(190, 190, 190);
+            transition: all .5s;
+            transform: scaleX(0%);
+            opacity: 0;
+            transform-origin: left;
+        }
     }
     .see-more-btn {
-        color: #fff;
+        color: #303030;
         font-size: 1.25rem;
+        opacity: 0;
         padding: 0.5rem 3rem;
         font-weight: 700;
-        border: 3px solid white;
-        border-radius: 40px;
-        background-color: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: white;
+        transition: all 0.7s;
+        transform: translateY(40px);
         cursor: pointer;
-        &:hover{
-            
+        &:hover {
+        }
+    }
+    &:hover{
+        span{
+            transform: scaleX(100%);
+            opacity: 100%;
+            transition-delay: 0.3s;
+        }
+        h1{
+            transform: translateY(0);
+        }
+        .see-more-btn {
+            transform: translateY(0);
+            opacity: 100%;
+            transition-delay: 0.4s;
         }
     }
 }
@@ -172,7 +219,7 @@ $banner-height: 6rem;
     @media (max-width: 720px) {
         width: 95%;
     }
-    &.hovered{
+    &.hovered {
     }
     .banner {
         width: 100%;
@@ -185,14 +232,14 @@ $banner-height: 6rem;
         justify-content: space-between;
         align-items: center;
         position: relative;
-        &::before{
-            content: '';
+        &::before {
+            content: "";
             position: absolute;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: .7px;
+            height: 0.7px;
             background-color: rgb(226, 226, 226);
             z-index: 1;
         }
@@ -220,12 +267,12 @@ $banner-height: 6rem;
                     font-weight: 500;
                 }
 
-                @media (max-width:600px) {
-                    h1{
+                @media (max-width: 600px) {
+                    h1 {
                         font-size: 1rem;
                     }
-                    span{
-                        font-size: .65rem;
+                    span {
+                        font-size: 0.65rem;
                     }
                 }
             }
@@ -237,7 +284,6 @@ $banner-height: 6rem;
             margin-right: 2rem;
             .icon {
                 font-size: 1.3rem;
-                
             }
             span {
                 font-size: 1rem;
@@ -249,24 +295,24 @@ $banner-height: 6rem;
                 display: flex;
                 flex-direction: column;
                 margin: 0 1rem;
-                &:nth-child(1){
+                &:nth-child(1) {
                     color: rgb(238, 54, 54);
                 }
-                &:nth-child(2){
+                &:nth-child(2) {
                     color: var(--secondary-color-dark);
                 }
             }
 
-            @media (max-width:600px) {
-                margin-right: .5rem;
-                .icon{
+            @media (max-width: 600px) {
+                margin-right: 0.5rem;
+                .icon {
                     font-size: 1rem;
                 }
-                span{
-                    font-size: .65rem;
+                span {
+                    font-size: 0.65rem;
                 }
-                .wrapper{
-                    margin: 0 .5rem;
+                .wrapper {
+                    margin: 0 0.5rem;
                 }
             }
         }
@@ -276,7 +322,7 @@ $banner-height: 6rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 2rem 0;
+        padding: 2rem 0;
         background: #fff;
         @media (max-width: 600px) {
             flex-direction: column;
@@ -292,18 +338,17 @@ $banner-height: 6rem;
             @media (max-width: 800px) {
                 width: 100%;
             }
-            .text{
+            .text {
                 color: rgb(114, 114, 114);
                 display: flex;
                 flex-direction: column;
-                @media (max-width:600px) {
+                @media (max-width: 600px) {
                     min-width: 310px;
                 }
-                span{
+                span {
                     color: var(--primary-font-color);
                 }
             }
-
         }
         .table-wrapper {
             height: 100%;
