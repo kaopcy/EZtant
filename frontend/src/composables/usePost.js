@@ -1,15 +1,15 @@
 import { ref } from "vue";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 import useAlert from "./useAlert";
 export default function () {
     const isLoading = ref(false);
     const userPost = ref(null);
-    const router = useRouter()
-    const { finish , loading } = useAlert()
+    const router = useRouter();
+    const { finish, loading, error } = useAlert();
 
     const getAllPost = async () => {
         isLoading.value = true;
-        const allPosts = ref(null)
+        const allPosts = ref(null);
         try {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/all-teachers`,
@@ -20,19 +20,36 @@ export default function () {
                     },
                     credentials: "include",
                 }
-            )
-            allPosts.value = await response.json()
+            );
+            allPosts.value = await response.json();
+
+            const arrayMove = (arr, fromIndex, toIndex) => {
+                var element = arr[fromIndex];
+                arr.splice(fromIndex, 1);
+                arr.splice(toIndex, 0, element);
+            };
+
+            allPosts.value.forEach((e) => {
+                console.log(e.subject_name);
+                if (e.requested.length == e.max_requested) {
+                    arrayMove(
+                        allPosts.value,
+                        allPosts.value.indexOf(e),
+                        allPosts.value.length
+                    );
+                }
+            });
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             isLoading.value = false;
         }
-        return allPosts.value
+        return allPosts.value;
     };
 
     const getLastestPost = async () => {
         isLoading.value = true;
-        const allPosts = ref(null)
+        const allPosts = ref(null);
         try {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/all-teachers`,
@@ -43,19 +60,34 @@ export default function () {
                     },
                     credentials: "include",
                 }
-            )
-            allPosts.value = await response.json()
+            );
+            allPosts.value = await response.json();
+            const arrayMove = (arr, fromIndex, toIndex) => {
+                var element = arr[fromIndex];
+                arr.splice(fromIndex, 1);
+                arr.splice(toIndex, 0, element);
+            };
+
+            allPosts.value.forEach((e) => {
+                if (e.requested.length == e.max_requested) {
+                    arrayMove(
+                        allPosts.value,
+                        allPosts.value.indexOf(e),
+                        allPosts.value.length
+                    );
+                }
+            });
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             isLoading.value = false;
         }
-        return allPosts.value
+        return allPosts.value;
     };
 
     const getPostByPostID = async (id) => {
         isLoading.value = true;
-        const allPosts = ref(null)
+        const allPosts = ref(null);
         try {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}`,
@@ -66,14 +98,14 @@ export default function () {
                     },
                     credentials: "include",
                 }
-            )
-            allPosts.value = await response.json()
+            );
+            allPosts.value = await response.json();
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             isLoading.value = false;
         }
-        return allPosts.value
+        return allPosts.value;
     };
 
     const getPostByTeacherID = async (ID) => {
@@ -88,23 +120,22 @@ export default function () {
                     },
                     credentials: "include",
                 }
-            )
-            userPost.value = await response.json()
+            );
+            userPost.value = await response.json();
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             isLoading.value = false;
         }
     };
 
-    const deletePostByID = async (ID)=>{
-
-        loading('deleting data . . .')
+    const deletePostByID = async (ID) => {
+        loading("deleting data . . .");
 
         isLoading.value = true;
         try {
             await fetch(
-                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${ID}/delete` ,
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${ID}/delete`,
                 {
                     method: "POST",
                     headers: {
@@ -112,23 +143,23 @@ export default function () {
                     },
                     credentials: "include",
                 }
-            )
-            router.back()
+            );
+            router.back();
         } catch (error) {
             console.log(error);
-        } finally{
-            finish('deleted successfully!')
+        } finally {
+            finish("deleted successfully!");
             isLoading.value = false;
         }
     };
-    
-    const request = async (id)=>{
-        loading('requesting data . . .')
+
+    const request = async (id) => {
+        loading("requesting data . . .");
 
         isLoading.value = true;
         try {
             const res = await fetch(
-                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}/requested` ,
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}/requested`,
                 {
                     method: "PUT",
                     headers: {
@@ -136,15 +167,16 @@ export default function () {
                     },
                     credentials: "include",
                 }
-                )
-            const data = await res.json()
-            finish(data.message)
+            );
+            const data = await res.json();
+            if (data.message.includes("fail")) error("Full requested !!");
+            else finish(data.message);
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             isLoading.value = false;
         }
-    }
+    };
 
     return {
         getAllPost,
@@ -154,6 +186,6 @@ export default function () {
         deletePostByID,
         isLoading,
         userPost,
-        request
+        request,
     };
 }

@@ -30,7 +30,7 @@
                     </div>
                     <div class="wrapper" @click="isPopup = true">
                         <fa class="icon" :icon="['fas', 'user-friends']" />
-                        <span>25</span>
+                        <span>{{post.requested.length}}</span>
                     </div>
                     <transition name="fade">
                         <ApplicantPopup
@@ -104,11 +104,12 @@
                         </div>
                         <div
                             class="btn request"
-                            @click="request(route.params.id)"
+                            :class="{requested:isRequested}"
+                            @click="handleRequest(route.params.id)"
                             v-if="user.role === 'student'"
                         >
                             <fa class="icon" :icon="['fas', 'sign-out-alt']" />
-                            <span>Request</span>
+                            <span>{{ isRequested ? 'you have Requested':'Request' }}</span>
                         </div>
                     </div>
                 </div>
@@ -146,16 +147,22 @@ export default {
             () => user.value.id == post.value.author.id
         );
 
+        const isRequested = computed(()=> post.value.requested.some((e)=> user.value.id == e.id ) )
+
         // onmounted method
         onMounted(async () => {
             post.value = await getPostByPostID(route.params.id);
         });
 
-        const interactRef = ref(null);
+        // handle user to request post
+        const handleRequest = async (id)=>{
+            await request(id)
+            post.value = await getPostByPostID(route.params.id);
+        }
 
         const closeApplicantPopup = () => {
             isPopup.value = false;
-            console.log("colse");
+            console.log("close");
         };
 
         return {
@@ -165,10 +172,10 @@ export default {
             route,
             isLoading,
             isPopup,
-            interactRef,
             closeApplicantPopup,
             isEditAble,
-            request
+            handleRequest,
+            isRequested
         };
     },
 };
@@ -395,6 +402,13 @@ $primary-font-color-light: #464646;
                     &:hover {
                         color: #fff;
                         background-color: var(--secondary-color-dark);
+                        .icon {
+                            color: #fff;
+                        }
+                    }
+                    &.requested {
+                        background-color: var(--secondary-color-dark);
+                        color: #fff;
                         .icon {
                             color: #fff;
                         }

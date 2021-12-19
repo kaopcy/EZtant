@@ -12,6 +12,7 @@
         <span class="line"></span>
 
         <section>
+            <span v-if="request.length == 0 || !request">Empty</span>
             <span v-for="item in request" :key="item">
                 <img :src="item.imageURL" alt="" />
                 <div class="text">

@@ -20,7 +20,7 @@
                         <option>Sun</option>
                     </select>
                 </td>
-                <td><input type="text" v-model="item.time" required placeholder="09.00 - 12.00" /></td>
+                <td><input type="text" v-model="item.time" required placeholder="09.00 - 12.00" @focus="item.time = '09.00 - 12.00'"/></td>
                 <td><fa class="icon" :icon="['fas' , 'trash-alt']" @click="deleteInput(index)"></fa></td>
             </tr>
         </table>

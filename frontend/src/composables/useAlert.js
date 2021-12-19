@@ -20,11 +20,12 @@ export default function (){
         })
     }
 
-    const error = (text , error)=>{
+    const error = (text)=>{
         Swal.fire({
             icon: "error",
             title: text,
-            text: error.message,
+            showConfirmButton: false,
+            timer: 1000,
         });
     }
 

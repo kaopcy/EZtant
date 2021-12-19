@@ -1,5 +1,5 @@
 <template>
-    <div class="post" :class="{ hovered: isHover }">
+    <div class="post" :class="[{ hovered: isHover } , { fulled: isFullRequest }]">
         <div class="banner">
             <div class="author-info-wrapper">
                 <img :src="author.imageURL" alt="" />
@@ -18,11 +18,11 @@
                 </div>
                 <div class="wrapper">
                     <fa class="icon" :icon="['fas', 'user-friends']" />
-                    <span>25</span>
+                    <span>{{post.requested.length}}</span>
                 </div>
             </div>
         </div>
-        <slot></slot>
+
         <div class="content" ref="postRef" >
             <transition name="fade">
                 <router-link
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "@vue/runtime-core";
+import { computed, onMounted, ref } from "@vue/runtime-core";
 
 import Table from "../components/Table.vue";
 
@@ -96,6 +96,8 @@ export default {
     setup(props) {
         const isHover = ref(false);
         const postRef = ref(null);
+
+        // onmounted hook
         onMounted(() => {
             postRef.value.onmouseenter = () => {
                 isHover.value = true;
@@ -108,7 +110,9 @@ export default {
             console.log(props.post);
         });
 
-        return { isHover, postRef };
+        const isFullRequest = computed(()=> props.post.requested.length == props.post.max_requested )
+
+        return { isHover, postRef , isFullRequest };
     },
 };
 </script>
@@ -120,22 +124,12 @@ $banner-height: 6rem;
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    // transform: translateY(100%);
     opacity: 0;
-    h1{
-        transform: translateY(100px);
-        transition-delay: 0.3s;
-        opacity: 1;
-    }
-    .see-more-btn {
-        transform: translateY(250px);
-        opacity: 1;
-    }
 }
 
 .see-more-wrapper {
@@ -219,7 +213,14 @@ $banner-height: 6rem;
     @media (max-width: 720px) {
         width: 95%;
     }
-    &.hovered {
+    &.fulled {
+        &::after{
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.507);
+            z-index: 1000;
+        }
     }
     .banner {
         width: 100%;
