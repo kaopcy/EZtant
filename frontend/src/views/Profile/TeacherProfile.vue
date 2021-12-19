@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="posts" v-if=" selectedTab === 'post'">
-            <Post />
+            <Post :userID="user.id" />
         </div>
     </div>
 </template>

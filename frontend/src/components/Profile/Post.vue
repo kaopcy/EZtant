@@ -31,13 +31,14 @@ export default {
         Loading,
         Postz,
     },
-    setup() {
+    props: ['userID'],
+    setup(props) {
         const { userPost , isLoading, getPostByTeacherID } = usePost();
-
         const user = inject("user");
 
         onMounted(async () => {
-            await getPostByTeacherID(user.value.id);
+            await getPostByTeacherID(props.userID);
+            
         });
 
         onMounted(()=>{

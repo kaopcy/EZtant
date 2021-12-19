@@ -8,7 +8,7 @@
                         {{ author.first_name || author.firstName }}
                         {{ author.last_name || author.lastName }}
                     </h1>
-                    <span>{{ post.timestamp }}</span>
+                    <span>{{ post.timestamp.slice(0 , post.timestamp.length -3) }}</span>
                 </div>
             </div>
             <div class="interact-info-wrapper">
@@ -62,7 +62,7 @@
                         <span style="font-weight: 700; line-height: 1.5rem"
                             >Payment:</span
                         >
-                        {{ post.wage || 600 }} $
+                        {{ post.wage || 600 }} ฿
                     </div>
                 </div>
             </div>
@@ -216,10 +216,22 @@ $banner-height: 6rem;
     &.fulled {
         &::after{
             content: '';
+            text-align: center;
             position: absolute;
             inset: 0;
             background-color: rgba(0, 0, 0, 0.507);
             z-index: 1000;
+        }
+        &::before{
+            content: 'Request is full';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% , -50%);
+            color: #fff;    
+            font-size: 2rem;
+            font-weight: 700;
+            z-index: 1001;
         }
     }
     .banner {

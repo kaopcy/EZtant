@@ -20,7 +20,7 @@
                             {{ post.author.first_name }}
                             {{ post.author.last_name }}
                         </h1>
-                        <span>{{ post.timestamp }} </span>
+                        <span>{{ post.timestamp.slice(0 , post.timestamp.length -3) }} </span>
                     </div>
                 </div>
                 <div class="interact-info-wrapper">
@@ -70,7 +70,7 @@
                             <span style="font-weight: 700; line-height: 1.5rem"
                                 >Payment:</span
                             >
-                            {{ post.wage || 600 }} $
+                            {{ post.wage || 600 }} ฿
                         </p>
                     </div>
                     <!-- right table -->

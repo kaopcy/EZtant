@@ -101,7 +101,7 @@
                 <span>Edit</span>
                 <fa class="icon" :icon="['fas', 'edit']" />
             </div>
-            <div class="btn">
+            <div class="btn" @click="changePassword()">
                 <span>Change Password</span>
                 <fa class="icon" :icon="['fas', 'key']" />
             </div>
@@ -119,10 +119,10 @@ import useAuth from "../../composables/useAuth";
 export default {
     name: "Info",
     setup() {
-        const { updateUser } = useAuth();
+        const { updateUser , changePassword } = useAuth();
         const user = inject("user");
         const isEdit = ref(false);
-        return { user, isEdit, updateUser };
+        return { user, isEdit, updateUser , changePassword };
     },
 };
 </script>
@@ -226,5 +226,9 @@ export default {
             color: #fff;
         }
     }
+}
+.input-password{
+    padding: 1rem;
+    
 }
 </style>

@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+
 export default function (){
     const loading = (text)=>{
         Swal.fire({
@@ -10,6 +11,7 @@ export default function (){
             },
         });
     }
+
     const finish = (text)=> {
         Swal.fire({
             position: 'center',
