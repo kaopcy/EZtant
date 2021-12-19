@@ -1,79 +1,120 @@
 <template>
-    <div class="post" ref="postRef">
-        <transition name="fade">
-            <router-link class="see-more-wrapper" v-if="isHover" :to="`/focus-post/${post.id}`">
-                <div class="see-more-btn">
-                    See more
-                </div>
-            </router-link>
-        </transition>
-
+    <div class="post" :class="[{ hovered: isHover } , { fulled: isFullRequest }]">
         <div class="banner">
             <div class="author-info-wrapper">
-                <img src="" alt="">
+                <img :src="author.imageURL" alt="" />
                 <div class="author-info">
-                    <h1>{{post.author}}</h1>
-                    <span>{{post.timeStamp}}</span>
+                    <h1>
+                        {{ author.first_name || author.firstName }}
+                        {{ author.last_name || author.lastName }}
+                    </h1>
+                    <span>{{ post.timestamp.slice(0 , post.timestamp.length -3) }}</span>
                 </div>
             </div>
             <div class="interact-info-wrapper">
                 <div class="wrapper">
-                    <fa class="icon" :icon="['fas' , 'heart']" />
+                    <fa class="icon" :icon="['fas', 'heart']" />
                     <span>15</span>
                 </div>
                 <div class="wrapper">
-                    <fa class="icon" :icon="['fas' , 'user-friends']" />
-                    <span>25</span>
+                    <fa class="icon" :icon="['fas', 'user-friends']" />
+                    <span>{{post.requested.length}}</span>
                 </div>
             </div>
         </div>
-        <div class="content">
+
+        <div class="content" ref="postRef" >
+            <transition name="fade">
+                <router-link
+                    class="see-more-wrapper"
+                    v-if="isHover"
+                    :to="`/focus-post/${post.id}`"
+                >
+                    <h1>
+                        {{ post.subject_name }}
+                        <span class="line"></span>
+                    </h1>
+                    
+                    <div class="see-more-btn">See more</div>
+                </router-link>
+            </transition>
             <div class="detail-wrapper">
-                <span>{{post.detail}}</span>
+                <div class="text">
+                    <div>
+                        <span style="font-weight: 700; line-height: 1.5rem"
+                            >Subject:</span
+                        >
+                        {{ post.subject_name }}
+                    </div>
+                    <div>
+                        <span style="font-weight: 700; line-height: 1.5rem"
+                            >Subject ID:</span
+                        >
+                        {{ post.subject_id || "01067007" }}
+                    </div>
+                    <div>
+                        <span style="font-weight: 700; line-height: 1.5rem"
+                            >Number/Group:</span
+                        >
+                        {{ post.max_requested || 1 }}
+                    </div>
+                    <div>
+                        <span style="font-weight: 700; line-height: 1.5rem"
+                            >Payment:</span
+                        >
+                        {{ post.wage || 600 }} ฿
+                    </div>
+                </div>
             </div>
             <div class="table-wrapper">
-                <Table :schedule="post.schedule" />
+                <Table :schedule="post.schedules" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted , ref } from '@vue/runtime-core'
+import { computed, onMounted, ref } from "@vue/runtime-core";
 
-import Table from '../components/Table.vue'
+import Table from "../components/Table.vue";
 
 export default {
-    name: 'Post',
+    name: "Post",
 
-    components:{
+    components: {
         Table,
     },
 
     props: {
         post: {
             type: Object,
-        }
+        },
+        author: {
+            type: Object,
+        },
     },
     setup(props) {
-        const isHover = ref(false)
-        const postRef = ref(null)
-        onMounted(()=>{
-            postRef.value.onmouseenter = ()=>{
-                isHover.value = true
-            }
+        const isHover = ref(false);
+        const postRef = ref(null);
 
-            postRef.value.onmouseleave = ()=>{
-                isHover.value = false
-            }
+        // onmounted hook
+        onMounted(() => {
+            postRef.value.onmouseenter = () => {
+                isHover.value = true;
+            };
+
+            postRef.value.onmouseleave = () => {
+                isHover.value = false;
+            };
 
             console.log(props.post);
-        })
+        });
 
-        return { isHover , postRef }
-    }
+        const isFullRequest = computed(()=> props.post.requested.length == props.post.max_requested )
 
-}
+        return { isHover, postRef , isFullRequest };
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -81,145 +122,255 @@ $primary-font-color: #303030;
 $primary-font-color-light: #464646;
 $banner-height: 6rem;
 
-
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.25s ease;
+    transition: all 0.3s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
-    transform: translateY(100%);
 }
 
-.see-more-wrapper{
+.see-more-wrapper {
     width: 100%;
-    height: 20%;
-    background-color: rgba(102, 102, 102, 0.288);
+    height: calc(100% - 100px);
+    background-color: rgba(0, 0, 0, 0.616);
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     position: absolute;
     bottom: 0;
     right: 0;
     text-decoration: none;
-    
-    .see-more-btn{
+    z-index: 2;
+    gap: 2rem;
+    @media (max-width: 600px) {
+        height: calc(100% - 70px);
+    }
+    h1 {
         color: #fff;
+        transition: all .5s;
+        position: relative;
+        padding: .5rem;
+        transform: translateY(40px);
+        span{
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 0;
+            bottom: 0;
+            background-color: rgb(190, 190, 190);
+            transition: all .5s;
+            transform: scaleX(0%);
+            opacity: 0;
+            transform-origin: left;
+        }
+    }
+    .see-more-btn {
+        color: #303030;
         font-size: 1.25rem;
-        padding: .5rem 3rem;
+        opacity: 0;
+        padding: 0.5rem 3rem;
         font-weight: 700;
-        border: 3px solid white;
-        border-radius: 40px;
-        background-color: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: white;
+        transition: all 0.7s;
+        transform: translateY(40px);
         cursor: pointer;
+        &:hover {
+        }
+    }
+    &:hover{
+        span{
+            transform: scaleX(100%);
+            opacity: 100%;
+            transition-delay: 0.3s;
+        }
+        h1{
+            transform: translateY(0);
+        }
+        .see-more-btn {
+            transform: translateY(0);
+            opacity: 100%;
+            transition-delay: 0.4s;
+        }
     }
 }
 
-.post{
+.post {
     position: relative;
     font-family: var(--primary-font);
-    width: 70%;
     margin: 0 auto;
-    min-height: 400px;
+    width: 700px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     margin-bottom: 2rem;
+    border-radius: 10px;
+    background: #fff;
     overflow: hidden;
-    @media (max-width: 648px) {
-        width: 90%;
+    @media (max-width: 720px) {
+        width: 95%;
     }
-    .banner{
-        width: 100%;
-            height: 100px;
-        // height: $banner-height;
-        @media (max-width: 500px) {
-            height: 100px;
+    &.fulled {
+        &::after{
+            content: '';
+            text-align: center;
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.507);
+            z-index: 1000;
         }
-        background-color: var(--secondary-color-normal);
+        &::before{
+            content: 'Request is full';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% , -50%);
+            color: #fff;    
+            font-size: 2rem;
+            font-weight: 700;
+            z-index: 1001;
+        }
+    }
+    .banner {
+        width: 100%;
+        height: 100px;
+        @media (max-width: 600px) {
+            height: 70px;
+        }
+        background-color: rgb(255, 255, 255);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 0.7px;
+            background-color: rgb(226, 226, 226);
+            z-index: 1;
+        }
 
-        .author-info-wrapper{
+        .author-info-wrapper {
             display: flex;
             margin-left: 2rem;
             align-items: center;
-            img{
+            img {
                 border-radius: 50%;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
                 height: 50px;
                 width: 50px;
                 margin-right: 1rem;
             }
-            .author-info{   
+            .author-info {
                 display: flex;
                 flex-direction: column;
-                h1{
+                h1 {
                     font-size: 1.5rem;
                     color: $primary-font-color;
                 }
-                span{
-                    color: $primary-font-color-light;
+                span {
+                    color: rgb(179, 179, 179);
                     font-weight: 500;
+                }
+
+                @media (max-width: 600px) {
+                    h1 {
+                        font-size: 1rem;
+                    }
+                    span {
+                        font-size: 0.65rem;
+                    }
                 }
             }
         }
 
-        .interact-info-wrapper{
+        .interact-info-wrapper {
             display: flex;
             color: #fff;
             margin-right: 2rem;
-            .icon{
+            .icon {
                 font-size: 1.3rem;
             }
-            span{
+            span {
                 font-size: 1rem;
-                color: $primary-font-color-light;
+                color: rgb(179, 179, 179);
                 font-weight: 500;
             }
-            .wrapper{
+            .wrapper {
                 align-items: center;
                 display: flex;
                 flex-direction: column;
                 margin: 0 1rem;
+                &:nth-child(1) {
+                    color: rgb(238, 54, 54);
+                }
+                &:nth-child(2) {
+                    color: var(--secondary-color-dark);
+                }
+            }
+
+            @media (max-width: 600px) {
+                margin-right: 0.5rem;
+                .icon {
+                    font-size: 1rem;
+                }
+                span {
+                    font-size: 0.65rem;
+                }
+                .wrapper {
+                    margin: 0 0.5rem;
+                }
             }
         }
     }
-    .content{
+    .content {
         width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
-        @media (max-width: 800px) {
+        align-items: center;
+        padding: 2rem 0;
+        background: #fff;
+        @media (max-width: 600px) {
             flex-direction: column;
         }
-        .detail-wrapper{
+        .detail-wrapper {
             width: 50%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 3rem;
+            margin: 2rem;
+            color: var(--primary-font-color);
             @media (max-width: 800px) {
                 width: 100%;
             }
-            span{
-                
+            .text {
+                color: rgb(114, 114, 114);
+                display: flex;
+                flex-direction: column;
+                @media (max-width: 600px) {
+                    min-width: 310px;
                 }
+                span {
+                    color: var(--primary-font-color);
+                }
+            }
         }
-        .table-wrapper{
-            margin-top: 2rem;
+        .table-wrapper {
             height: 100%;
             width: 50%;
+            min-width: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
-            @media (max-width: 800px) {
-                width: 100%;
-                margin: 0rem 0 2rem 0;
-            }
         }
     }
-
 }
 </style>

@@ -1,21 +1,26 @@
 <template>
     <div class="focus-post-wrapper">
-        
-        <Loading :Attr="{ width: '70%' , height: '40vh' }" v-if="isLoading"/>
+        <Loading :Attr="{ width: '70%', height: '40vh' }" v-if="isLoading" />
 
-        <div class="topic-wrapper" v-if="!isLoading">
+        <div class="topic-wrapper" v-if="!isLoading && post">
             <h1 class="topic">Post.</h1>
-            <span>hire teacher assistant for {{post.department}} engineering.</span>
+            <span
+                >hire teacher assistant for
+                {{ post.department }} engineering.</span
+            >
         </div>
 
-        <div class="post" v-if="!isLoading">
+        <div class="post" v-if="!isLoading && post">
             <!-- header field -->
             <div class="head">
                 <div class="author-info-wrapper">
-                    <img src="" alt="" />
+                    <img :src="post.author.imageURL" alt="" />
                     <div class="author-info">
-                        <h1>{{ post.author }}</h1>
-                        <span>{{ post.timeStamp }} </span>
+                        <h1>
+                            {{ post.author.first_name }}
+                            {{ post.author.last_name }}
+                        </h1>
+                        <span>{{ post.timestamp.slice(0 , post.timestamp.length -3) }} </span>
                     </div>
                 </div>
                 <div class="interact-info-wrapper">
@@ -25,7 +30,7 @@
                     </div>
                     <div class="wrapper" @click="isPopup = true">
                         <fa class="icon" :icon="['fas', 'user-friends']" />
-                        <span>25</span>
+                        <span>{{post.requested.length}}</span>
                     </div>
                     <transition name="fade">
                         <ApplicantPopup
@@ -47,30 +52,30 @@
                             <span style="font-weight: 700; line-height: 1.5rem"
                                 >Subject:</span
                             >
-                            {{ post.subject }}
+                            {{ post.subject_name }}
                         </p>
                         <p>
                             <span style="font-weight: 700; line-height: 1.5rem"
                                 >Subject ID:</span
                             >
-                            {{ post.subjectID || "01067007" }}
+                            {{ post.subject_id || "01067007" }}
                         </p>
                         <p>
                             <span style="font-weight: 700; line-height: 1.5rem"
                                 >Number/Group:</span
                             >
-                            {{ post.number || 1 }}
+                            {{ post.max_requested || 1 }}
                         </p>
                         <p>
                             <span style="font-weight: 700; line-height: 1.5rem"
                                 >Payment:</span
                             >
-                            {{ post.payment || 600 }} $
+                            {{ post.wage || 600 }} ฿
                         </p>
                     </div>
                     <!-- right table -->
                     <div class="table">
-                        <Table :schedule="post.schedule" />
+                        <Table :schedule="post.schedules" />
                     </div>
                 </div>
                 <!-- bottom detail -->
@@ -78,12 +83,34 @@
                     <h1>Detail</h1>
                     <div class="text">
                         <p>
-                            {{ post.detail }}
+                            {{ post.description }}
                         </p>
                     </div>
-                    <div class="request-btn" @click="handleRequest">
-                        <fa class="icon" :icon="['fas', 'sign-out-alt']" />
-                        <span>Request</span>
+                    <div class="btn-wrapper">
+                        <div
+                            class="btn"
+                            @click="deletePostByID(route.params.id)"
+                            v-if="isEditAble"
+                        >
+                            <fa class="icon" :icon="['fas', 'trash-alt']" />
+                            <span>Delete</span>
+                        </div>
+                        <div
+                            class="btn"
+                            v-if="isEditAble"
+                        >
+                            <fa class="icon" :icon="['fas', 'edit']" />
+                            <span>Edit</span>
+                        </div>
+                        <div
+                            class="btn request"
+                            :class="{requested:isRequested}"
+                            @click="handleRequest(route.params.id)"
+                            v-if="user.role === 'student'"
+                        >
+                            <fa class="icon" :icon="['fas', 'sign-out-alt']" />
+                            <span>{{ isRequested ? 'you have Requested':'Request' }}</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -92,12 +119,13 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { useRoute } from 'vue-router';
+import { computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 
-import usePost from '../../composables/usePost'
+import usePost from "../../composables/usePost";
+import useAuth from "../../composables/useAuth";
 
-import Loading from '../../components/Loading/LoadingComponent.vue'
+import Loading from "../../components/Loading/LoadingComponent.vue";
 import Table from "../../components/Table.vue";
 import ApplicantPopup from "../../components/MainPost/ApplicantPopup.vue";
 
@@ -109,37 +137,45 @@ export default {
         Loading,
     },
     setup() {
-        const { isLoading , getPostByPostID } = usePost()
-        const route = useRoute()
+        const { isLoading, getPostByPostID, deletePostByID , request } = usePost();
+        const { user } = useAuth();
+        const route = useRoute();
         const isPopup = ref(false);
         const post = ref(null);
-        const test = ref(false)
+
+        const isEditAble = computed(
+            () => user.value.id == post.value.author.id
+        );
+
+        const isRequested = computed(()=> post.value.requested.some((e)=> user.value.id == e.id ) )
+
         // onmounted method
-        onMounted(async ()=>{
-            post.value = await getPostByPostID(route.params.id)
+        onMounted(async () => {
+            post.value = await getPostByPostID(route.params.id);
         });
 
-        const interactRef = ref(null);
-
-        const handleRequest = () => {
-            console.log("requested");
-        };
+        // handle user to request post
+        const handleRequest = async (id)=>{
+            await request(id)
+            post.value = await getPostByPostID(route.params.id);
+        }
 
         const closeApplicantPopup = () => {
             isPopup.value = false;
-            console.log("colse");
+            console.log("close");
         };
 
-        
-
         return {
+            deletePostByID,
             post,
+            user,
+            route,
             isLoading,
-            handleRequest,
             isPopup,
-            interactRef,
             closeApplicantPopup,
-            test
+            isEditAble,
+            handleRequest,
+            isRequested
         };
     },
 };
@@ -156,16 +192,16 @@ $primary-font-color-light: #464646;
     top: 70px;
 }
 
-.topic-wrapper{
+.topic-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 1.5rem;
     margin-top: 2rem;
-    h1{
+    h1 {
         color: var(--primary-font-color);
     }
-    span{
+    span {
         color: rgb(126, 126, 126);
     }
 }
@@ -287,6 +323,7 @@ $primary-font-color-light: #464646;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                position: relative;
             }
         }
         .detail {
@@ -302,29 +339,84 @@ $primary-font-color-light: #464646;
                 padding: 0.5rem 3rem;
                 margin-bottom: 2rem;
                 p {
+                    word-break: break-word;
                     padding: 1rem 1rem;
                     border: 1px dashed rgb(236, 236, 236);
                 }
             }
-            .request-btn {
+            .btn-wrapper {
+                align-self: flex-end;
+                margin-bottom: 0rem;
+                margin-right: 2rem;
+                display: flex;
+                gap: 0.5rem;
+            }
+            .btn {
                 padding: 0.65rem 2rem;
                 border-radius: 8px;
-                color: #fff;
-                background-color: var(--secondary-color-dark);
-                align-self: flex-end;
-                margin-bottom: 2rem;
-                margin-right: 2rem;
                 cursor: pointer;
                 transition: 0.25s;
+                border: 1px solid rgb(179, 179, 179);
+
+                .icon{
+                    transition: .25s;
+                }
+
+                &:nth-child(1) {
+                    border: 1px solid rgb(255, 20, 20);
+                    color: rgb(255, 20, 20);
+                    .icon {
+                        color: rgb(255, 20, 20);
+                    }
+                    &:hover {
+                        color: #fff;
+                        background-color: rgb(255, 20, 20);
+                        .icon {
+                            color: #fff;
+                        }
+                    }
+                }
+                &:nth-child(2) {
+                    border: 1px solid var(--primary-font-color);
+                    color: var(--primary-font-color);
+
+                    .icon {
+                        color: var(--primary-font-color)
+                    }
+                    &:hover {
+                        color: #fff;
+                        background-color: var(--primary-font-color);
+                        .icon {
+                            color: #fff;
+                        }
+                    }
+                    .icon {
+                    }
+                }
+                &.request {
+                    border: 1px solid var(--secondary-color-dark);
+                    color: var(--secondary-color-dark);
+                    .icon {
+                        color: var(--secondary-color-dark);
+                    }
+                    &:hover {
+                        color: #fff;
+                        background-color: var(--secondary-color-dark);
+                        .icon {
+                            color: #fff;
+                        }
+                    }
+                    &.requested {
+                        background-color: var(--secondary-color-dark);
+                        color: #fff;
+                        .icon {
+                            color: #fff;
+                        }
+                    }
+                }
                 span {
                     margin: 0.5rem;
                     font-weight: 500;
-                }
-                .icon {
-                    transform: rotate(-90deg);
-                }
-                &:hover {
-                    background-color: var(--secondary-color-normal);
                 }
             }
         }

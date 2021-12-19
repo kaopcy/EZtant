@@ -1,7 +1,8 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
+import useAlert from "./useAlert";
 import Swal from "sweetalert2";
-import axios from 'axios'
 
 const user = ref({
     id: null,
@@ -16,7 +17,7 @@ const user = ref({
 });
 
 export default function () {
-    const isLoading = ref(false)
+    const isLoading = ref(false);
     const role = computed(() => user.value.role);
     const isLoggedIn = computed(() => (user.value.role ? true : false));
 
@@ -27,10 +28,12 @@ export default function () {
     );
 
     const router = useRouter();
+    const { finish, loading, error } = useAlert();
 
     const login = async (email, password) => {
+        loading("Logging in. . .");
         try {
-            isLoading.value = true
+            isLoading.value = true;
             let response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/login`,
                 {
@@ -49,28 +52,18 @@ export default function () {
             if (response.status === 403) throw new Error(data.detail);
             await getUser();
             router.push("/");
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Login Succesfully!',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        } catch (error) {
-            clearUserData()
-            Swal.fire({
-                icon: "error",
-                title: "Access denied",
-                text: error.message,
-            });
-        } finally{
-            isLoading.value = false
+            finish("Logging in succesfully");
+        } catch (err) {
+            clearUserData();
+            error(`Access denied`, err);
+        } finally {
+            isLoading.value = false;
         }
     };
 
     const logout = async () => {
         try {
-            isLoading.value = true
+            isLoading.value = true;
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/logout`,
                 {
@@ -81,14 +74,15 @@ export default function () {
                     credentials: "include",
                 }
             );
-            if (response.status === 403) throw new Error('403 is unacceptable for me!');
+            if (response.status === 403)
+                throw new Error("403 is unacceptable for me!");
             const data = await response.json();
             clearUserData();
             console.log(data);
         } catch (error) {
             console.log(error.message);
         } finally {
-            isLoading.value = false
+            isLoading.value = false;
         }
     };
 
@@ -102,7 +96,7 @@ export default function () {
                 password: teacher.password,
                 department: teacher.department,
                 role: "teacher",
-                imageURL: teacher.imageURL
+                imageURL: teacher.imageURL,
             };
             const res = await axios.post(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}/api/register`,
@@ -143,7 +137,7 @@ export default function () {
     const getUser = async () => {
         if (isLoggedIn.value) return;
         try {
-            isLoading.value = true
+            isLoading.value = true;
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/account`,
                 {
@@ -154,7 +148,8 @@ export default function () {
                     credentials: "include",
                 }
             );
-            if (response.status === 403) throw new Error('403 is unacceptable for me!');
+            if (response.status === 403)
+                throw new Error("403 is unacceptable for me!");
             const data = await response.json();
             console.log(data);
             user.value.role = data.role ?? null;
@@ -165,12 +160,14 @@ export default function () {
             user.value.department = data.department ?? null;
             user.value.year = data.student_year ?? null;
             user.value.email = data.email ?? null;
-            user.value.imageURL = data.imageURL ?? 'https://scontent.fbkk29-2.fna.fbcdn.net/v/t1.6435-9/145036933_2024789844329614_5665229284832997399_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeF-G4NBaMMqLeOMgBnXW7Y4zrMy5swv9THOszLmzC_1MUQZpLV0TqUXN4WUpLNo9-pMK8A4LzDscC6NXxX3D41R&_nc_ohc=QwtBEvFjOH8AX9e6Le6&_nc_ht=scontent.fbkk29-2.fna&oh=af0b4ead911191902a9a640eddc3a077&oe=61CA9B6D';
+            user.value.imageURL =
+                data.imageURL ??
+                "https://scontent.fbkk29-2.fna.fbcdn.net/v/t1.6435-9/145036933_2024789844329614_5665229284832997399_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeF-G4NBaMMqLeOMgBnXW7Y4zrMy5swv9THOszLmzC_1MUQZpLV0TqUXN4WUpLNo9-pMK8A4LzDscC6NXxX3D41R&_nc_ohc=QwtBEvFjOH8AX9e6Le6&_nc_ht=scontent.fbkk29-2.fna&oh=af0b4ead911191902a9a640eddc3a077&oe=61CA9B6D";
         } catch (error) {
-            clearUserData()
+            clearUserData();
             console.log(error.message);
         } finally {
-            isLoading.value = false
+            isLoading.value = false;
         }
     };
 
@@ -188,18 +185,59 @@ export default function () {
         };
     };
 
-    const updateUser = async ()=> {
-        Swal.fire({
-            title: 'Please Wait !',
-            html: 'data uploading',// add html attribute if you want or remove
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading()
+    const updateUser = async (userData) => {
+        loading("Updating user data. . .");
+        try {
+            isLoading.value = true;
+            console.log(userData.email);
+            let response = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/update`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        email: userData.email,
+                        first_name: userData.firstName,
+                        last_name: userData.lastName,
+                        imageURL: userData.imageURL,
+                        department: userData.department,
+                    }),
+                }
+            );
+            const data = await response.json();
+            if (response.status === 403) throw new Error(data.detail);
+            await getUser();
+            finish("updated in succesfully");
+        } catch (err) {
+            clearUserData();
+            error(`Access denied`, err);
+        } finally {
+            finish("updated successfully");
+        }
+    };
+
+    const changePassword = async () => {
+        const { value: formValues } = await Swal.fire({
+            title: "Multiple inputs",
+            html:
+                '<input id="swal-input1" class="swal2-input" >' +
+                '<input id="swal-input2" >',
+            focusConfirm: false,
+            preConfirm: () => {
+                return [
+                    document.getElementById("swal-input1").value,
+                    document.getElementById("swal-input2").value,
+                ];
             },
         });
-        await new Promise(resolve=> setTimeout(resolve , 1000))
-        Swal.close();
-    }
+
+        if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+        }
+    };
 
     // getUser();
 
@@ -214,6 +252,7 @@ export default function () {
         logout,
         getUser,
         updateUser,
-        isLoading
+        isLoading,
+        changePassword,
     };
 }

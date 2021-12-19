@@ -38,14 +38,12 @@ export default {
 .table-container{
     $font-size-n: 1rem;
     $font-size-s: 0.75rem;
-
     font-family: var(--primary-font);
     width: 90%;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     table{
         width: 100%;
         border-collapse: collapse;
-
         td , th{
             font-size: $font-size-n;
             padding: 8px;
@@ -65,7 +63,6 @@ export default {
             &:nth-child(1){
                 background-color: var(--secondary-color-dark);
                 color: #fff;
-                
             }   
             &:nth-child(even) {
                 background-color: #f4f7ff;

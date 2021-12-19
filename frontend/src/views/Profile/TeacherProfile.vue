@@ -28,13 +28,13 @@
             </h3>
         </div>
 
-        <div class="tab">
-            <div class="infomation" v-if=" selectedTab === 'information'">
+        <div class="tab" v-if=" selectedTab === 'information'">
+            <div class="infomation" >
                 <Info />
             </div>
-            <div class="posts" v-if=" selectedTab === 'post'">
-                <Post />
-            </div>
+        </div>
+        <div class="posts" v-if=" selectedTab === 'post'">
+            <Post :userID="user.id" />
         </div>
     </div>
 </template>

@@ -7,8 +7,10 @@
                 <span>Last name</span>
                 <span>Email</span>
                 <span>Faculty</span>
+                <span>ImageURL</span>
             </div>
             <div class="colon-wrapper">
+                <span>:</span>
                 <span>:</span>
                 <span>:</span>
                 <span>:</span>
@@ -31,6 +33,11 @@
                 <input
                     type="text"
                     v-model="user.department"
+                    :disabled="!isEdit"
+                />
+                <input
+                    type="text"
+                    v-model="user.imageURL"
                     :disabled="!isEdit"
                 />
             </div>
@@ -75,7 +82,14 @@
                         :icon="['fas', 'trash-alt']"
                         style="color: rgb(197, 42, 42)"
                         @click="user.department = ''"
-
+                    ></fa>
+                </span>
+                <span>
+                    <fa
+                        class="icon"
+                        :icon="['fas', 'trash-alt']"
+                        style="color: rgb(197, 42, 42)"
+                        @click="user.imageURL = ''"
                     ></fa>
                 </span>
                 
@@ -87,11 +101,11 @@
                 <span>Edit</span>
                 <fa class="icon" :icon="['fas', 'edit']" />
             </div>
-            <div class="btn">
+            <div class="btn" @click="changePassword()">
                 <span>Change Password</span>
                 <fa class="icon" :icon="['fas', 'key']" />
             </div>
-            <button class="btn" @click="updateUser()" :disabled="!isEdit">
+            <button class="btn" @click="updateUser(user)" :disabled="!isEdit">
                 <span>Save</span>
                 <fa class="icon" :icon="['fas', 'save']" />
             </button>
@@ -105,11 +119,10 @@ import useAuth from "../../composables/useAuth";
 export default {
     name: "Info",
     setup() {
-        const { updateUser } = useAuth();
+        const { updateUser , changePassword } = useAuth();
         const user = inject("user");
         const isEdit = ref(false);
-
-        return { user, isEdit, updateUser };
+        return { user, isEdit, updateUser , changePassword };
     },
 };
 </script>
@@ -213,5 +226,9 @@ export default {
             color: #fff;
         }
     }
+}
+.input-password{
+    padding: 1rem;
+    
 }
 </style>

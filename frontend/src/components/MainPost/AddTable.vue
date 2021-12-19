@@ -7,7 +7,7 @@
                 <th>Time</th>
                 <th></th>
             </tr>
-            <tr v-for="( item , index ) in schedule" :key="item">
+            <tr v-for="( item , index ) in data.schedules" :key="item">
                 <td><input type="text" v-model="item.section" required /></td>
                 <td>
                     <select name="day" id="day" v-model="item.day"  required>
@@ -20,7 +20,7 @@
                         <option>Sun</option>
                     </select>
                 </td>
-                <td><input type="text" v-model="item.time" required placeholder="09.00 - 12.00" /></td>
+                <td><input type="text" v-model="item.time" required placeholder="09.00 - 12.00" @focus="item.time = '09.00 - 12.00'"/></td>
                 <td><fa class="icon" :icon="['fas' , 'trash-alt']" @click="deleteInput(index)"></fa></td>
             </tr>
         </table>
@@ -31,40 +31,16 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import useAddPost from '../../composables/useAddPost'
+import { inject } from "vue";
 
 export default {
     name: "AddTable",
     setup() {
+        const data = inject('data')
+        const addInput = inject('addInput')
+        const deleteInput = inject('deleteInput')
 
-        const { addSchedule } = useAddPost()
-
-        const schedule = ref([
-            {
-                section: "",
-                day: "",
-                time: "",
-            },
-        ]);
-
-        const addInput = () => {
-            schedule.value.push({
-                section: "",
-                day: "",
-                time: "",
-            });
-        };
-
-        const submitSchedule = ()=> {
-            addSchedule(schedule.value)
-        }
-        
-        const deleteInput = (index)=>{
-            schedule.value.splice(index , 1)
-        }
-
-        return { schedule, addInput , deleteInput , submitSchedule };
+        return { data , addInput , deleteInput };
     },
 };
 </script>

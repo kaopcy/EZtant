@@ -160,6 +160,7 @@
                 class="department-wrapper link"
                 v-for="item in department"
                 :key="item"
+                @click="toggleDropDown()"
                 :to="`/main-post/${item.name.split(' ')[0]}`"
             >
                 <div class="img-wrapper">

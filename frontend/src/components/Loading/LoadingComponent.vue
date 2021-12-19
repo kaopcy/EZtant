@@ -1,10 +1,9 @@
 <template>
-    <div
-        class="loading-wrapper"
-        :style="`width:${Attr.width ?? ''};height:${Attr.height ?? ''}`"
-    >
-        <div class="loading">
-            <div class="lds-roller">
+    <div class="loading-wrapper">
+        <div class="holder">
+            <div class="preloader">
+                <div></div>
+                <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
@@ -14,6 +13,7 @@
                 <div></div>
                 <div></div>
             </div>
+            <span>Loading...</span>
         </div>
     </div>
 </template>
@@ -31,97 +31,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$count: 10;
+$time: 2; //in seconds
+$size: 100;
+$color: #303030;
+
 .loading-wrapper {
-    background-color: rgb(230, 230, 230);
+    background-color: transparent;
+    height: $size+px;
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
-.lds-roller {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-}
-.lds-roller div {
-    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    transform-origin: 40px 40px;
-}
-.lds-roller div:after {
-    content: " ";
-    display: block;
+
+.holder {
     position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #fff;
-    margin: -4px 0 0 -4px;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+
 }
-.lds-roller div:nth-child(1) {
-    animation-delay: -0.036s;
+
+span{
+    position: absolute;
+    left: 50%;
+    top: 130%;
+    color: rgb(141, 141, 141);
+    transform: translateX(-50%) translateY(-50%);
+    font-weight: 400;
 }
-.lds-roller div:nth-child(1):after {
-    top: 63px;
-    left: 63px;
+
+.preloader {
+    /* size */
+    width: $size + px;
+    height: $size + px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    animation: rotatePreloader $time + s infinite ease-in;
 }
-.lds-roller div:nth-child(2) {
-    animation-delay: -0.072s;
-}
-.lds-roller div:nth-child(2):after {
-    top: 68px;
-    left: 56px;
-}
-.lds-roller div:nth-child(3) {
-    animation-delay: -0.108s;
-}
-.lds-roller div:nth-child(3):after {
-    top: 71px;
-    left: 48px;
-}
-.lds-roller div:nth-child(4) {
-    animation-delay: -0.144s;
-}
-.lds-roller div:nth-child(4):after {
-    top: 72px;
-    left: 40px;
-}
-.lds-roller div:nth-child(5) {
-    animation-delay: -0.18s;
-}
-.lds-roller div:nth-child(5):after {
-    top: 71px;
-    left: 32px;
-}
-.lds-roller div:nth-child(6) {
-    animation-delay: -0.216s;
-}
-.lds-roller div:nth-child(6):after {
-    top: 68px;
-    left: 24px;
-}
-.lds-roller div:nth-child(7) {
-    animation-delay: -0.252s;
-}
-.lds-roller div:nth-child(7):after {
-    top: 63px;
-    left: 17px;
-}
-.lds-roller div:nth-child(8) {
-    animation-delay: -0.288s;
-}
-.lds-roller div:nth-child(8):after {
-    top: 56px;
-    left: 12px;
-}
-@keyframes lds-roller {
+@keyframes rotatePreloader {
     0% {
-        transform: rotate(0deg);
+        transform: translateX(-50%) translateY(-50%) rotateZ(0deg);
     }
     100% {
-        transform: rotate(360deg);
+        transform: translateX(-50%) translateY(-50%) rotateZ(-360deg);
+    }
+}
+.preloader div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+.preloader div:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0%;
+    width: 10%;
+    height: 10%;
+    background-color: $color;
+    transform: translateX(-50%);
+    border-radius: 50%;
+}
+
+@for $i from 1 through $count {
+    .preloader div:nth-child(#{$i}) {
+        transform: rotateZ(((360 / $count) * ($i - 1)) + deg);
+        animation: rotateCircle + $i $time + s infinite linear;
+        z-index: $count - $i;
+    }
+    @keyframes rotateCircle#{$i} {
+        #{percentage(((50 / $count) * ($i - 1)) / 100)} {
+            opacity: 0;
+        }
+        #{percentage((((50 / $count) + 0.0001) * ($i - 1)) / 100)} {
+            opacity: 1;
+            transform: rotateZ((0 - ((360 / $count) * ($i - 2))) + deg);
+        }
+        #{percentage((((50 / $count) * ($i - 0)) + 2) / 100)} {
+            transform: rotateZ((0 - ((360 / $count) * ($i - 1))) + deg);
+        }
+        #{percentage(((50 + ((50 / $count) * ($i - 0))) + 2) / 100)} {
+            transform: rotateZ((0 - ((360 / $count) * ($i - 1))) + deg);
+        }
+        100% {
+            transform: rotateZ((0 - ((360 / $count) * ($count - 1))) + deg);
+            opacity: 1;
+        }
     }
 }
 </style>

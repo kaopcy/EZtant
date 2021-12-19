@@ -76,12 +76,13 @@
 </template>
 
 <script>
-import { computed, ref } from "@vue/reactivity";
+import { computed , ref } from "@vue/reactivity";
 import { store } from "../../store";
 
 import Table from "../../components/MainPost/AddTable.vue";
 import useAddPost from "../../composables/useAddPost";
 import useAuth from "../../composables/useAuth";
+import { provide } from '@vue/runtime-core';
 
 export default {
     name: "PostPopup",
@@ -100,19 +101,53 @@ export default {
             max_requested: null,
             wage: null,
             description: "",
+            schedules: [
+                {
+                    section: "",
+                    day: "",
+                    time: "",
+                },
+            ],
+            timestamp: null,
         });
-        const post = () => {
-            tableRef.value.submitSchedule();
-            addPost(data.value);
+
+        const addInput = () => {
+            data.value.schedules.push({
+                section: "",
+                day: "",
+                time: "",
+            });
+        };
+
+        const deleteInput = (index)=>{
+            data.value.schedules.splice(index , 1)
+        }
+
+        
+        const post = async () => {
+            await addPost(data.value);
             data.value = {
                 subject_name: "",
                 subject_id: "",
                 max_requested: null,
                 wage: null,
                 description: "",
+                schedules: [
+                    {
+                        section: "",
+                        day: "",
+                        time: "",
+                    },
+                ],
+                timestamp: null
             };
+            console.log(data.value);
             store.commit("toggleIsPopup");
         };
+
+        provide('data' , data )
+        provide('deleteInput' , deleteInput)
+        provide('addInput' , addInput)
 
         return { store, isPopup, post, tableRef, data, role };
     },
