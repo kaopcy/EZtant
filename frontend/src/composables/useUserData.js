@@ -13,11 +13,15 @@ export default function () {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/all-students`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: "include",
+                    body: JSON.stringify({
+                        order: "student_year",
+                        sort_by: "asc"
+                    }),
                 }
             );
             allStudent.value = await response.json();
@@ -39,11 +43,15 @@ export default function () {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/all-teachers`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: "include",
+                    body: JSON.stringify({
+                        order: "email",
+                        sort_by: "asc"
+                    }),
                 }
             );
             allTeacher.value = await response.json();

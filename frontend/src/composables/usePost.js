@@ -14,11 +14,15 @@ export default function () {
             const response = await fetch(
                 `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/all-teachers`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: "include",
+                    body: JSON.stringify({
+                        order: "max_requested",
+                        sort_by: "asc"
+                    }),
                 }
             );
             allPosts.value = await response.json();

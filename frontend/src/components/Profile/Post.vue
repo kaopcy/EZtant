@@ -10,11 +10,6 @@
             </div>
             <div v-else style="margin-bottom:2rem">EMPTY</div>
         </div>
-        
-        <router-link class="create link"  v-if="!isLoading && userPost" to="/create">
-            <fa :icon="['fas' , 'plus-circle']" class="icon"></fa>
-        </router-link>
-
     </div>
 </template>
 
@@ -75,25 +70,5 @@ export default {
     padding-bottom: 0.16rem;
 }
 
-.create{
-    width: 100%;
-    height: 70px;
-    background-color: rgb(255, 255, 255);
-    margin-bottom: 5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .25s;
-    outline: 1px solid rgb(228, 228, 228);
-    .icon{
-        font-size: 2rem;
-        color: rgb(172, 172, 172);
-    }
-    &:hover{
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;   
-    }
-    &:active{
-        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    }
-}
+
 </style>
