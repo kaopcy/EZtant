@@ -9,7 +9,7 @@
                         @click="homeNav()"
                     />
                 </div>
-                <router-link class="link" to="/">About</router-link>
+                <router-link class="link" to="/about">About</router-link>
                 <div
                     class="link"
                     id="department-selector"

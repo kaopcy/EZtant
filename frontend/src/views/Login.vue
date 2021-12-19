@@ -1,41 +1,39 @@
 <template>
-    <div class="login-container">
+    <div class="hero">
         <Loading :Attr="{width:'100%',height:'100%'}" v-if="isLoading"/>
-        <form class="login-wrapper" @submit.prevent="login(user.email , user.password )" v-if="!isLoading">
-            <h1>Login</h1>
-            <div class="input-wrapper">
-                <label for="email">Email:</label>
+        <div class="form-box">
+            <div>
+                <img class="teachericon" src="../../src/assets/teacherlogo.png" alt="">
+                <img class="logoicon" src="../../src/assets/logo.svg" alt="">
+            </div>
+            <form id="login" class="input-group" @submit.prevent="login(user.email , user.password )" v-if="!isLoading">
+                <div class="n-input">User</div>
                 <input
                     type="text"
+                    class="input-field"
                     name="email"
                     id="email"
                     v-model="user.email"
                     autofocus
                 />
-            </div>
-            <div class="input-wrapper">
-                <label for="password">Password:</label>
+                <div class="n-field">Password</div>
                 <input
-                    type="text"
+                    type="password"
+                    class="input-field"
                     name="password"
                     id="password"
                     v-model="user.password"
                 />
-            </div>
-            <div class="bottom">
-                <div class="checkbox-wrapper">
-                    <label for="rememberMe">Remember?</label>
-                    <input type="checkbox" id="rememberMe" name="rememberMe" />
-                </div>
-                <button class="submit-btn">Login</button>
-            </div>
-        </form>
+                <input type="checkbox" class="check-box"><span>Remember Password</span>
+                <button type="submit" class="submit-btn">Login</button>
+                <router-link type="submit" class="register-btn link" to="/register">Register</router-link>
+            </form>
+        </div>
     </div>
 </template>
 
 <script>
 import { reactive } from "@vue/reactivity";
-
 import useAuth from '../composables/useAuth'
 import Loading from '../components/Loading/LoadingComponent.vue'
 
@@ -45,14 +43,11 @@ export default {
         Loading,
     },
     setup() {
-
         const { login , username , isLoading } = useAuth()
-
         const user = reactive({
             email: "",
             password: "",
         });
-
         return {
             user,
             login,
@@ -64,88 +59,128 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    outline: none;
-    text-decoration: none;
-    align-self: flex-end;
-    background-color: var(--secondary-color-dark);
-    color: #fff;
-    font-family: var(--primary-font);
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.25s background-color;
-    &:hover {
-        background-color: var(--secondary-color-normal);
+.hero{
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom ,rgb(60,92,164),rgb(248, 248, 248));
+    background-position: center;
+    background-size: 100%;
+    position: absolute;
+    border-radius: 0% 0% 70% 0%;
+    @media (max-width:640px){
+    border-radius: 0% 0% 0% 0%;
+    }
+    margin-top:-1%;
+    
+}
+.form-box{
+    background:whitesmoke;
+    width: 370px;
+    height: 470px;
+    position: relative;
+    margin: 6% auto;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #8888;
+    @media (max-width:640px) {
+    margin-top: 25%
     }
 }
-.login-container {
+.n-input{
+    margin: 4px 0;
+}
+.logo{
+    right: 500px;
+    background-position: center;
+    max-width: 180px;
+    border-radius: 78% 38% 25% 14% / 52% 50% 53% 48% ;
+    margin: 30px 10px 30px 95px;
+}
+.logo h1{
+    color: white;
+    font-size: 50px;
+    text-align: center;
+    font-style:oblique;
+}
+.input-group{
+    font-family: 'Inter', sans-serif;
+    top: 210px;
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+}
+.input-field{
     width: 100%;
-    height: 100vh;
+    padding: 5px 0px 0px 0px;
+    margin: 0px 0px 15px 0px;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    background: transparent;
+    border-bottom: 1px solid #000000;
+}
+.submit-btn{
+    color: white;
+    font-size: 13px;
+    width: 50%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: 10px 25%;
+    background:#3c5ca4;
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+    box-shadow: 4px 2px 5px rgba(112, 112, 112, 0.533);
+}
+.register-btn{
+    color: white;
+    font-size: 13px;
+    width: 50%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background:#3c5ca4;
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+    box-shadow: 4px 2px 5px rgba(112, 112, 112, 0.533);
     font-family: var(--primary-font);
-    color: var(--primary-font-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .login-wrapper {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        // border: 1px solid rgb(180, 180, 180);
-        padding: 2rem 1rem;
-        // border-radius: 5px;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        h1 {
-            margin-bottom: 1rem;
-            align-self: center;
-        }
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 0.5rem;
-            label {
-                margin-right: 1rem;
-            }
-            input {
-                border: none;
-                outline: 1px solid rgb(235, 235, 235);
-                padding: 0.35rem 0.75rem;
-            }
-        }
-        .bottom {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            align-items: center;
-            margin-top: 1rem;
-            .checkbox-wrapper {
-                display: flex;
-                align-items: center;
-                label {
-                    margin-right: 0.5rem;
-                }
-            }
-            button {
-                padding: 0.5rem 1rem;
-                border: none;
-                outline: none;
-                text-decoration: none;
-                align-self: flex-end;
-                background-color: var(--secondary-color-dark);
-                color: #fff;
-                font-family: var(--primary-font);
-                font-size: 1rem;
-                font-weight: 500;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: 0.25s background-color;
-                &:hover {
-                    background-color: var(--secondary-color-normal);
-                }
-            }
-        }
-    }
+    text-align: center;
+}
+.check-box{
+    margin: 7px 0px 10px 143px;
+    color: #946474;
+}
+span{
+    color: #946474;
+    font-size: 12px;
+    bottom: 100.5px;
+    left: 159px;
+    position: absolute;
+}
+#login{
+    left: 50px
+}
+.usericon{
+    color: var(--primarydark);
+}
+.teachericon{
+    padding: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    width: 40%;
+    height: auto;
+}
+.logoicon{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 45%;
+    height: auto;
 }
 </style>

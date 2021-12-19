@@ -2,7 +2,8 @@
 <div class="main-wrapper">
     <Loading  :Attr="{ width:'70%' , height: '40vh' }" v-if="isLoading"/>
     <section v-if="!isLoading">
-        <span>{{user}}</span>
+        <img :src="user.imageURL" alt="">
+        <span >{{user}}</span>   
     </section>
 </div>
 </template>
