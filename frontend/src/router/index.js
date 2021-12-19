@@ -64,6 +64,11 @@ const routes = [
         name: "TeacherListProfile",
         component: () => import("../views/UserList/Profile/TeacherListProfile.vue"),
     },
+    {
+        path: "/about",
+        name: "About",
+        component: () => import("../views/About.vue"),
+    },
 ];
 
 const router = createRouter({

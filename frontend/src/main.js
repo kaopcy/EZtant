@@ -6,6 +6,7 @@ import { store } from "./store";
 // import font awesome
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+
 import {
     faSignInAlt,
     faSortAlphaDown,
@@ -26,7 +27,9 @@ import {
     faSave,
     
 } from "@fortawesome/free-solid-svg-icons";
-
+import { faFacebookSquare } from "@fortawesome/free-brands-svg-icons"
+import {faLine} from '@fortawesome/free-brands-svg-icons'
+import {faInstagramSquare} from '@fortawesome/free-brands-svg-icons'
 library.add(
     faSignInAlt,
     faSortAlphaDown,
@@ -44,7 +47,10 @@ library.add(
     faStar,
     faEdit,
     faKey,
-    faSave
+    faSave,
+    faFacebookSquare,
+    faLine,
+    faInstagramSquare,
 );
 
 createApp(App)
