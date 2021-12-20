@@ -7,7 +7,7 @@ export default function () {
 
     const user = ref(null)
 
-    const getAllStudent = async () => {
+    const getAllStudent = async (options) => {
         try {
             isLoading.value = true;
             const response = await fetch(
@@ -19,8 +19,8 @@ export default function () {
                     },
                     credentials: "include",
                     body: JSON.stringify({
-                        order: "student_year",
-                        sort_by: "asc"
+                        order: options.orderBy,
+                        sort_by: options.sortBy
                     }),
                 }
             );
@@ -37,7 +37,7 @@ export default function () {
         }
     };
 
-    const getAllTeacher = async () => {
+    const getAllTeacher = async (options) => {
         try {
             isLoading.value = true;
             const response = await fetch(
@@ -49,8 +49,8 @@ export default function () {
                     },
                     credentials: "include",
                     body: JSON.stringify({
-                        order: "email",
-                        sort_by: "asc"
+                        order: options.orderBy,
+                        sort_by: options.sortBy
                     }),
                 }
             );

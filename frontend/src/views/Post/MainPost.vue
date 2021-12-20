@@ -29,7 +29,8 @@
             </div>
             <div class="icon-wrapper">
                 <fa class="icon" :icon="['fas', 'search']" />
-                <fa class="icon" :icon="['fas', 'sort-alpha-down']" />
+                <fa class="icon" :icon="['fas', 'sort-alpha-down']" @click="sortPopupRef.toggle()" />
+                <SortPopup ref="sortPopupRef" :type="'post'" @getNewData="getNewData()"/>
             </div>
         </div>
 
@@ -52,12 +53,13 @@
 
 <script>
 import { computed, ref } from "@vue/reactivity";
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, provide } from "@vue/runtime-core";
 import { store } from "../../store";
 import gsap from "gsap";
 
 import Post from "../../components/Post.vue";
 import Loading from "../../components/Loading/LoadingComponent.vue";
+import SortPopup from '../../components/Accessory/SortPopup.vue'
 
 import usePost from "../../composables/usePost";
 import { useRoute } from 'vue-router';
@@ -66,6 +68,7 @@ export default {
     components: {
         Post,
         Loading,
+        SortPopup,
     },
     setup() {
         const route = useRoute()
@@ -73,20 +76,32 @@ export default {
         // get department name
         const departments = store.getters.getDepartmentName;
         const selectedValue = ref(route.params.department);
+        const sortPopupRef = ref(null);
+
+        const orderBy = ref("timestamp");
+        const sortBy = ref("asc");
+
+        provide('sortBy' , sortBy)
+        provide('orderBy' , orderBy)
+
+        // onmounted hook
+        const getNewData = async ()=>{
+            posts.value = await getAllPost({ sortBy: sortBy.value , orderBy: orderBy.value });
+        }
 
         // animated is last variable
         const isLast = ref(true);
         const toggleIsLast = async () => {
             isLast.value = !isLast.value;
             if (isLast.value) {
-                posts.value = await getLastestPost();
+                posts.value = await getAllPost({ sortBy: sortBy.value , orderBy: orderBy.value });
             } else {
-                posts.value = await getAllPost();
+                posts.value = await getAllPost({ sortBy: sortBy.value , orderBy: orderBy.value });
             }
         };
 
         // post variable
-        const { getAllPost, getLastestPost, isLoading } = usePost();
+        const { getAllPost, isLoading } = usePost();
         const posts = ref(null);
         const getPostByDepartment = computed(() =>
             posts.value
@@ -99,7 +114,7 @@ export default {
         );
 
         onMounted(async () => {
-            posts.value = await getAllPost();
+            posts.value = await getAllPost({ sortBy: sortBy.value , orderBy: orderBy.value });
         });
 
         // animation
@@ -128,6 +143,8 @@ export default {
             getPostByDepartment,
             beforeEnter,
             enter,
+            sortPopupRef,
+            getNewData
         };
     },
 };
@@ -254,6 +271,7 @@ $sort-type-height: 5px;
     }
 
     .icon-wrapper {
+        z-index: 2;
         position: absolute;
         bottom: 50%;
         right: 14%;
@@ -276,6 +294,7 @@ $sort-type-height: 5px;
                 font-size: 1.5rem;
             }
         }
+        
     }
 }
 

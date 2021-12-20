@@ -8,7 +8,10 @@
                 v-model="searchValue"
             />
             <fa class="icon" :icon="['fas', 'search']" />
-            <fa class="icon" :icon="['fas', 'sort-alpha-down']" />
+            <div class="h">
+                <fa class="icon" :icon="['fas', 'sort-alpha-down']" @click="sortPopupRef.toggle()" />
+                <SortPopup ref="sortPopupRef" :type="'teacher'" @getNewData="getNewData()"/>
+            </div>
         </div>
         
         <Loading v-if="isLoading" :Attr="{ width:'70%' , height: '40vh' }" />
@@ -35,9 +38,10 @@
 <script>
 import useUserData from "../../composables/useUserData";
 import { ref } from "vue";
-import { computed, inject } from "@vue/runtime-core";
+import { computed, inject, provide } from "@vue/runtime-core";
 import gsap from "gsap";
 import Loading from "../../components/Loading/LoadingComponent.vue";
+import SortPopup from '../../components/Accessory/SortPopup.vue'
 
 export default {
     name: "TeacherTab",
@@ -49,14 +53,28 @@ export default {
     },
     components: {
         Loading,
+        SortPopup,
     },
     setup(props) {
         const { getAllTeacher, isLoading, allTeacher } = useUserData();
         const searchValue = ref("");
         const selectedTitle = inject("selectedTitle");
+        const sortPopupRef = ref(null);
 
         // fetch
-        getAllTeacher();
+        const orderBy = ref("first_name");
+        const sortBy = ref("asc");
+
+        provide('sortBy' , sortBy)
+        provide('orderBy' , orderBy)
+
+        // onmounted hook
+        getAllTeacher({ sortBy: sortBy.value , orderBy: orderBy.value });
+        
+        const getNewData = ()=>{
+            getAllTeacher({ sortBy: sortBy.value , orderBy: orderBy.value });
+        }
+
 
         // random star
         const getRandomStar = () => parseInt(Math.random() * 30);
@@ -101,6 +119,8 @@ export default {
             beforeEnter,
             enter,
             selectedTitle,
+            sortPopupRef,
+            getNewData
         };
     },
 };
@@ -147,6 +167,10 @@ $hover-color: #418ae8;
         .icon {
             margin: 0.5rem;
             color: var(--primary-font-color);
+        }
+
+        .h{
+            position: relative;
         }
     }
 

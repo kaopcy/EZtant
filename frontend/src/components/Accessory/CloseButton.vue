@@ -1,7 +1,7 @@
 <template>
     <button
         id="close-btn"
-        :style="`width:${attr.width ?? ''};height:${attr.width ?? ''}`"
+        :style="`width:${attr.width ?? ''};height:${attr.width ?? ''};top:${attr.top ?? ''};right:${attr.right ?? ''}`"
     >
         <span :style="`height:${attr.height ?? ''};background-color:${attr.color ?? ''}`"></span>
         <span :style="`height:${attr.height ?? ''};background-color:${attr.color ?? ''}`"></span>
