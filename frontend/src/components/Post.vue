@@ -13,8 +13,8 @@
             </div>
             <div class="interact-info-wrapper">
                 <div class="wrapper">
-                    <fa class="icon" :icon="['fas', 'heart']" />
-                    <span>15</span>
+                    <fa class="icon" :icon="[isFavorite? 'fas':'far', 'heart']" @click="handleFavorite()" :class="{favorite:isFavorite}" />
+                    <span>{{favoriteNumber}}</span>
                 </div>
                 <div class="wrapper">
                     <fa class="icon" :icon="['fas', 'user-friends']" />
@@ -77,6 +77,8 @@
 import { computed, onMounted, ref } from "@vue/runtime-core";
 
 import Table from "../components/Table.vue";
+import useAuth from '../composables/useAuth';
+import usePost from '../composables/usePost';
 
 export default {
     name: "Post",
@@ -96,7 +98,9 @@ export default {
     setup(props) {
         const isHover = ref(false);
         const postRef = ref(null);
-
+        const { user } = useAuth()
+        const { favorite } = usePost()
+        const toggleFavorite = ref(true);
         // onmounted hook
         onMounted(() => {
             postRef.value.onmouseenter = () => {
@@ -110,9 +114,24 @@ export default {
             console.log(props.post);
         });
 
-        const isFullRequest = computed(()=> props.post.requested.length == props.post.max_requested )
+        const handleFavorite = ()=>{
+            toggleFavorite.value = !toggleFavorite.value
+            favorite(props.post.id)
+        }
 
-        return { isHover, postRef , isFullRequest };
+        const favoriteNumber = computed(()=>{
+            const favorite = props.post.favourite.some((e) =>  e.id == user.value.id )
+            if (favorite && toggleFavorite.value) return props.post.favourite.length
+            if (!favorite && toggleFavorite.value) return props.post.favourite.length
+            if ( !favorite && !toggleFavorite.value ) return props.post.favourite.length + 1
+            if ( favorite && !toggleFavorite.value ) return props.post.favourite.length - 1
+        })
+        
+        const isFavorite = computed(()=> toggleFavorite.value ? props.post.favourite.some((e) =>  e.id == user.value.id ) : !props.post.favourite.some((e) =>  e.id == user.value.id))
+
+        const isFullRequest = computed(()=> props.post.requested.length == props.post.max_requested )
+        
+        return { isHover, postRef , isFullRequest , handleFavorite , isFavorite , user , favoriteNumber , toggleFavorite};
     },
 };
 </script>
@@ -297,6 +316,15 @@ $banner-height: 6rem;
             margin-right: 2rem;
             .icon {
                 font-size: 1.3rem;
+                transition: all .25s linear;
+                cursor: pointer;
+
+                &.favorite{
+                    color: rgb(238, 54, 54);
+                }
+                &:hover{
+                    transform: scale(1.25);
+                }
             }
             span {
                 font-size: 1rem;
@@ -309,7 +337,8 @@ $banner-height: 6rem;
                 flex-direction: column;
                 margin: 0 1rem;
                 &:nth-child(1) {
-                    color: rgb(238, 54, 54);
+                    color: rgb(77, 77, 77);
+                    
                 }
                 &:nth-child(2) {
                     color: var(--secondary-color-dark);

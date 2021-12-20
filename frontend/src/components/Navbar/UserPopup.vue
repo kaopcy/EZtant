@@ -176,12 +176,14 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: 0.25s ease;
+    transition: all 0.25s ease-in-out , z-index 0s linear 0.01s; 
     transform-origin: top;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    transform: scaleY(0);
+    transform: translateY(-2em);
+    z-index: -1;
+    opacity: 0;
 }
 </style>

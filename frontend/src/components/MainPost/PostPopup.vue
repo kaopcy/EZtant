@@ -18,6 +18,7 @@
                             type="text"
                             placeholder="Subject"
                             v-model="data.subject_name"
+                            id="subject"
                             required
                         />
                         <input

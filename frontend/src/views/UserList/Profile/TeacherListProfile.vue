@@ -76,7 +76,7 @@ section{
     align-items: center;
     background-color: #fff;
     margin-bottom: 1rem;
-    padding: 2rem 1.5rem; 
+    padding: 2rem 3rem; 
     border-radius: 5px;
     border: 1px solid rgb(235, 235, 235);
     img{

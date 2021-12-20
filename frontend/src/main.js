@@ -25,17 +25,25 @@ import {
     faEdit,
     faKey,
     faSave,
-    
 } from "@fortawesome/free-solid-svg-icons";
-import { faFacebookSquare } from "@fortawesome/free-brands-svg-icons"
-import {faLine} from '@fortawesome/free-brands-svg-icons'
-import {faInstagramSquare} from '@fortawesome/free-brands-svg-icons'
+
+import {
+    faFacebookSquare,
+    faLine,
+    faInstagramSquare,
+} from "@fortawesome/free-brands-svg-icons";
+
+import {
+    faHeart as faHeart2
+} from '@fortawesome/free-regular-svg-icons';
+
 library.add(
     faSignInAlt,
     faSortAlphaDown,
     faSearch,
     faUserFriends,
     faHeart,
+    faHeart2,
     faTrashAlt,
     faPlusCircle,
     faCalendarAlt,
@@ -50,7 +58,7 @@ library.add(
     faSave,
     faFacebookSquare,
     faLine,
-    faInstagramSquare,
+    faInstagramSquare
 );
 
 createApp(App)

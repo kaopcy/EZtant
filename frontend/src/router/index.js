@@ -84,7 +84,7 @@ router.beforeEach( async (to, from, next) => {
     if (!isLoggedIn.value){
         await getUser()
     }
-    if (to.name !== "Login" && !isLoggedIn.value ) {
+    if (to.name !== "Login" && to.name !== "Register" && !isLoggedIn.value ) {
         console.log('not logged in');
         next({ name: "Login" });
     } 

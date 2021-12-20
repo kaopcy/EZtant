@@ -4,6 +4,7 @@ import useAlert from "./useAlert";
 export default function () {
     const isLoading = ref(false);
     const userPost = ref(null);
+    const requestedPost = ref(null);
     const router = useRouter();
     const { finish, loading, error } = useAlert();
 
@@ -157,6 +158,7 @@ export default function () {
         }
     };
 
+// Request API
     const request = async (id) => {
         loading("requesting data . . .");
 
@@ -182,14 +184,58 @@ export default function () {
         }
     };
 
+    const favorite = async (id)=>{
+        try {
+            await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}/favourite`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getRequestedPostbyID = async (id)=>{
+        isLoading.value = true;
+        try {
+            const response = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/account/${id}/requested`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                }
+            );
+            const he =  await response.json();
+            requestedPost.value = he
+            console.log(he);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            isLoading.value = false;
+            console.log(requestedPost.value);
+        }
+    }
+
     return {
         getAllPost,
         getPostByPostID,
         getLastestPost,
         getPostByTeacherID,
         deletePostByID,
+        getRequestedPostbyID,
         isLoading,
         userPost,
+        requestedPost,
         request,
+        favorite,
     };
 }

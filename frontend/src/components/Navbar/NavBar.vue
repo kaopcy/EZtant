@@ -369,6 +369,7 @@ $button-color: rgba(0, 118, 255, 0.9);
             justify-content: center;
             align-items: center;
             z-index: 99;
+            cursor: pointer;
             &::after {
                 content: "";
                 position: absolute;
@@ -659,19 +660,28 @@ $button-color: rgba(0, 118, 255, 0.9);
 }
 
 .drop-down {
+    visibility: hidden; /* hides sub-menu */
     position: absolute;
     width: 100%;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
         rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     padding: 1rem 0;
-    display: none;
-    animation: fade 0.25s;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    transform: translateY(-2em);
+    opacity: 0;
+    z-index: -1;
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
     &.visible {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        visibility: visible; /* shows sub-menu */
+        opacity: 1;
+        z-index: 1;
+        transform: translateY(0%);
+        transition-delay: 0s, 0s, 0.3s;
     }
     .department-wrapper {
         display: flex;
