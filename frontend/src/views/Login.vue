@@ -1,6 +1,5 @@
 <template>
     <div class="hero">
-        <Loading :Attr="{width:'100%',height:'100%'}" v-if="isLoading"/>
         <div class="form-box">
             <div>
                 <img class="teachericon" src="../../src/assets/teacherlogo.png" alt="">
@@ -35,13 +34,9 @@
 <script>
 import { reactive } from "@vue/reactivity";
 import useAuth from '../composables/useAuth'
-import Loading from '../components/Loading/LoadingComponent.vue'
 
 export default {
     name: "Login",
-    components:{
-        Loading,
-    },
     setup() {
         const { login , username , isLoading } = useAuth()
         const user = reactive({

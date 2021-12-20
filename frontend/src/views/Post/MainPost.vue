@@ -3,6 +3,13 @@
         <div class="selection-bar-wrapper">
             <div
                 class="selection"
+                @click="selectedValue = 'all' "
+                :class="{ select: selectedValue == department }"
+            >
+                all
+            </div>
+            <div
+                class="selection"
                 v-for="department in departments"
                 :key="department"
                 @click="selectedValue = department"
@@ -10,6 +17,7 @@
             >
                 {{ department }}
             </div>
+            
         </div>
         <span class="line"></span>
         <div class="search-bar">
@@ -103,14 +111,17 @@ export default {
         // post variable
         const { getAllPost, isLoading } = usePost();
         const posts = ref(null);
-        const getPostByDepartment = computed(() =>
-            posts.value
+        const getPostByDepartment = computed(() =>{
+            if (selectedValue.value === 'all' ) return posts.value
+            return posts.value
                 ? posts.value.filter(
                       (e) =>
                           e.author.department.toLowerCase() ===
                           selectedValue.value.toLowerCase()
                   )
                 : []
+        }
+            
         );
 
         onMounted(async () => {

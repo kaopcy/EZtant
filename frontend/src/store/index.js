@@ -6,7 +6,7 @@ export const store = createStore({
     state: {
         isMobile: false,
         isPopup: false,
-        departmentTemplate: [
+        departmentTemplate: [ 
             {
                 name: "Computer Engineer",
                 instrument: "Lorem ipsum dolor sit amet consectetur.",

@@ -25,12 +25,16 @@ import {
     faEdit,
     faKey,
     faSave,
+    faWind,
+    faPodcast,
+    faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
     faFacebookSquare,
     faLine,
     faInstagramSquare,
+    faFacebook,
 } from "@fortawesome/free-brands-svg-icons";
 
 import {
@@ -58,7 +62,11 @@ library.add(
     faSave,
     faFacebookSquare,
     faLine,
-    faInstagramSquare
+    faInstagramSquare,
+    faWind,
+    faPodcast,
+    faGlobe,
+    faFacebook
 );
 
 createApp(App)
