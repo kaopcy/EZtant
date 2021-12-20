@@ -12,7 +12,7 @@
 
         <div class="post" v-if="!isLoading && post">
             <!-- header field -->
-            <div class="head">
+            <div class="head">  
                 <div class="author-info-wrapper">
                     <img :src="post.author.imageURL" alt="" />
                     <div class="author-info">
@@ -25,8 +25,8 @@
                 </div>
                 <div class="interact-info-wrapper">
                     <div class="wrapper">
-                        <fa class="icon" :icon="['fas', 'heart']" />
-                        <span>15</span>
+                        <fa class="icon" :icon="[isFavorite? 'fas':'far', 'heart']" @click="handleFavorite()" :class="{favorite:isFavorite}" />
+                        <span>{{favoriteNumber}}</span>
                     </div>
                     <div class="wrapper" @click="isPopup = true">
                         <fa class="icon" :icon="['fas', 'user-friends']" />
@@ -142,6 +142,27 @@ export default {
         const route = useRoute();
         const isPopup = ref(false);
         const post = ref(null);
+        
+        // Handle favorite
+        const { favorite } = usePost()
+        const toggleFavorite = ref(true);
+
+        const handleFavorite = ()=>{
+            toggleFavorite.value = !toggleFavorite.value
+            favorite(post.value.id)
+        }
+
+        const favoriteNumber = computed(()=>{
+            const favorite =  post.value.favourite.some((e) =>  e.id == user.value.id )
+            if (favorite && toggleFavorite.value) return  post.value.favourite.length
+            if (!favorite && toggleFavorite.value) return  post.value.favourite.length
+            if ( !favorite && !toggleFavorite.value ) return  post.value.favourite.length + 1
+            if ( favorite && !toggleFavorite.value ) return post.value.favourite.length - 1
+            return null
+        })
+
+        const isFavorite = computed(()=> toggleFavorite.value ?  post.value.favourite.some((e) =>  e.id == user.value.id ) : !post.value.favourite.some((e) =>  e.id == user.value.id))
+
 
         const isEditAble = computed(
             () => user.value.id == post.value.author.id
@@ -175,7 +196,12 @@ export default {
             closeApplicantPopup,
             isEditAble,
             handleRequest,
-            isRequested
+            isRequested,
+            favorite,
+            toggleFavorite,
+            handleFavorite,
+            favoriteNumber,
+            isFavorite
         };
     },
 };
@@ -275,6 +301,9 @@ $primary-font-color-light: #464646;
             position: relative;
             .icon {
                 font-size: 1.3rem;
+                &.favorite{
+                    color: rgb(238, 54, 54);
+                }
             }
             span {
                 font-size: 1rem;

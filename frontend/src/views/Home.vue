@@ -11,20 +11,18 @@
 
         <div class="text-area">
             <section>
-                <fa :icon="['fas','wind']" class="icon"></fa>
-                <h1>Faster Decision</h1>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                In a corporis consequatur excepturi at pariatur.</span>
+                <fa :icon="['fas','tasks']" class="icon"></fa>
+                <h1>Compilation</h1>
+                <span>Collect work for the entire faculty of assistant teachers in one place.</span>
             </section>
             <section>
-                <fa :icon="['fas','podcast']" class="icon"></fa>
-                <h1>Wide connection</h1>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                In a corporis consequatur excepturi at pariatur.</span>
+                <fa :icon="['far','address-card']" class="icon"></fa>
+                <h1>Easy</h1>
+                <span>Help teachers to find teacher assistants easily and quickly just by posting.</span>
             </section>
-            <div class="explore-btn">
+            <router-link class="explore-btn link" :to="`/main-post/Computer`">
                 EXPLORE
-            </div>
+            </router-link>
         </div>
     </div>
 
@@ -42,15 +40,16 @@
                 <fa :icon="['fab' , 'facebook']" class="icon"></fa>
                 <fa :icon="['fas' , 'globe']" class="icon"></fa>
             </div>
-            <div class="visit-btn">
+            <router-link class="visit-btn link" :to="`/main-post/${department.name.split(' ')[0]}`">
                 Visit ->
-            </div>
+            </router-link>
         </div>
     </div>
 
     <h1 class="support-1">Post Showcase</h1>
     <h2 class="support-2">We support almost every faculty in KMITL engineering.</h2>
     
+    <Loading v-if="isLoading" />
     <SlideShow  v-if="!isLoading && allPosts" :posts="filteredPosts" />
 
     <div class="blank"></div>
@@ -60,13 +59,16 @@
 <script>
 import { computed, onMounted, ref } from 'vue'
 import { store } from '../store'
+
 import SlideShow from '../components/Home/PostSlideShow.vue'
 import usePost from '../composables/usePost'
+import Loading from '../components/Loading/LoadingComponent.vue'
 
 export default {
     name: 'Home',
     components:{
         SlideShow,
+        Loading,
     },
     setup(){
         const { isLoading , getAllPost } = usePost()

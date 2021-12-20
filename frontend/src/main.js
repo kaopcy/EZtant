@@ -30,6 +30,7 @@ import {
     faGlobe,
     faChevronLeft,
     faChevronRight,
+    faTasks,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -40,7 +41,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 import {
-    faHeart as faHeart2
+    faHeart as faHeart2,
+    faAddressCard,
 } from '@fortawesome/free-regular-svg-icons';
 
 library.add(
@@ -70,7 +72,9 @@ library.add(
     faGlobe,
     faFacebook,
     faChevronLeft,
-    faChevronRight
+    faChevronRight,
+    faAddressCard,
+    faTasks,
     
 );
 

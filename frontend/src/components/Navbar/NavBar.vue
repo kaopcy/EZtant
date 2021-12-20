@@ -14,6 +14,7 @@
                     class="link"
                     id="department-selector"
                     @click="toggleDropDown()"
+                    v-if="role === 'teacher'"
                 >
                     <span>Post</span>
                     <svg
@@ -34,10 +35,32 @@
                 </div>
                 <router-link class="link" to="/teacher-list">Teacher</router-link>
                 <router-link class="link" to="/student-list">TA</router-link>
-                <router-link class="link" to="/register">Contact</router-link>
-                <router-link class="link last" to="/create"
+                <router-link class="link last" to="/create" v-if="role === 'teacher'"
                     >Create</router-link
                 >
+                <div
+                    class="link last"
+                    id="department-selector"
+                    @click="toggleDropDown()"
+                    v-if="role === 'student'"
+                >
+                    <span>Post</span>
+                    <svg
+                        viewBox="0 0 24 24"
+                        width="16"
+                        height="16"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        fill="none"
+                        shape-rendering="geometricPrecision"
+                        style="color: currentColor"
+                        class="svg"
+                    >
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </div>
                 <div
                     class="img-wrapper"
                     :class="{
@@ -151,7 +174,6 @@
             </div>
             <router-link class="link" to="/teacher-list">Teacher</router-link>
             <router-link class="link" to="/student-list">TA</router-link>
-            <router-link class="link" to="/register">Contact</router-link>
             <router-link class="link last" to="/create">Post</router-link>
         </div>
 
