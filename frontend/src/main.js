@@ -28,6 +28,8 @@ import {
     faWind,
     faPodcast,
     faGlobe,
+    faChevronLeft,
+    faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -66,7 +68,10 @@ library.add(
     faWind,
     faPodcast,
     faGlobe,
-    faFacebook
+    faFacebook,
+    faChevronLeft,
+    faChevronRight
+    
 );
 
 createApp(App)

@@ -48,20 +48,38 @@
         </div>
     </div>
 
+    <h1 class="support-1">Post Showcase</h1>
+    <h2 class="support-2">We support almost every faculty in KMITL engineering.</h2>
+    
+    <SlideShow  v-if="!isLoading && allPosts" :posts="filteredPosts" />
 
-
+    <div class="blank"></div>
 </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { store } from '../store'
+import SlideShow from '../components/Home/PostSlideShow.vue'
+import usePost from '../composables/usePost'
+
 export default {
     name: 'Home',
+    components:{
+        SlideShow,
+    },
     setup(){
+        const { isLoading , getAllPost } = usePost()
+        const allPosts = ref(null);
         const departments = ref(store.state.departmentTemplate)
 
-        return { departments }
+        onMounted(async ()=>{
+            allPosts.value = await getAllPost({ orderBy: 'timestamp' , sortBy: 'asc' })
+        })
+
+        const filteredPosts = computed(()=> allPosts.value.slice(0,6) )
+
+        return { departments , allPosts , filteredPosts , isLoading }
     }
 }
 </script>
@@ -74,6 +92,8 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-x: hidden;
+
     .home-lander{
         display: flex;
         flex-direction: column;
@@ -249,78 +269,78 @@ export default {
         padding: 2rem 1rem;
         border-radius: 4px;
 
-        // &:nth-child(8n+1){
-        //     .img-wrapper {
-        //         background-color: rgba(0, 118, 255, 0.9);
-        //     }
-        //     .visit-btn{
-        //         background-color: rgba(0, 118, 255, 0.9);
-        //     }
-        // }
-        // &:nth-child(8n+2){
-        //     .img-wrapper {
-        //         background-color: #7928ca;
-        //     }
-        //     .visit-btn{
-        //         background-color: #7928ca;
-        //     }
-        // }
-        // &:nth-child(8n+3){
-        //     .img-wrapper {
-        //         background-color: #db47bd;
-        //     }
-        //     .visit-btn{
-        //         background-color: #db47bd;
-        //     }
-        // }
-        // &:nth-child(8n+4){
-        //     .img-wrapper {
-        //         background-color: #000000;
-        //     }
-        //     .visit-btn{
-        //         background-color: #000000;
-        //     }
-        // }
-        // &:nth-child(8n+5){
-        //     .img-wrapper {
-        //         background-color: #000000;
-        //     }
-        //     .visit-btn{
-        //         background-color: #000000;
-        //     }
+        &:nth-child(8n+1){
+            .img-wrapper {
+                background-color: rgba(0, 118, 255, 0.9);
+            }
+            .visit-btn{
+                background-color: rgba(0, 118, 255, 0.9);
+            }
+        }
+        &:nth-child(8n+2){
+            .img-wrapper {
+                background-color: #7928ca;
+            }
+            .visit-btn{
+                background-color: #7928ca;
+            }
+        }
+        &:nth-child(8n+3){
+            .img-wrapper {
+                background-color: #db47bd;
+            }
+            .visit-btn{
+                background-color: #db47bd;
+            }
+        }
+        &:nth-child(8n+4){
+            .img-wrapper {
+                background-color: #000000;
+            }
+            .visit-btn{
+                background-color: #000000;
+            }
+        }
+        &:nth-child(8n+5){
+            .img-wrapper {
+                background-color: #000000;
+            }
+            .visit-btn{
+                background-color: #000000;
+            }
             
-        // }
-        // &:nth-child(8n+6){
-        //     .img-wrapper {
-        //         background-color: rgba(0, 118, 255, 0.9);
-        //     }
-        //     .visit-btn{
-        //         background-color: rgba(0, 118, 255, 0.9);
-        //     }
+        }
+        &:nth-child(8n+6){
+            .img-wrapper {
+                background-color: rgba(0, 118, 255, 0.9);
+            }
+            .visit-btn{
+                background-color: rgba(0, 118, 255, 0.9);
+            }
             
             
-        // }
-        // &:nth-child(8n+7){
-        //     .img-wrapper {
-        //         background-color: #7928ca;
-        //     }
-        //     .visit-btn{
-        //         background-color: #7928ca;
-        //     }
-        // }
-        // &:nth-child(8n+8){
-        //     .img-wrapper {
-        //         background-color: #db47bd;
-        //     }
-        //     .visit-btn{
-        //         background-color: #db47bd;
-        //     }
-        // }
+        }
+        &:nth-child(8n+7){
+            .img-wrapper {
+                background-color: #7928ca;
+            }
+            .visit-btn{
+                background-color: #7928ca;
+            }
+        }
+        &:nth-child(8n+8){
+            .img-wrapper {
+                background-color: #db47bd;
+            }
+            .visit-btn{
+                background-color: #db47bd;
+            }
+        }
 
         .img-wrapper {
             width: 80px;
             height: 80px;
-            background-color: #a7c7e7;
+            background-color: rgba(0, 118, 255, 0.9);
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
             border-radius: 50%;
             display: flex;
@@ -365,6 +385,12 @@ export default {
         }
 
     }
+}
+
+.blank{
+    margin-top: 3rem;
+    height: 5rem;
+    background-color: #fff;
 }
 
 </style>
