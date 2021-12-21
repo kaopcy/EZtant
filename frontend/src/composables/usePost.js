@@ -8,7 +8,7 @@ export default function () {
     const router = useRouter();
     const { finish, loading, error } = useAlert();
 
-    const getAllPost = async () => {
+    const getAllPost = async (options) => {
         isLoading.value = true;
         const allPosts = ref(null);
         try {
@@ -21,8 +21,8 @@ export default function () {
                     },
                     credentials: "include",
                     body: JSON.stringify({
-                        order: "max_requested",
-                        sort_by: "asc"
+                        order: options.orderBy,
+                        sort_by: options.sortBy
                     }),
                 }
             );

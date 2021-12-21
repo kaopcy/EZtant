@@ -2,7 +2,7 @@
 <div class="slide-show">
     <fa class="icon" :icon="['fas' , 'chevron-left']" @click="current--"></fa>
     <transition-group >
-        <div v-for="post in getPostbyCurrent" :key="post" class="card" >
+        <router-link v-for="post in getPostbyCurrent" :key="post" class="card link" :to="`/focus-post/${post.id}`">
             <div class="head">
                 <img :src="post.author.imageURL" alt="">
                 <div class="text">
@@ -18,7 +18,7 @@
 
             <div class="btn">View Post -></div>
 
-        </div>
+        </router-link>
     </transition-group>
     <fa class="icon" :icon="['fas' , 'chevron-right']" @click="current--"></fa>
 

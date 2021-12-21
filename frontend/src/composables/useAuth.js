@@ -2,7 +2,6 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import useAlert from "./useAlert";
-import Swal from "sweetalert2";
 
 const user = ref({
     id: null,
@@ -219,26 +218,7 @@ export default function () {
         }
     };
 
-    const changePassword = async () => {
-        const { value: formValues } = await Swal.fire({
-            title: "Multiple inputs",
-            html:
-                '<input id="swal-input1" class="swal2-input" >' +
-                '<input id="swal-input2" >',
-            focusConfirm: false,
-            preConfirm: () => {
-                return [
-                    document.getElementById("swal-input1").value,
-                    document.getElementById("swal-input2").value,
-                ];
-            },
-        });
-
-        if (formValues) {
-            Swal.fire(JSON.stringify(formValues));
-        }
-    };
-
+    
     // getUser();
 
     return {
@@ -253,6 +233,5 @@ export default function () {
         getUser,
         updateUser,
         isLoading,
-        changePassword,
     };
 }

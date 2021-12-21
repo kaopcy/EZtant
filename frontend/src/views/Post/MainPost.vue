@@ -4,7 +4,7 @@
             <div
                 class="selection"
                 @click="selectedValue = 'all' "
-                :class="{ select: selectedValue == department }"
+                :class="{ select: selectedValue == 'all'  }"
             >
                 all
             </div>
@@ -19,7 +19,9 @@
             </div>
             
         </div>
+        
         <span class="line"></span>
+
         <div class="search-bar">
             <div class="wrapper" :class="isLast ? 'active' : 'inactive'">
                 <h1
@@ -155,7 +157,9 @@ export default {
             beforeEnter,
             enter,
             sortPopupRef,
-            getNewData
+            getNewData,
+            sortBy,
+            orderBy
         };
     },
 };

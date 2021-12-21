@@ -1,5 +1,6 @@
 <template>
     <div class="wrapper">
+
         <div class="info-wrapper">
             <div class="h1-wrapper">
                 <span>Username</span>
@@ -101,7 +102,7 @@
                 <span>Edit</span>
                 <fa class="icon" :icon="['fas', 'edit']" />
             </div>
-            <div class="btn" @click="changePassword()">
+            <div class="btn" @click="closeRef.toggleClose()">
                 <span>Change Password</span>
                 <fa class="icon" :icon="['fas', 'key']" />
             </div>
@@ -116,13 +117,18 @@
 <script>
 import { inject, ref } from "@vue/runtime-core";
 import useAuth from "../../composables/useAuth";
+
+
 export default {
     name: "Info",
+    components:{
+    },
     setup() {
-        const { updateUser , changePassword } = useAuth();
+        const { updateUser } = useAuth();
+        const closeRef = ref(null)
         const user = inject("user");
         const isEdit = ref(false);
-        return { user, isEdit, updateUser , changePassword };
+        return { user, isEdit, updateUser , closeRef };
     },
 };
 </script>
