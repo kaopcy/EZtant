@@ -54,5 +54,36 @@ export default function () {
         posts.value.schedule = schedules;
     };
 
-    return { addPost, addSchedule };
+    const updatePost = async (payload , id)=>{
+        loading('Uploading data. . .')
+        isLoading.value = true
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date+' '+time;
+        payload.timestamp = dateTime
+        console.log(JSON.parse(JSON.stringify(payload)));
+        try {
+            const res = await fetch(
+                `${process.env.VUE_APP_DJANGO_BASE_URL}api/post/${id}/update`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(payload)
+                }
+            );
+            console.log(res.status);
+        } catch (error) {
+            console.log(error.message);
+        } finally{
+            finish('Uploaded Successfully!')
+            isLoading.value = false
+        }
+    }
+
+
+    return { addPost, addSchedule , updatePost };
 }

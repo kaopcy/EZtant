@@ -90,7 +90,7 @@ export default {
 .home{
     width: 100%;
     min-height: 100vh;
-    background-color: #fff;
+    background-color: rgb(248, 248, 248);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -110,6 +110,7 @@ export default {
     padding: 3rem;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
     h1{
         font-size: 5rem;
         line-height: 3.5rem;

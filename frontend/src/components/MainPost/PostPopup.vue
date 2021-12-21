@@ -83,15 +83,18 @@ import { store } from "../../store";
 import Table from "../../components/MainPost/AddTable.vue";
 import useAddPost from "../../composables/useAddPost";
 import useAuth from "../../composables/useAuth";
-import { provide } from '@vue/runtime-core';
+import { onMounted, provide } from '@vue/runtime-core';
 
 export default {
     name: "PostPopup",
     components: {
         Table,
     },
-    setup() {
-        const { addPost } = useAddPost();
+
+    props:['postData'],
+
+    setup(props) {
+        const { addPost , updatePost } = useAddPost();
         const { role } = useAuth();
         const isPopup = computed(() => store.state.isPopup);
         const tableRef = ref(null);
@@ -126,6 +129,29 @@ export default {
 
         
         const post = async () => {
+
+            if (props.postData) {
+                await updatePost(data.value , props.postData.id);
+                data.value = {
+                    subject_name: "",
+                    subject_id: "",
+                    max_requested: null,
+                    wage: null,
+                    description: "",
+                    schedules: [
+                        {
+                            section: "",
+                            day: "",
+                            time: "",
+                        },
+                    ],
+                    timestamp: null
+                };
+                console.log(data.value);
+                store.commit("toggleIsPopup");
+                return
+            }
+
             await addPost(data.value);
             data.value = {
                 subject_name: "",
@@ -145,6 +171,21 @@ export default {
             console.log(data.value);
             store.commit("toggleIsPopup");
         };
+        
+        onMounted(()=>{
+            if (props.postData) {
+                data.value = {
+                    subject_name: props.postData.subject_name,
+                    subject_id: props.postData.subject_id,
+                    max_requested: props.postData.max_requested,
+                    wage: props.postData.wage,
+                    description: props.postData.description,
+                    schedules: props.postData.schedules,
+                    timestamp: props.postData.timestamp
+                }
+            }
+            console.log(data.value);
+        })
 
         provide('data' , data )
         provide('deleteInput' , deleteInput)

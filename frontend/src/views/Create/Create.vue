@@ -8,7 +8,7 @@
                     id="btn-post"
                     @click="store.commit('toggleIsPopup')"
                 >
-                    POST
+                    POST 
                 </div>
                 <div class="wrapper" :class="{ hovered: isHover }">
                     <h1>Find your Right teacher assistant!</h1>

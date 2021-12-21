@@ -1,6 +1,7 @@
 <template>
     <div class="focus-post-wrapper">
         <Loading :Attr="{ width: '70%', height: '40vh' }" v-if="isLoading" />
+        <Popup id="popup" :postData="post" v-if="!isLoading && post" />
 
         <div class="topic-wrapper" v-if="!isLoading && post">
             <h1 class="topic">Post.</h1>
@@ -98,6 +99,7 @@
                         <div
                             class="btn"
                             v-if="isEditAble"
+                            @click="store.commit('toggleIsPopup')"
                         >
                             <fa class="icon" :icon="['fas', 'edit']" />
                             <span>Edit</span>
@@ -121,6 +123,7 @@
 <script>
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { store } from "../../store";
 
 import usePost from "../../composables/usePost";
 import useAuth from "../../composables/useAuth";
@@ -128,6 +131,7 @@ import useAuth from "../../composables/useAuth";
 import Loading from "../../components/Loading/LoadingComponent.vue";
 import Table from "../../components/Table.vue";
 import ApplicantPopup from "../../components/MainPost/ApplicantPopup.vue";
+import Popup from "../../components/MainPost/PostPopup.vue";
 
 export default {
     name: "FocusPost",
@@ -135,6 +139,7 @@ export default {
         Table,
         ApplicantPopup,
         Loading,
+        Popup,
     },
     setup() {
         const { isLoading, getPostByPostID, deletePostByID , request } = usePost();
@@ -201,7 +206,8 @@ export default {
             toggleFavorite,
             handleFavorite,
             favoriteNumber,
-            isFavorite
+            isFavorite,
+            store
         };
     },
 };
@@ -450,6 +456,13 @@ $primary-font-color-light: #464646;
             }
         }
     }
+}
+
+#popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
 }
 
 .fade-enter-active,
