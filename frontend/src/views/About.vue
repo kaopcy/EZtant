@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class=" item">
-                        <img src="../../src/assets/teacherlogo.png" alt="team">
+                        <img src="../../src/assets/Nabin.jpg" alt="team">
                         <div class="inner">
                             <div class="info">
                                 <h5>Naveeharn</h5>
